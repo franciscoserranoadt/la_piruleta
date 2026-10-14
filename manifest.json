@@ -1,0 +1,18 @@
+{
+  "name": "TPV LA PIRULETA",
+  "short_name": "LA PIRULETA",
+  "description": "Sistema de cobro TPV táctil para cafetería y panadería La Piruleta",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#c85a32",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%23c85a32'/%3E%3Ccircle cx='50' cy='45' r='28' fill='%23fff8f1'/%3E%3Cpath d='M50 25 A20 20 0 0 1 70 45 A20 20 0 0 1 50 65 A20 20 0 0 1 30 45 Z' fill='none' stroke='%23e05638' stroke-width='6' stroke-dasharray='10 5'/%3E%3Cpath d='M50 45 L50 85' stroke='%23ffffff' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
