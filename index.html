@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Código Fuente - index.html (LA PIRULETA)</title>
+  <title>Código index.html - TPV LA PIRULETA</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,51 +11,370 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    pre, code, textarea { font-family: 'Fira Code', monospace; }
+    .font-code { font-family: 'Fira Code', monospace; }
+    .font-brand { font-family: 'Space Grotesk', sans-serif; }
   </style>
 </head>
-<body class="bg-[#121316] text-stone-200 min-h-screen p-4 sm:p-8 flex flex-col items-center">
+<body class="bg-[#121316] text-stone-200 min-h-screen p-4 sm:p-8 flex flex-col items-center justify-start">
+
   <div class="w-full max-w-4xl space-y-4">
-    <!-- Encabezado con información y botón de copia -->
-    <div class="bg-[#1a1b20] border border-stone-800 rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-[#c85a32] text-white flex items-center justify-center text-2xl shadow-md">
+    
+    <!-- Barra Superior de Control y Acción -->
+    <header class="bg-[#1c1d22] border border-stone-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-xl bg-[#c85a32] text-white flex items-center justify-center text-2xl shadow-lg shadow-[#c85a32]/20">
           🍭
         </div>
         <div>
-          <h1 class="text-xl font-bold text-white flex items-center gap-2 font-['Space_Grotesk']">
-            <span>index.html</span>
-            <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono">TPV LA PIRULETA</span>
-          </h1>
-          <p class="text-xs text-stone-400 mt-0.5">Código estructurado con saltos de línea listos para GitHub Pages o tu editor</p>
+          <div class="flex items-center gap-2">
+            <h1 class="font-brand font-bold text-white text-lg sm:text-xl">index.html</h1>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">TPV LA PIRULETA</span>
+          </div>
+          <p class="text-xs text-stone-400 mt-0.5">Código 100% interactivo listo para pegar en GitHub Pages</p>
         </div>
       </div>
-      
-      <button id="copyBtn" onclick="copiarCodigo()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#c85a32] hover:bg-[#b04a25] active:scale-95 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#c85a32]/25 transition cursor-pointer">
-        <i class="fa-regular fa-copy text-base" id="copyIcon"></i>
-        <span id="copyText">Copiar Todo el Código</span>
+
+      <!-- Botón de Copia Principal Grande -->
+      <button onclick="copiarCodigo()" id="btnCopiar" class="w-full sm:w-auto bg-[#c85a32] hover:bg-[#d9653a] active:scale-95 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2.5 shadow-lg shadow-[#c85a32]/30 transition-all cursor-pointer">
+        <i class="fa-solid fa-copy text-sm" id="iconoCopiar"></i>
+        <span id="textoCopiar">Copiar Todo el Código</span>
       </button>
+    </header>
+
+    <!-- Instrucción Breve -->
+    <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3.5 text-xs text-amber-200/90 flex items-center gap-3">
+      <i class="fa-solid fa-circle-info text-amber-400 text-sm shrink-0"></i>
+      <span>Haz clic en <strong>"Copiar Todo el Código"</strong>. Luego ve a GitHub, borra el contenido de tu <code>index.html</code> y dale a <strong>Pegar</strong>. Se pegará estructurado con todos sus saltos de línea.</span>
     </div>
 
-    <!-- Indicador de estado al copiar -->
-    <div id="toastSuccess" class="hidden bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 animate-pulse">
-      <i class="fa-solid fa-circle-check"></i>
-      <span>¡Código copiado al portapapeles con todos los saltos de línea intactos! Ya puedes pegarlo en GitHub o en un bloc de notas.</span>
-    </div>
-
-    <!-- Caja de texto / Código editable y seleccionable -->
-    <div class="bg-[#18191f] border border-stone-800/80 rounded-2xl overflow-hidden shadow-2xl relative">
-      <div class="bg-[#212228] px-4 py-2.5 border-b border-stone-800 flex items-center justify-between text-xs text-stone-400 font-mono">
+    <!-- Visor de Código Estructurado -->
+    <div class="bg-[#18191e] border border-stone-800/90 rounded-2xl overflow-hidden shadow-2xl">
+      <!-- Barra de ventana tipo editor -->
+      <div class="bg-[#141519] px-4 py-2.5 border-b border-stone-800 flex items-center justify-between text-xs text-stone-400 font-mono">
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
           <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
           <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-          <span class="ml-2 text-stone-300 font-semibold">index.html</span>
+          <span class="ml-2 font-semibold text-stone-300">index.html (TPV Móvil)</span>
         </div>
-        <span>UTF-8 • HTML5 • Tailwind CSS</span>
+        <span class="text-stone-500 text-[11px]">HTML5 • Tailwind CSS • JavaScript</span>
       </div>
 
-      <textarea id="rawCode" readonly class="w-full h-[650px] p-5 bg-[#14151a] text-stone-300 text-xs leading-relaxed outline-none border-none resize-none font-mono selection:bg-[#c85a32]/30 selection:text-white" spellcheck="false"><!DOCTYPE html>
+      <!-- Área de código preformateada -->
+      <div class="relative">
+        <pre class="p-5 overflow-x-auto text-xs sm:text-sm font-code leading-relaxed text-stone-300 selection:bg-[#c85a32] selection:text-white max-h-[68vh] overflow-y-auto" id="codigoVisual"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&quot;&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black-translucent&quot;&gt;
+  &lt;meta name=&quot;theme-color&quot; content=&quot;#c85a32&quot;&gt;
+  &lt;title&gt;TPV LA PIRULETA&lt;/title&gt;
+  
+  &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css&quot;&gt;
+  
+  &lt;style&gt;
+    body {
+      font-family: &#39;Plus Jakarta Sans&#39;, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .font-brand {
+      font-family: &#39;Space Grotesk&#39;, sans-serif;
+    }
+    ::-webkit-scrollbar { display: none; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-[#f7f2ea] text-stone-900 min-h-screen flex flex-col justify-between pb-24 select-none&quot;&gt;
+
+  &lt;!-- Header Superior --&gt;
+  &lt;header class=&quot;sticky top-0 z-30 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between&quot;&gt;
+    &lt;div class=&quot;flex items-center gap-3&quot;&gt;
+      &lt;div class=&quot;w-10 h-10 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center font-bold text-xl shadow-sm&quot;&gt;
+        🍭
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h1 class=&quot;font-brand font-bold text-lg leading-tight tracking-tight text-stone-900&quot;&gt;LA PIRULETA&lt;/h1&gt;
+        &lt;div class=&quot;flex items-center gap-1.5 text-xs text-stone-500 font-medium&quot;&gt;
+          &lt;span class=&quot;w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse&quot;&gt;&lt;/span&gt;
+          &lt;span&gt;Online • Caja 1&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+      &lt;button onclick=&quot;reiniciarTicket()&quot; title=&quot;Vaciar pedido&quot; class=&quot;w-9 h-9 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-200 active:scale-95 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-rotate-right text-xs&quot;&gt;&lt;/i&gt;
+      &lt;/button&gt;
+      &lt;div class=&quot;w-9 h-9 rounded-full bg-stone-800 text-amber-100 font-bold text-xs flex items-center justify-center border border-stone-700&quot;&gt;
+        LP
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;!-- Filtros de Servicio y Categorías --&gt;
+  &lt;div class=&quot;px-4 pt-3 pb-1 space-y-2.5&quot;&gt;
+    &lt;div class=&quot;grid grid-cols-3 gap-1.5 bg-stone-200/70 p-1 rounded-xl text-xs font-semibold text-stone-600&quot;&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg bg-white text-[#c85a32] shadow-sm flex items-center justify-center gap-1.5 font-bold&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-mug-saucer text-xs&quot;&gt;&lt;/i&gt; Barra
+      &lt;/button&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-bag-shopping text-xs&quot;&gt;&lt;/i&gt; Para llevar
+      &lt;/button&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-chair text-xs&quot;&gt;&lt;/i&gt; Mesa
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Pestañas de categoría --&gt;
+    &lt;div class=&quot;flex items-center gap-2 overflow-x-auto pb-1 text-xs font-medium&quot;&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Todos&#39;)&quot; id=&quot;cat-Todos&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm&quot;&gt;Todos&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Café&#39;)&quot; id=&quot;cat-Café&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;☕ Café&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Pan&#39;)&quot; id=&quot;cat-Pan&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥖 Pan&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Bollería&#39;)&quot; id=&quot;cat-Bollería&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥐 Bollería&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Tostadas&#39;)&quot; id=&quot;cat-Tostadas&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥪 Tostadas&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Catálogo de Productos --&gt;
+  &lt;main class=&quot;p-4 flex-1&quot;&gt;
+    &lt;div class=&quot;grid grid-cols-2 gap-3&quot; id=&quot;catalogo&quot;&gt;
+      &lt;!-- Se inyecta dinámicamente --&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+
+  &lt;!-- Barra Inferior de Cobro Fija --&gt;
+  &lt;div class=&quot;fixed bottom-0 left-0 right-0 p-3 bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200 z-40 max-w-lg mx-auto&quot;&gt;
+    &lt;button onclick=&quot;abrirCobro()&quot; id=&quot;btnCobrar&quot; disabled class=&quot;w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-brand font-bold py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-lg shadow-[#c85a32]/25 disabled:opacity-50 disabled:pointer-events-none&quot;&gt;
+      &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+        &lt;span class=&quot;w-6 h-6 rounded-lg bg-black/20 flex items-center justify-center text-xs font-mono&quot; id=&quot;cantTotal&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;text-sm font-semibold&quot;&gt;Cobrar Ticket&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;span class=&quot;text-lg tracking-tight font-extrabold&quot; id=&quot;precioTotal&quot;&gt;0,00 €&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Modal de Pasarela de Cobro y Ticket Digital --&gt;
+  &lt;div id=&quot;modalCobro&quot; class=&quot;fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4&quot;&gt;
+    &lt;div class=&quot;bg-[#fffdfa] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto&quot;&gt;
+      &lt;div class=&quot;flex items-center justify-between pb-2 border-b border-stone-200&quot;&gt;
+        &lt;div&gt;
+          &lt;h3 class=&quot;font-brand font-bold text-lg text-stone-900&quot;&gt;Cobro • LA PIRULETA&lt;/h3&gt;
+          &lt;p class=&quot;text-xs text-stone-500&quot; id=&quot;resumenModal&quot;&gt;Ticket #1042&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;button onclick=&quot;cerrarCobro()&quot; class=&quot;w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-200&quot;&gt;
+          ✕
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Importe Total --&gt;
+      &lt;div class=&quot;bg-amber-50/70 rounded-2xl p-4 text-center border border-amber-200/60&quot;&gt;
+        &lt;span class=&quot;text-xs font-semibold uppercase tracking-wider text-amber-800&quot;&gt;Total a Pagar&lt;/span&gt;
+        &lt;div class=&quot;text-3xl font-extrabold font-brand text-stone-900 mt-1&quot; id=&quot;totalModal&quot;&gt;0,00 €&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Desglose breve del ticket --&gt;
+      &lt;div class=&quot;bg-white rounded-xl p-3 border border-stone-200/80 text-xs space-y-1.5&quot; id=&quot;desgloseItems&quot;&gt;
+        &lt;!-- Rellenado por JS --&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Métodos de cobro directos --&gt;
+      &lt;div id=&quot;seccionMetodos&quot; class=&quot;space-y-2&quot;&gt;
+        &lt;label class=&quot;text-xs font-bold text-stone-500 uppercase tracking-wider&quot;&gt;Selecciona método de cobro&lt;/label&gt;
+        &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Tarjeta&#39;)&quot; class=&quot;p-3 rounded-xl border-2 border-stone-800 bg-stone-900 text-white flex flex-col items-center gap-1 active:scale-95 transition&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-credit-card text-lg text-amber-300&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Tarjeta&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Efectivo&#39;)&quot; class=&quot;p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-money-bill-wave text-lg text-emerald-600&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Efectivo&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Bizum&#39;)&quot; class=&quot;p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-mobile-screen-button text-lg text-sky-600&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Bizum&lt;/span&gt;
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Ticket digital sin papel (Éxito de cobro) --&gt;
+      &lt;div id=&quot;pantallaExito&quot; class=&quot;hidden text-center py-4 space-y-3 bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200&quot;&gt;
+        &lt;div class=&quot;w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-md&quot;&gt;✓&lt;/div&gt;
+        &lt;h4 class=&quot;font-bold text-stone-900 text-base&quot; id=&quot;exitoTitulo&quot;&gt;¡Cobro Registrado!&lt;/h4&gt;
+        &lt;p class=&quot;text-xs text-stone-600&quot;&gt;Ticket 100% digital sin papel ni impresora&lt;/p&gt;
+
+        &lt;!-- QR simulado en pantalla para escanear --&gt;
+        &lt;div class=&quot;my-2 p-3 bg-white rounded-xl inline-block border border-stone-200 shadow-inner&quot;&gt;
+          &lt;i class=&quot;fa-solid fa-qrcode text-5xl text-stone-800&quot;&gt;&lt;/i&gt;
+          &lt;p class=&quot;text-[10px] text-stone-400 mt-1 font-mono&quot;&gt;Escanear para e-Ticket&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;flex flex-col gap-2 pt-2&quot;&gt;
+          &lt;button onclick=&quot;compartirWhatsApp()&quot; class=&quot;w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition&quot;&gt;
+            &lt;i class=&quot;fa-brands fa-whatsapp text-sm&quot;&gt;&lt;/i&gt; Enviar ticket por WhatsApp
+          &lt;/button&gt;
+          &lt;button onclick=&quot;reiniciarTodo()&quot; class=&quot;w-full bg-[#c85a32] hover:bg-[#b04a25] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm active:scale-95 transition&quot;&gt;
+            Nuevo Cobro / Siguiente Venta
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    const productos = [
+      { id: 1, nombre: &quot;Flat White Doble&quot;, precio: 2.80, cat: &quot;Café&quot;, emoji: &quot;☕&quot; },
+      { id: 2, nombre: &quot;Cappuccino Avena&quot;, precio: 2.90, cat: &quot;Café&quot;, emoji: &quot;🥛&quot; },
+      { id: 3, nombre: &quot;Cold Brew Nitro&quot;, precio: 3.40, cat: &quot;Café&quot;, emoji: &quot;🧊&quot; },
+      { id: 4, nombre: &quot;Hogaza Masa Madre 1kg&quot;, precio: 4.20, cat: &quot;Pan&quot;, emoji: &quot;🥖&quot; },
+      { id: 5, nombre: &quot;Pan Centeno 500g&quot;, precio: 3.10, cat: &quot;Pan&quot;, emoji: &quot;🍞&quot; },
+      { id: 6, nombre: &quot;Croissant Mantequilla&quot;, precio: 1.95, cat: &quot;Bollería&quot;, emoji: &quot;🥐&quot; },
+      { id: 7, nombre: &quot;Pain au Chocolat&quot;, precio: 2.30, cat: &quot;Bollería&quot;, emoji: &quot;🍫&quot; },
+      { id: 8, nombre: &quot;Tostada Ibérica AOVE&quot;, precio: 4.50, cat: &quot;Tostadas&quot;, emoji: &quot;🥪&quot; }
+    ];
+
+    let carrito = {};
+    let categoriaActiva = &quot;Todos&quot;;
+
+    function filtrarCategoria(cat) {
+      categoriaActiva = cat;
+      [&quot;Todos&quot;, &quot;Café&quot;, &quot;Pan&quot;, &quot;Bollería&quot;, &quot;Tostadas&quot;].forEach(c =&gt; {
+        const btn = document.getElementById(&quot;cat-&quot; + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = &quot;px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm&quot;;
+          } else {
+            btn.className = &quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;;
+          }
+        }
+      });
+      renderCatalogo();
+    }
+
+    function renderCatalogo() {
+      const contenedor = document.getElementById(&quot;catalogo&quot;);
+      const prodsFiltrados = categoriaActiva === &quot;Todos&quot; 
+        ? productos 
+        : productos.filter(p =&gt; p.cat === categoriaActiva);
+
+      contenedor.innerHTML = prodsFiltrados.map(p =&gt; {
+        const cant = carrito[p.id] || 0;
+        return `
+          &lt;div class=&quot;bg-white p-3.5 rounded-2xl border ${cant &gt; 0 ? &#39;border-[#c85a32]/60 ring-2 ring-[#c85a32]/20&#39; : &#39;border-stone-200/80&#39;} shadow-sm flex flex-col justify-between transition active:scale-[0.99]&quot;&gt;
+            &lt;div class=&quot;flex items-start justify-between&quot;&gt;
+              &lt;span class=&quot;text-2xl&quot;&gt;${p.emoji}&lt;/span&gt;
+              ${cant &gt; 0 ? `&lt;span class=&quot;bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono&quot;&gt;${cant}&lt;/span&gt;` : &#39;&#39;}
+            &lt;/div&gt;
+            &lt;div class=&quot;my-2&quot;&gt;
+              &lt;h3 class=&quot;font-bold text-stone-900 text-sm leading-snug&quot;&gt;${p.nombre}&lt;/h3&gt;
+              &lt;p class=&quot;text-xs text-stone-400 font-medium&quot;&gt;${p.cat}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;flex items-center justify-between pt-1&quot;&gt;
+              &lt;span class=&quot;font-brand font-bold text-stone-900 text-sm&quot;&gt;${p.precio.toFixed(2)} €&lt;/span&gt;
+              &lt;div class=&quot;flex items-center gap-1&quot;&gt;
+                ${cant &gt; 0 ? `
+                  &lt;button onclick=&quot;modificarCantidad(${p.id}, -1)&quot; class=&quot;w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200&quot;&gt;-&lt;/button&gt;
+                ` : &#39;&#39;}
+                &lt;button onclick=&quot;modificarCantidad(${p.id}, 1)&quot; class=&quot;w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90&quot;&gt;+&lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        `;
+      }).join(&#39;&#39;);
+      actualizarTotales();
+    }
+
+    function modificarCantidad(id, delta) {
+      carrito[id] = (carrito[id] || 0) + delta;
+      if (carrito[id] &lt;= 0) delete carrito[id];
+      renderCatalogo();
+    }
+
+    function calcularTotal() {
+      let total = 0;
+      let cantidad = 0;
+      for (const id in carrito) {
+        const prod = productos.find(p =&gt; p.id == id);
+        if (prod) {
+          total += prod.precio * carrito[id];
+          cantidad += carrito[id];
+        }
+      }
+      return { total, cantidad };
+    }
+
+    function actualizarTotales() {
+      const { total, cantidad } = calcularTotal();
+      document.getElementById(&quot;cantTotal&quot;).innerText = cantidad;
+      document.getElementById(&quot;precioTotal&quot;).innerText = total.toFixed(2).replace(&#39;.&#39;, &#39;,&#39;) + &quot; €&quot;;
+      document.getElementById(&quot;btnCobrar&quot;).disabled = cantidad === 0;
+    }
+
+    function abrirCobro() {
+      const { total, cantidad } = calcularTotal();
+      if (cantidad === 0) return;
+      document.getElementById(&quot;totalModal&quot;).innerText = total.toFixed(2).replace(&#39;.&#39;, &#39;,&#39;) + &quot; €&quot;;
+      document.getElementById(&quot;resumenModal&quot;).innerText = `${cantidad} productos • Ticket #${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const desglose = document.getElementById(&quot;desgloseItems&quot;);
+      let html = &quot;&quot;;
+      for (const id in carrito) {
+        const p = productos.find(item =&gt; item.id == id);
+        const sub = p.precio * carrito[id];
+        html += `&lt;div class=&quot;flex justify-between text-stone-600&quot;&gt;&lt;span&gt;${carrito[id]}x ${p.nombre}&lt;/span&gt;&lt;span class=&quot;font-medium&quot;&gt;${sub.toFixed(2)} €&lt;/span&gt;&lt;/div&gt;`;
+      }
+      desglose.innerHTML = html;
+
+      document.getElementById(&quot;seccionMetodos&quot;).classList.remove(&quot;hidden&quot;);
+      document.getElementById(&quot;pantallaExito&quot;).classList.add(&quot;hidden&quot;);
+      document.getElementById(&quot;modalCobro&quot;).classList.remove(&quot;hidden&quot;);
+    }
+
+    function cerrarCobro() {
+      document.getElementById(&quot;modalCobro&quot;).classList.add(&quot;hidden&quot;);
+    }
+
+    function finalizarVenta(metodo) {
+      document.getElementById(&quot;seccionMetodos&quot;).classList.add(&quot;hidden&quot;);
+      document.getElementById(&quot;exitoTitulo&quot;).innerText = `¡Cobro con ${metodo} Registrado!`;
+      document.getElementById(&quot;pantallaExito&quot;).classList.remove(&quot;hidden&quot;);
+    }
+
+    function reiniciarTicket() {
+      carrito = {};
+      renderCatalogo();
+    }
+
+    function reiniciarTodo() {
+      carrito = {};
+      renderCatalogo();
+      cerrarCobro();
+    }
+
+    function compartirWhatsApp() {
+      const { total } = calcularTotal();
+      let detalle = &quot;&quot;;
+      for (const id in carrito) {
+        const p = productos.find(item =&gt; item.id == id);
+        detalle += `• ${carrito[id]}x ${p.nombre}%0A`;
+      }
+      const texto = `🍭 *LA PIRULETA - Ticket de Compra*%0A---------------------------%0A${detalle}---------------------------%0A*Total: ${total.toFixed(2)} €*%0A¡Muchas gracias por tu visita! 😊`;
+      window.open(`https://wa.me/?text=${texto}`, &#39;_blank&#39;);
+    }
+
+    renderCatalogo();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+    </div>
+
+    <!-- Texto oculto sin escapar para el copiado exacto -->
+    <textarea id="rawCode" class="sr-only" aria-hidden="true"><!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -219,7 +538,6 @@
   </div>
 
   <script>
-    // Catálogo inicial de productos para LA PIRULETA
     const productos = [
       { id: 1, nombre: "Flat White Doble", precio: 2.80, cat: "Café", emoji: "☕" },
       { id: 2, nombre: "Cappuccino Avena", precio: 2.90, cat: "Café", emoji: "🥛" },
@@ -314,7 +632,6 @@
       document.getElementById("totalModal").innerText = total.toFixed(2).replace('.', ',') + " €";
       document.getElementById("resumenModal").innerText = `${cantidad} productos • Ticket #${Math.floor(1000 + Math.random() * 9000)}`;
 
-      // Renderizar desglose
       const desglose = document.getElementById("desgloseItems");
       let html = "";
       for (const id in carrito) {
@@ -361,38 +678,55 @@
       window.open(`https://wa.me/?text=${texto}`, '_blank');
     }
 
-    // Inicializar catálogo al cargar
     renderCatalogo();
   </script>
 </body>
 </html></textarea>
-    </div>
+
   </div>
 
   <script>
     function copiarCodigo() {
       const textarea = document.getElementById('rawCode');
       textarea.select();
-      textarea.setSelectionRange(0, 99999);
-      
-      navigator.clipboard.writeText(textarea.value).then(() => {
-        const btnText = document.getElementById('copyText');
-        const btnIcon = document.getElementById('copyIcon');
-        const toast = document.getElementById('toastSuccess');
-        
-        btnText.innerText = "¡Copiado con Éxito!";
-        btnIcon.className = "fa-solid fa-check text-base";
-        toast.classList.remove('hidden');
-        
-        setTimeout(() => {
-          btnText.innerText = "Copiar Todo el Código";
-          btnIcon.className = "fa-regular fa-copy text-base";
-        }, 3000);
-      }).catch(err => {
-        // Fallback clásico si falla clipboard API
+      textarea.setSelectionRange(0, 99999); // Para móviles
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textarea.value).then(onCopiadoExitoso).catch(fallbackCopiar);
+      } else {
+        fallbackCopiar();
+      }
+    }
+
+    function fallbackCopiar() {
+      try {
+        const textarea = document.getElementById('rawCode');
+        textarea.classList.remove('sr-only');
+        textarea.select();
         document.execCommand('copy');
-        alert("Código copiado al portapapeles.");
-      });
+        textarea.classList.add('sr-only');
+        onCopiadoExitoso();
+      } catch (err) {
+        alert('Por favor selecciona el código manualmente y pulsa Copiar.');
+      }
+    }
+
+    function onCopiadoExitoso() {
+      const btn = document.getElementById('btnCopiar');
+      const icono = document.getElementById('iconoCopiar');
+      const texto = document.getElementById('textoCopiar');
+
+      btn.classList.remove('bg-[#c85a32]', 'hover:bg-[#d9653a]');
+      btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+      icono.className = 'fa-solid fa-check text-sm';
+      texto.innerText = '¡Copiado con Éxito!';
+
+      setTimeout(() => {
+        btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        btn.classList.add('bg-[#c85a32]', 'hover:bg-[#d9653a]');
+        icono.className = 'fa-solid fa-copy text-sm';
+        texto.innerText = 'Copiar Todo el Código';
+      }, 3000);
     }
   </script>
 </body>
