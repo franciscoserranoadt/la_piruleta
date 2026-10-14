@@ -3,286 +3,479 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>index.html Actualizado - LA PIRULETA PWA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0f12; color: #f3f4f6; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .font-code { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center justify-start">
+
+  <div class="w-full max-w-4xl space-y-6">
+
+    <!-- Header Card -->
+    <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#c85a32] to-[#e05638] flex items-center justify-center shadow-lg shadow-[#c85a32]/20 flex-shrink-0">
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">PWA Lista para Instalar</span>
+            <span class="text-xs text-gray-400">franciscoserranoadt / la_piruleta</span>
+          </div>
+          <h1 class="text-2xl font-bold text-white font-heading mt-1">index.html Actualizado (LA PIRULETA)</h1>
+          <p class="text-sm text-gray-400">Incluye vinculación directa con <code class="text-[#c85a32] bg-gray-800 px-1.5 py-0.5 rounded text-xs">manifest.json</code> y el registro de <code class="text-[#c85a32] bg-gray-800 px-1.5 py-0.5 rounded text-xs">sw.js</code> para habilitar la instalación nativa.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <button id="copyBtn" onclick="copyFullCode()" class="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gray-800 hover:bg-gray-750 text-white font-semibold transition border border-gray-700 shadow-sm active:scale-95">
+          <svg id="copyIcon" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          </svg>
+          <span id="copyText">Copiar Código</span>
+        </button>
+
+        <button onclick="downloadHtmlFile()" class="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#c85a32] hover:bg-[#d6633b] text-white font-bold transition shadow-lg shadow-[#c85a32]/25 active:scale-95">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          <span>Descargar index.html</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick instructions -->
+    <div class="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-4 flex items-center gap-4 text-xs md:text-sm text-gray-300">
+      <div class="w-8 h-8 rounded-xl bg-[#c85a32]/20 text-[#c85a32] flex items-center justify-center font-bold flex-shrink-0 font-heading">
+        ✓
+      </div>
+      <div>
+        <span class="font-bold text-white">Instrucciones:</span> Copia el código o descarga el archivo. En tu GitHub (<code class="text-white">la_piruleta</code>), entra en <strong class="text-white">index.html</strong>, pulsa el lápiz para editar, borra lo anterior y pega este código nuevo. Guarda con <strong>Commit changes</strong>.
+      </div>
+    </div>
+
+    <!-- Code Display Container -->
+    <div class="bg-gray-950 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div class="px-5 py-3.5 bg-gray-900/90 border-b border-gray-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+          <span class="ml-2 font-code text-xs text-gray-400 font-medium">index.html</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-[11px] font-code bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">manifest.json + sw.js incluidos</span>
+          <button onclick="copyFullCode()" class="text-xs text-gray-400 hover:text-white px-2 py-1 rounded bg-gray-800 transition">Copiar</button>
+        </div>
+      </div>
+
+      <pre class="p-6 overflow-x-auto text-xs md:text-sm font-code text-gray-300 leading-relaxed max-h-[600px] select-all scrollbar-thin scrollbar-thumb-gray-800"><code id="rawCodeArea"></code></pre>
+    </div>
+
+  </div>
+
+  <textarea id="hiddenSource" class="hidden"></textarea>
+
+  <script>
+    const fullHtmlCode = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#c85a32">
   <title>TPV LA PIRULETA</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="manifest.json">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"><\\/script>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; }
-    .font-brand { font-family: 'Space Grotesk', sans-serif; }
-    ::-webkit-scrollbar { display: none; }
-  </style>
-</head>
-<body class="bg-[#f7f2ea] text-stone-900 min-h-screen flex flex-col justify-between pb-24 select-none">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-  <header class="sticky top-0 z-30 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center font-bold text-xl shadow-sm">
-        🍭
-      </div>
-      <div>
-        <h1 class="font-brand font-bold text-lg leading-tight tracking-tight text-stone-900">LA PIRULETA</h1>
-        <div class="flex items-center gap-1.5 text-xs text-stone-500 font-medium">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-          <span>Online • Caja 1</span>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#c85a32',
+              hover: '#b24c28',
+              light: '#fdf3ed'
+            }
+          },
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  <\\/script>
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <!-- Registro del Service Worker para funcionamiento Offline y PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
+          .catch(err => console.log('Fallo al registrar Service Worker:', err));
+      });
+    }
+  <\\/script>
+</head>
+<body class="bg-stone-100 text-stone-900 min-h-screen flex flex-col antialiased">
+
+  <!-- CABECERA PRINCIPAL -->
+  <header class="bg-stone-900 text-white px-4 py-3 sticky top-0 z-30 shadow-md">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#c85a32] to-[#e05638] flex items-center justify-center shadow-md">
+          <span class="text-xl">🍭</span>
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight font-heading leading-tight">LA PIRULETA</h1>
+          <div class="flex items-center gap-1.5 text-[11px] text-stone-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Online • Caja 1</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <button onclick="reiniciarTicket()" title="Vaciar pedido" class="w-9 h-9 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-200 active:scale-95 transition">
-        <i class="fa-solid fa-rotate-right text-xs"></i>
-      </button>
-      <div class="w-9 h-9 rounded-full bg-stone-800 text-amber-100 font-bold text-xs flex items-center justify-center border border-stone-700">
-        LP
+      <div class="flex items-center gap-2">
+        <button onclick="location.reload()" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 flex items-center justify-center active:scale-95 text-xs" title="Recargar">
+          🔄
+        </button>
+        <span class="text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-full font-medium">LP</span>
       </div>
+    </div>
+
+    <!-- MODO DE SERVICIO -->
+    <div class="grid grid-cols-3 gap-1.5 mt-3 bg-stone-800/80 p-1 rounded-xl text-xs font-semibold">
+      <button onclick="setModo(this, 'Barra')" class="modo-btn py-1.5 rounded-lg bg-stone-100 text-stone-900 shadow-sm transition">☕ Barra</button>
+      <button onclick="setModo(this, 'Llevar')" class="modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition">🛍️ Llevar</button>
+      <button onclick="setModo(this, 'Mesa')" class="modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition">🪑 Mesa</button>
     </div>
   </header>
 
-  <div class="px-4 pt-3 pb-1 space-y-2.5">
-    <div class="grid grid-cols-3 gap-1.5 bg-stone-200/70 p-1 rounded-xl text-xs font-semibold text-stone-600">
-      <button class="py-1.5 rounded-lg bg-white text-[#c85a32] shadow-sm flex items-center justify-center gap-1.5 font-bold">
-        <i class="fa-solid fa-mug-saucer text-xs"></i> Barra
-      </button>
-      <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
-        <i class="fa-solid fa-bag-shopping text-xs"></i> Llevar
-      </button>
-      <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
-        <i class="fa-solid fa-chair text-xs"></i> Mesa
-      </button>
+  <!-- BARRA DE CATEGORÍAS -->
+  <nav class="bg-white border-b border-stone-200 px-3 py-2.5 sticky top-[97px] z-20 shadow-xs">
+    <div id="categoriasList" class="flex gap-2 overflow-x-auto no-scrollbar py-0.5">
+      <!-- Inyectado por JS -->
     </div>
+  </nav>
 
-    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-medium">
-      <button onclick="filtrarCategoria('Todos')" id="cat-Todos" class="px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm">Todos</button>
-      <button onclick="filtrarCategoria('Café')" id="cat-Café" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">☕ Café</button>
-      <button onclick="filtrarCategoria('Pan')" id="cat-Pan" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥖 Pan</button>
-      <button onclick="filtrarCategoria('Bollería')" id="cat-Bollería" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥐 Bollería</button>
-      <button onclick="filtrarCategoria('Tostadas')" id="cat-Tostadas" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥪 Tostadas</button>
+  <!-- CATÁLOGO DE PRODUCTOS -->
+  <main class="flex-1 p-3 pb-28 overflow-y-auto">
+    <div id="productosGrid" class="grid grid-cols-2 gap-2.5">
+      <!-- Inyectado por JS -->
     </div>
-  </div>
-
-  <main class="p-4 flex-1">
-    <div class="grid grid-cols-2 gap-3" id="catalogo"></div>
   </main>
 
-  <div class="fixed bottom-0 left-0 right-0 p-3 bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200 z-40 max-w-lg mx-auto">
-    <button onclick="abrirCobro()" id="btnCobrar" disabled class="w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-brand font-bold py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-lg shadow-[#c85a32]/25 disabled:opacity-50 disabled:pointer-events-none">
-      <div class="flex items-center gap-2">
-        <span class="w-6 h-6 rounded-lg bg-black/20 flex items-center justify-center text-xs font-mono" id="cantTotal">0</span>
-        <span class="text-sm font-semibold">Cobrar Ticket</span>
+  <!-- BARRA INFERIOR / RESUMEN TICKET -->
+  <footer class="fixed bottom-0 inset-x-0 bg-white border-t border-stone-200 p-3 shadow-2xl z-30">
+    <div class="flex items-center justify-between gap-3 max-w-lg mx-auto">
+      <div class="cursor-pointer" onclick="abrirModalTicket()">
+        <p class="text-[11px] text-stone-500 font-semibold tracking-wider uppercase">Ticket actual</p>
+        <div class="flex items-baseline gap-1.5">
+          <span id="totalBadge" class="text-xl font-bold font-heading text-stone-900">0.00 €</span>
+          <span id="itemsBadge" class="text-xs text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full font-semibold">0 uds</span>
+        </div>
       </div>
-      <span class="text-lg tracking-tight font-extrabold" id="precioTotal">0,00 €</span>
-    </button>
+      <button id="btnCobrar" onclick="abrirModalCobro()" disabled class="flex-1 max-w-[200px] bg-stone-300 text-stone-500 font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition cursor-not-allowed">
+        <span>Cobrar</span>
+        <span class="text-xs">➔</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- MODAL DE COBRO Y DESGLOSE -->
+  <div id="modalCobro" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom duration-200">
+      <div class="flex justify-between items-center pb-3 border-b border-stone-100">
+        <h3 class="font-bold text-lg font-heading text-stone-900">Cobrar Ticket</h3>
+        <button onclick="cerrarModalCobro()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <!-- Resumen de Importe -->
+      <div class="py-4 text-center bg-stone-50 rounded-2xl my-3">
+        <span class="text-xs text-stone-500 uppercase tracking-widest font-semibold">Total a Cobrar</span>
+        <div id="modalTotalCobro" class="text-3xl font-extrabold text-stone-900 font-heading">0.00 €</div>
+      </div>
+
+      <!-- Métodos de pago -->
+      <div class="space-y-2 mb-4">
+        <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Método de pago</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="seleccionarMetodo(this, 'Tarjeta')" class="metodo-btn p-3 rounded-xl border-2 border-[#c85a32] bg-[#fdf3ed] text-[#c85a32] font-bold text-xs flex flex-col items-center gap-1">
+            <span class="text-xl">💳</span>
+            <span>Tarjeta</span>
+          </button>
+          <button onclick="seleccionarMetodo(this, 'Efectivo')" class="metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50">
+            <span class="text-xl">💶</span>
+            <span>Efectivo</span>
+          </button>
+          <button onclick="seleccionarMetodo(this, 'Bizum')" class="metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50">
+            <span class="text-xl">📱</span>
+            <span>Bizum</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botón Finalizar Venta -->
+      <button onclick="procesarVenta()" class="w-full bg-[#c85a32] hover:bg-[#b24c28] text-white font-bold py-3.5 rounded-xl text-base shadow-lg shadow-[#c85a32]/25 active:scale-98 transition flex items-center justify-center gap-2">
+        <span>Completar Cobro</span>
+        <span>✓</span>
+      </button>
+    </div>
   </div>
 
-  <div id="modalCobro" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-[#fffdfa] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-2 border-b border-stone-200">
-        <div>
-          <h3 class="font-brand font-bold text-lg text-stone-900">Cobro • LA PIRULETA</h3>
-          <p class="text-xs text-stone-500" id="resumenModal">Ticket #1042</p>
+  <!-- MODAL TICKET DIGITAL FINALIZADO -->
+  <div id="modalExito" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">✓</div>
+      <h3 class="text-xl font-bold font-heading text-stone-900">¡Cobro Completado!</h3>
+      <p id="ticketInfoExito" class="text-sm text-stone-500 mt-1">Ticket #1042 • 0.00 €</p>
+
+      <div class="my-5 p-3.5 bg-stone-50 border border-stone-200 rounded-2xl text-left text-xs space-y-1.5 text-stone-600">
+        <div class="flex justify-between font-bold text-stone-800">
+          <span>LA PIRULETA</span>
+          <span>CAFETERÍA/PAN</span>
         </div>
-        <button onclick="cerrarCobro()" class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-200">✕</button>
+        <div class="border-t border-stone-200 my-1"></div>
+        <div id="ticketDesgloseExito" class="space-y-1"></div>
       </div>
 
-      <div class="bg-amber-50/70 rounded-2xl p-4 text-center border border-amber-200/60">
-        <span class="text-xs font-semibold uppercase tracking-wider text-amber-800">Total a Pagar</span>
-        <div class="text-3xl font-extrabold font-brand text-stone-900 mt-1" id="totalModal">0,00 €</div>
-      </div>
-
-      <div class="bg-white rounded-xl p-3 border border-stone-200/80 text-xs space-y-1.5" id="desgloseItems"></div>
-
-      <div id="seccionMetodos" class="space-y-2">
-        <label class="text-xs font-bold text-stone-500 uppercase tracking-wider">Selecciona método de cobro</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="finalizarVenta('Tarjeta')" class="p-3 rounded-xl border-2 border-stone-800 bg-stone-900 text-white flex flex-col items-center gap-1 active:scale-95 transition">
-            <i class="fa-solid fa-credit-card text-lg text-amber-300"></i>
-            <span class="text-xs font-bold">Tarjeta</span>
-          </button>
-          <button onclick="finalizarVenta('Efectivo')" class="p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm">
-            <i class="fa-solid fa-money-bill-wave text-lg text-emerald-600"></i>
-            <span class="text-xs font-bold">Efectivo</span>
-          </button>
-          <button onclick="finalizarVenta('Bizum')" class="p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm">
-            <i class="fa-solid fa-mobile-screen-button text-lg text-sky-600"></i>
-            <span class="text-xs font-bold">Bizum</span>
-          </button>
-        </div>
-      </div>
-
-      <div id="pantallaExito" class="hidden text-center py-4 space-y-3 bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200">
-        <div class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-md">✓</div>
-        <h4 class="font-bold text-stone-900 text-base" id="exitoTitulo">¡Cobro Registrado!</h4>
-        <p class="text-xs text-stone-600">Ticket 100% digital sin papel ni impresora</p>
-
-        <div class="my-2 p-3 bg-white rounded-xl inline-block border border-stone-200 shadow-inner">
-          <i class="fa-solid fa-qrcode text-5xl text-stone-800"></i>
-          <p class="text-[10px] text-stone-400 mt-1 font-mono">Escanear para e-Ticket</p>
-        </div>
-        
-        <div class="flex flex-col gap-2 pt-2">
-          <button onclick="compartirWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition">
-            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar ticket por WhatsApp
-          </button>
-          <button onclick="reiniciarTodo()" class="w-full bg-[#c85a32] hover:bg-[#b04a25] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm active:scale-95 transition">
-            Nuevo Cobro / Siguiente Venta
-          </button>
-        </div>
+      <div class="flex flex-col gap-2">
+        <button onclick="enviarWhatsApp()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-emerald-700">
+          <span>📱 Enviar Ticket por WhatsApp</span>
+        </button>
+        <button onclick="nuevaVenta()" class="w-full bg-stone-100 text-stone-700 font-bold py-3 rounded-xl text-sm hover:bg-stone-200">
+          Nueva Venta
+        </button>
       </div>
     </div>
   </div>
 
   <script>
-    var productos = [
-      { id: 1, nombre: "Flat White Doble", precio: 2.80, cat: "Café", emoji: "☕" },
-      { id: 2, nombre: "Cappuccino Avena", precio: 2.90, cat: "Café", emoji: "🥛" },
-      { id: 3, nombre: "Cold Brew Nitro", precio: 3.40, cat: "Café", emoji: "🧊" },
-      { id: 4, nombre: "Hogaza Masa Madre 1kg", precio: 4.20, cat: "Pan", emoji: "🥖" },
-      { id: 5, nombre: "Pan Centeno 500g", precio: 3.10, cat: "Pan", emoji: "🍞" },
-      { id: 6, nombre: "Croissant Mantequilla", precio: 1.95, cat: "Bollería", emoji: "🥐" },
-      { id: 7, nombre: "Pain au Chocolat", precio: 2.30, cat: "Bollería", emoji: "🍫" },
-      { id: 8, nombre: "Tostada Ibérica AOVE", precio: 4.50, cat: "Tostadas", emoji: "🥪" }
+    // CATÁLOGO DE PRODUCTOS (Completamente editable)
+    const CATALOGO = [
+      { id: 1, nombre: 'Flat White Doble', precio: 2.80, cat: 'Café', icono: '☕' },
+      { id: 2, nombre: 'Cappuccino Avena', precio: 2.90, cat: 'Café', icono: '🥛' },
+      { id: 3, nombre: 'Cold Brew Nitro', precio: 3.40, cat: 'Café', icono: '🧊' },
+      { id: 4, nombre: 'Hogaza Masa Madre 1kg', precio: 4.20, cat: 'Pan', icono: '🥖' },
+      { id: 5, nombre: 'Baguette Rústica', precio: 1.60, cat: 'Pan', icono: '🥖' },
+      { id: 6, nombre: 'Croissant Mantequilla', precio: 2.10, cat: 'Bollería', icono: '🥐' },
+      { id: 7, nombre: 'Pain au Chocolat', precio: 2.40, cat: 'Bollería', icono: '🍫' },
+      { id: 8, nombre: 'Tosta Aguacate & Tomate', precio: 5.50, cat: 'Tostadas', icono: '🥪' },
+      { id: 9, nombre: 'Zumo Naranja Natural', precio: 2.70, cat: 'Bebidas', icono: '🍊' },
+      { id: 10, nombre: 'Piruleta Dulce Especial', precio: 1.50, cat: 'Dulces', icono: '🍭' }
     ];
 
-    var carrito = {};
-    var categoriaActiva = "Todos";
+    const CATEGORIAS = ['Todos', 'Café', 'Pan', 'Bollería', 'Tostadas', 'Bebidas', 'Dulces'];
+    let categoriaActual = 'Todos';
+    let ticket = [];
+    let metodoPagoActual = 'Tarjeta';
+    let modoServicio = 'Barra';
+
+    // RENDERIZAR CATEGORÍAS
+    function renderCategorias() {
+      const container = document.getElementById('categoriasList');
+      container.innerHTML = CATEGORIAS.map(cat => {
+        const active = cat === categoriaActual;
+        return \`
+          <button onclick="filtrarCategoria('\${cat}')" 
+            class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all \${active ? 'bg-stone-900 text-white shadow-xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">
+            \${cat}
+          </button>
+        \`;
+      }).join('');
+    }
+
+    // RENDERIZAR PRODUCTOS
+    function renderProductos() {
+      const container = document.getElementById('productosGrid');
+      const filtrados = categoriaActual === 'Todos' ? CATALOGO : CATALOGO.filter(p => p.cat === categoriaActual);
+
+      container.innerHTML = filtrados.map(prod => \`
+        <div onclick="agregarAlTicket(\${prod.id})" 
+          class="bg-white p-3.5 rounded-2xl border border-stone-200/90 shadow-xs flex flex-col justify-between active:scale-97 transition cursor-pointer hover:border-[#c85a32]/50">
+          <div class="flex items-start justify-between">
+            <span class="text-2xl">\${prod.icono}</span>
+            <span class="text-[10px] font-semibold text-stone-400 bg-stone-50 px-2 py-0.5 rounded-md">\${prod.cat}</span>
+          </div>
+          <div class="mt-2">
+            <h4 class="font-bold text-sm text-stone-900 leading-tight">\${prod.nombre}</h4>
+            <div class="flex items-baseline justify-between mt-2">
+              <span class="font-extrabold text-[#c85a32] text-sm">\${prod.precio.toFixed(2)} €</span>
+              <span class="w-6 h-6 rounded-full bg-[#fdf3ed] text-[#c85a32] flex items-center justify-center font-bold text-xs">+</span>
+            </div>
+          </div>
+        </div>
+      \`).join('');
+    }
+
+    // AGREGAR AL TICKET
+    function agregarAlTicket(id) {
+      const prod = CATALOGO.find(p => p.id === id);
+      const itemExistente = ticket.find(i => i.id === id);
+      if (itemExistente) {
+        itemExistente.cantidad++;
+      } else {
+        ticket.push({ ...prod, cantidad: 1 });
+      }
+      actualizarResumenTicket();
+    }
+
+    // ACTUALIZAR BADGES Y BOTÓN COBRAR
+    function actualizarResumenTicket() {
+      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+      const totalUds = ticket.reduce((sum, item) => sum + item.cantidad, 0);
+
+      document.getElementById('totalBadge').innerText = total.toFixed(2) + ' €';
+      document.getElementById('itemsBadge').innerText = totalUds + (totalUds === 1 ? ' ud' : ' uds');
+
+      const btnCobrar = document.getElementById('btnCobrar');
+      if (totalUds > 0) {
+        btnCobrar.disabled = false;
+        btnCobrar.className = 'flex-1 max-w-[200px] bg-[#c85a32] hover:bg-[#b24c28] text-white font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#c85a32]/25 active:scale-95 transition cursor-pointer';
+      } else {
+        btnCobrar.disabled = true;
+        btnCobrar.className = 'flex-1 max-w-[200px] bg-stone-300 text-stone-500 font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition cursor-not-allowed';
+      }
+    }
 
     function filtrarCategoria(cat) {
-      categoriaActiva = cat;
-      var categorias = ["Todos", "Café", "Pan", "Bollería", "Tostadas"];
-      for (var i = 0; i < categorias.length; i++) {
-        var c = categorias[i];
-        var btn = document.getElementById("cat-" + c);
-        if (btn) {
-          if (c === cat) {
-            btn.className = "px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm";
-          } else {
-            btn.className = "px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm";
-          }
-        }
-      }
-      renderCatalogo();
+      categoriaActual = cat;
+      renderCategorias();
+      renderProductos();
     }
 
-    function renderCatalogo() {
-      var contenedor = document.getElementById("catalogo");
-      var prodsFiltrados = categoriaActiva === "Todos" 
-        ? productos 
-        : productos.filter(function(p) { return p.cat === categoriaActiva; });
-
-      var html = "";
-      for (var i = 0; i < prodsFiltrados.length; i++) {
-        var p = prodsFiltrados[i];
-        var cant = carrito[p.id] || 0;
-        var borde = cant > 0 ? "border-[#c85a32]/60 ring-2 ring-[#c85a32]/20" : "border-stone-200/80";
-        var badge = cant > 0 ? "<span class=\"bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono\">" + cant + "</span>" : "";
-        var btnMenos = cant > 0 ? "<button onclick=\"modificarCantidad(" + p.id + ", -1)\" class=\"w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200\">-</button>" : "";
-
-        html += "<div class=\"bg-white p-3.5 rounded-2xl border " + borde + " shadow-sm flex flex-col justify-between transition active:scale-[0.99]\">" +
-          "<div class=\"flex items-start justify-between\"><span class=\"text-2xl\">" + p.emoji + "</span>" + badge + "</div>" +
-          "<div class=\"my-2\"><h3 class=\"font-bold text-stone-900 text-sm leading-snug\">" + p.nombre + "</h3><p class=\"text-xs text-stone-400 font-medium\">" + p.cat + "</p></div>" +
-          "<div class=\"flex items-center justify-between pt-1\"><span class=\"font-brand font-bold text-stone-900 text-sm\">" + p.precio.toFixed(2) + " €</span>" +
-          "<div class=\"flex items-center gap-1\">" + btnMenos + "<button onclick=\"modificarCantidad(" + p.id + ", 1)\" class=\"w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90\">+</button></div></div></div>";
-      }
-      contenedor.innerHTML = html;
-      actualizarTotales();
+    function setModo(btn, modo) {
+      modoServicio = modo;
+      document.querySelectorAll('.modo-btn').forEach(b => {
+        b.className = 'modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition';
+      });
+      btn.className = 'modo-btn py-1.5 rounded-lg bg-stone-100 text-stone-900 shadow-sm transition';
     }
 
-    function modificarCantidad(id, delta) {
-      carrito[id] = (carrito[id] || 0) + delta;
-      if (carrito[id] <= 0) { delete carrito[id]; }
-      renderCatalogo();
+    function abrirModalCobro() {
+      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+      document.getElementById('modalTotalCobro').innerText = total.toFixed(2) + ' €';
+      document.getElementById('modalCobro').classList.remove('hidden');
     }
 
-    function calcularTotal() {
-      var total = 0;
-      var cantidad = 0;
-      for (var id in carrito) {
-        var prod = null;
-        for (var i = 0; i < productos.length; i++) {
-          if (productos[i].id == id) { prod = productos[i]; break; }
-        }
-        if (prod) {
-          total += prod.precio * carrito[id];
-          cantidad += carrito[id];
-        }
-      }
-      return { total: total, cantidad: cantidad };
+    function cerrarModalCobro() {
+      document.getElementById('modalCobro').classList.add('hidden');
     }
 
-    function actualizarTotales() {
-      var res = calcularTotal();
-      document.getElementById("cantTotal").innerText = res.cantidad;
-      document.getElementById("precioTotal").innerText = res.total.toFixed(2).replace('.', ',') + " €";
-      document.getElementById("btnCobrar").disabled = res.cantidad === 0;
+    function seleccionarMetodo(btn, metodo) {
+      metodoPagoActual = metodo;
+      document.querySelectorAll('.metodo-btn').forEach(b => {
+        b.className = 'metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50';
+      });
+      btn.className = 'metodo-btn p-3 rounded-xl border-2 border-[#c85a32] bg-[#fdf3ed] text-[#c85a32] font-bold text-xs flex flex-col items-center gap-1';
     }
 
-    function abrirCobro() {
-      var res = calcularTotal();
-      if (res.cantidad === 0) return;
-      document.getElementById("totalModal").innerText = res.total.toFixed(2).replace('.', ',') + " €";
-      document.getElementById("resumenModal").innerText = res.cantidad + " productos • Ticket #" + Math.floor(1000 + Math.random() * 9000);
+    function procesarVenta() {
+      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+      cerrarModalCobro();
 
-      var desglose = document.getElementById("desgloseItems");
-      var html = "";
-      for (var id in carrito) {
-        var p = null;
-        for (var i = 0; i < productos.length; i++) {
-          if (productos[i].id == id) { p = productos[i]; break; }
-        }
-        if (p) {
-          var sub = p.precio * carrito[id];
-          html += "<div class=\"flex justify-between text-stone-600\"><span>" + carrito[id] + "x " + p.nombre + "</span><span class=\"font-medium\">" + sub.toFixed(2) + " €</span></div>";
-        }
-      }
-      desglose.innerHTML = html;
-      document.getElementById("seccionMetodos").classList.remove("hidden");
-      document.getElementById("pantallaExito").classList.add("hidden");
-      document.getElementById("modalCobro").classList.remove("hidden");
+      document.getElementById('ticketInfoExito').innerText = 'Ticket #' + Math.floor(1000 + Math.random() * 9000) + ' • ' + total.toFixed(2) + ' € (' + metodoPagoActual + ')';
+      
+      const desglose = document.getElementById('ticketDesgloseExito');
+      desglose.innerHTML = ticket.map(i => \`
+        <div class="flex justify-between">
+          <span>\${i.cantidad}x \${i.nombre}</span>
+          <span class="font-semibold">\${(i.precio * i.cantidad).toFixed(2)} €</span>
+        </div>
+      \`).join('');
+
+      document.getElementById('modalExito').classList.remove('hidden');
     }
 
-    function cerrarCobro() {
-      document.getElementById("modalCobro").classList.add("hidden");
+    function nuevaVenta() {
+      ticket = [];
+      actualizarResumenTicket();
+      document.getElementById('modalExito').classList.add('hidden');
     }
 
-    function finalizarVenta(metodo) {
-      document.getElementById("seccionMetodos").classList.add("hidden");
-      document.getElementById("exitoTitulo").innerText = "¡Cobro con " + metodo + " Registrado!";
-      document.getElementById("pantallaExito").classList.remove("hidden");
+    function enviarWhatsApp() {
+      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+      let texto = '🧾 *Ticket LA PIRULETA*\\n';
+      texto += '---------------------\\n';
+      ticket.forEach(i => {
+        texto += \`\${i.cantidad}x \${i.nombre} - \${(i.precio * i.cantidad).toFixed(2)}€\\n\`;
+      });
+      texto += '---------------------\\n';
+      texto += \`*Total:* \${total.toFixed(2)}€ (\${metodoPagoActual})\\n\`;
+      texto += '¡Gracias por su visita a La Piruleta! 🍭';
+      
+      window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank');
     }
 
-    function reiniciarTicket() {
-      carrito = {};
-      renderCatalogo();
+    // INICIALIZAR
+    renderCategorias();
+    renderProductos();
+  <\\/script>
+</body>
+</html>`.replace(/<\\\/script>/g, '<\/script>');
+
+    document.getElementById('rawCodeArea').textContent = fullHtmlCode;
+    document.getElementById('hiddenSource').value = fullHtmlCode;
+
+    function copyFullCode() {
+      const text = document.getElementById('hiddenSource').value;
+      navigator.clipboard.writeText(text).then(() => {
+        const copyText = document.getElementById('copyText');
+        const copyBtn = document.getElementById('copyBtn');
+        copyText.textContent = '¡Copiado con Éxito!';
+        copyBtn.classList.add('bg-emerald-600', 'border-emerald-500');
+        setTimeout(() => {
+          copyText.textContent = 'Copiar Código';
+          copyBtn.classList.remove('bg-emerald-600', 'border-emerald-500');
+        }, 2500);
+      }).catch(err => {
+        alert('Selecciona el código en el recuadro inferior y presiona Copiar.');
+      });
     }
 
-    function reiniciarTodo() {
-      carrito = {};
-      renderCatalogo();
-      cerrarCobro();
+    function downloadHtmlFile() {
+      const text = document.getElementById('hiddenSource').value;
+      const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
-
-    function compartirWhatsApp() {
-      var res = calcularTotal();
-      var detalle = "";
-      for (var id in carrito) {
-        var p = null;
-        for (var i = 0; i < productos.length; i++) {
-          if (productos[i].id == id) { p = productos[i]; break; }
-        }
-        if (p) {
-          detalle += "• " + carrito[id] + "x " + p.nombre + "%0A";
-        }
-      }
-      var texto = "🍭 *LA PIRULETA - Ticket de Compra*%0A---------------------------%0A" + detalle + "---------------------------%0A*Total: " + res.total.toFixed(2) + " €*%0A¡Muchas gracias por tu visita! 😊";
-      window.open("https://wa.me/?text=" + texto, '_blank');
-    }
-
-    renderCatalogo();
   </script>
 </body>
 </html>
