@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LA PIRULETA - Terminal TPV v2.5</title>
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              orange: '#c2410c',
+              light: '#fff7ed',
+              accent: '#d97706'
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#faf8f5] text-slate-800 min-h-screen flex flex-col font-sans select-none pb-20">
+
+  <!-- BEGIN: TopBar -->
+  <header class="bg-white border-b border-orange-100 px-4 py-3 sticky top-0 z-20 shadow-sm flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-xl shadow-inner border border-amber-200">
+        🍭
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-black tracking-tight text-slate-900 text-base">LA PIRULETA</h1>
+          <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full uppercase">Terminal</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Online</span>
+          <span>•</span>
+          <span>Caja 1</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600">
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </button>
+      <button class="w-9 h-9 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-900 flex items-center justify-center">
+        <i class="fa-solid fa-sliders text-sm"></i>
+      </button>
+    </div>
+  </header>
+  <!-- END: TopBar -->
+
+  <!-- BEGIN: MainContainer -->
+  <main class="flex-1 max-w-lg w-full mx-auto p-4 space-y-4">
+
+    <!-- Vista: Cierre y Arqueo de Caja -->
+    <section id="view-caja" class="bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80 space-y-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Arqueo de Turno</h2>
+          <p class="text-xs text-slate-500">Cierre Diario - Caja 1</p>
+        </div>
+        <span id="badge-turno" class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+          Turno Activo
+        </span>
+      </div>
+
+      <!-- Tarjetas de Métricas en Caja -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+          <p class="text-xs text-slate-500 font-medium">Efectivo en Cajón</p>
+          <p id="metric-efectivo" class="text-xl font-bold text-emerald-600">0.00 €</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+          <p class="text-xs text-slate-500 font-medium">Datafono / Tarjeta</p>
+          <p id="metric-tarjeta" class="text-xl font-bold text-blue-600">0.00 €</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+          <p class="text-xs text-slate-500 font-medium">Bizum Recibidos</p>
+          <p id="metric-bizum" class="text-xl font-bold text-teal-600">0.00 €</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-orange-50/60 border border-amber-200/60 space-y-1">
+          <p class="text-xs text-amber-900 font-medium">Total Ventas</p>
+          <p id="metric-total" class="text-xl font-bold text-slate-900">0.00 €</p>
+        </div>
+      </div>
+
+      <!-- Botón Principal de Cierre -->
+      <button 
+        id="btn-cerrar-caja" 
+        type="button" 
+        class="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-700 hover:from-orange-700 hover:to-amber-800 text-white font-bold text-sm shadow-lg shadow-orange-700/20 active:scale-98 transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-lock"></i>
+        <span>Cerrar Caja y Descargar Resumen Z</span>
+      </button>
+    </section>
+
+    <!-- Vista: Mesas (Persistencia de Estado) -->
+    <section id="view-mesas" class="bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-slate-900">Estado de Sala / Mesas</h2>
+        <span class="text-xs text-slate-400">100% Libres por defecto</span>
+      </div>
+      <div id="grid-mesas" class="grid grid-cols-4 gap-2.5">
+        <!-- Mesas dinámicas renderizadas desde localStorage -->
+      </div>
+    </section>
+
+  </main>
+  <!-- END: MainContainer -->
+
+  <!-- BEGIN: BottomNavigationBar -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 px-6 py-2.5 flex items-center justify-between text-xs z-30 shadow-lg">
+    <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-800">
+      <i class="fa-solid fa-cash-register text-lg"></i>
+      <span>TERMINAL</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-800">
+      <i class="fa-solid fa-receipt text-lg"></i>
+      <span>COBRO</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-800">
+      <i class="fa-solid fa-chair text-lg"></i>
+      <span>MESAS</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 text-orange-600 font-bold">
+      <i class="fa-solid fa-utensils text-lg"></i>
+      <span>CAJA</span>
+    </button>
+  </nav>
+  <!-- END: BottomNavigationBar -->
+
+  <!-- BEGIN: PersistenceScripts -->
+  <script data-purpose="localstorage-persistence-logic">
+    // Claves unificadas en localStorage para LA PIRULETA
+    const STORAGE_KEY_CAJA = 'piruleta_caja_v25';
+    const STORAGE_KEY_MESAS = 'piruleta_mesas_v25';
+
+    // Estado inicial por defecto limpio (todas libres, sin importes inventados)
+    const DEFAULT_CAJA = {
+      efectivo: 0.00,
+      tarjeta: 0.00,
+      bizum: 0.00,
+      cajaCerrada: false,
+      ultimaActualizacion: new Date().toISOString()
+    };
+
+    const DEFAULT_MESAS = Array.from({ length: 8 }, (_, i) => ({
+      id: i + 1,
+      ocupada: false,
+      total: 0.00,
+      comensales: 0
+    }));
+
+    // Cargar estado guardado o inicializar limpio
+    function loadState() {
+      let caja = JSON.parse(localStorage.getItem(STORAGE_KEY_CAJA));
+      if (!caja) {
+        caja = DEFAULT_CAJA;
+        saveCaja(caja);
+      }
+
+      let mesas = JSON.parse(localStorage.getItem(STORAGE_KEY_MESAS));
+      if (!mesas || !Array.isArray(mesas)) {
+        mesas = DEFAULT_MESAS;
+        saveMesas(mesas);
+      }
+
+      return { caja, mesas };
+    }
+
+    function saveCaja(caja) {
+      localStorage.setItem(STORAGE_KEY_CAJA, JSON.stringify(caja));
+    }
+
+    function saveMesas(mesas) {
+      localStorage.setItem(STORAGE_KEY_MESAS, JSON.stringify(mesas));
+    }
+
+    // Renderizar métricas en pantalla
+    function renderApp() {
+      const { caja, mesas } = loadState();
+
+      // Métricas de Caja
+      document.getElementById('metric-efectivo').textContent = `${Number(caja.efectivo).toFixed(2)} €`;
+      document.getElementById('metric-tarjeta').textContent = `${Number(caja.tarjeta).toFixed(2)} €`;
+      document.getElementById('metric-bizum').textContent = `${Number(caja.bizum).toFixed(2)} €`;
+      
+      const totalVentas = (Number(caja.efectivo) + Number(caja.tarjeta) + Number(caja.bizum)).toFixed(2);
+      document.getElementById('metric-total').textContent = `${totalVentas} €`;
+
+      const badge = document.getElementById('badge-turno');
+      if (caja.cajaCerrada) {
+        badge.textContent = 'Turno Cerrado (0.00 €)';
+        badge.className = 'text-xs font-semibold px-3 py-1 rounded-full bg-slate-200 text-slate-700';
+      } else {
+        badge.textContent = 'Turno Activo';
+        badge.className = 'text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200';
+      }
+
+      // Renderizar Mesas
+      const grid = document.getElementById('grid-mesas');
+      grid.innerHTML = '';
+      mesas.forEach(m => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => toggleMesa(m.id);
+        btn.className = `p-3 rounded-2xl text-center border font-semibold transition ${
+          m.ocupada 
+            ? 'bg-rose-50 border-rose-300 text-rose-700' 
+            : 'bg-stone-50 border-stone-200 text-slate-700 hover:bg-stone-100'
+        }`;
+        btn.innerHTML = `
+          <div class="text-xs opacity-70">Mesa</div>
+          <div class="text-base font-bold">${m.id}</div>
+          <div class="text-[10px] uppercase font-bold tracking-wider mt-1 ${m.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
+            ${m.ocupada ? 'Ocupada' : 'Libre'}
+          </div>
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    // Cambiar estado de mesa y guardar de inmediato
+    function toggleMesa(id) {
+      const { mesas } = loadState();
+      const mesa = mesas.find(m => m.id === id);
+      if (mesa) {
+        mesa.ocupada = !mesa.ocupada;
+        saveMesas(mesas);
+        renderApp();
+      }
+    }
+
+    // Botón de Cierre de Caja con puesta a 0.00 € y almacenamiento persistente
+    document.getElementById('btn-cerrar-caja').addEventListener('click', () => {
+      if (confirm('¿Confirmar cierre de caja? Los importes se pondrán a 0.00 € y el estado se guardará permanentemente.')) {
+        const cajaCerrada = {
+          efectivo: 0.00,
+          tarjeta: 0.00,
+          bizum: 0.00,
+          cajaCerrada: true,
+          ultimaActualizacion: new Date().toISOString()
+        };
+        saveCaja(cajaCerrada);
+        renderApp();
+        alert('Caja cerrada con éxito. Guardado permanentemente en localStorage.');
+      }
+    });
+
+    // Inicializar al cargar
+    document.addEventListener('DOMContentLoaded', renderApp);
+  </script>
+  <!-- END: PersistenceScripts -->
+
+</body>
+</html>
