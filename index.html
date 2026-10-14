@@ -2,658 +2,731 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#c85a32">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Miga & Grano POS">
-  <title>Miga & Grano - TPV Móvil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Código index.html - TPV LA PIRULETA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-code { font-family: 'Fira Code', monospace; }
+    .font-brand { font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#121316] text-stone-200 min-h-screen p-4 sm:p-8 flex flex-col items-center justify-start">
+
+  <div class="w-full max-w-4xl space-y-4">
+    
+    <!-- Barra Superior de Control y Acción -->
+    <header class="bg-[#1c1d22] border border-stone-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-xl bg-[#c85a32] text-white flex items-center justify-center text-2xl shadow-lg shadow-[#c85a32]/20">
+          🍭
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-brand font-bold text-white text-lg sm:text-xl">index.html</h1>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">TPV LA PIRULETA</span>
+          </div>
+          <p class="text-xs text-stone-400 mt-0.5">Código 100% interactivo listo para pegar en GitHub Pages</p>
+        </div>
+      </div>
+
+      <!-- Botón de Copia Principal Grande -->
+      <button onclick="copiarCodigo()" id="btnCopiar" class="w-full sm:w-auto bg-[#c85a32] hover:bg-[#d9653a] active:scale-95 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2.5 shadow-lg shadow-[#c85a32]/30 transition-all cursor-pointer">
+        <i class="fa-solid fa-copy text-sm" id="iconoCopiar"></i>
+        <span id="textoCopiar">Copiar Todo el Código</span>
+      </button>
+    </header>
+
+    <!-- Instrucción Breve -->
+    <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3.5 text-xs text-amber-200/90 flex items-center gap-3">
+      <i class="fa-solid fa-circle-info text-amber-400 text-sm shrink-0"></i>
+      <span>Haz clic en <strong>"Copiar Todo el Código"</strong>. Luego ve a GitHub, borra el contenido de tu <code>index.html</code> y dale a <strong>Pegar</strong>. Se pegará estructurado con todos sus saltos de línea.</span>
+    </div>
+
+    <!-- Visor de Código Estructurado -->
+    <div class="bg-[#18191e] border border-stone-800/90 rounded-2xl overflow-hidden shadow-2xl">
+      <!-- Barra de ventana tipo editor -->
+      <div class="bg-[#141519] px-4 py-2.5 border-b border-stone-800 flex items-center justify-between text-xs text-stone-400 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+          <span class="ml-2 font-semibold text-stone-300">index.html (TPV Móvil)</span>
+        </div>
+        <span class="text-stone-500 text-[11px]">HTML5 • Tailwind CSS • JavaScript</span>
+      </div>
+
+      <!-- Área de código preformateada -->
+      <div class="relative">
+        <pre class="p-5 overflow-x-auto text-xs sm:text-sm font-code leading-relaxed text-stone-300 selection:bg-[#c85a32] selection:text-white max-h-[68vh] overflow-y-auto" id="codigoVisual"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&quot;&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black-translucent&quot;&gt;
+  &lt;meta name=&quot;theme-color&quot; content=&quot;#c85a32&quot;&gt;
+  &lt;title&gt;TPV LA PIRULETA&lt;/title&gt;
   
-  <!-- Tailwind CSS CDN -->
+  &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css&quot;&gt;
+  
+  &lt;style&gt;
+    body {
+      font-family: &#39;Plus Jakarta Sans&#39;, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .font-brand {
+      font-family: &#39;Space Grotesk&#39;, sans-serif;
+    }
+    ::-webkit-scrollbar { display: none; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-[#f7f2ea] text-stone-900 min-h-screen flex flex-col justify-between pb-24 select-none&quot;&gt;
+
+  &lt;!-- Header Superior --&gt;
+  &lt;header class=&quot;sticky top-0 z-30 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between&quot;&gt;
+    &lt;div class=&quot;flex items-center gap-3&quot;&gt;
+      &lt;div class=&quot;w-10 h-10 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center font-bold text-xl shadow-sm&quot;&gt;
+        🍭
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h1 class=&quot;font-brand font-bold text-lg leading-tight tracking-tight text-stone-900&quot;&gt;LA PIRULETA&lt;/h1&gt;
+        &lt;div class=&quot;flex items-center gap-1.5 text-xs text-stone-500 font-medium&quot;&gt;
+          &lt;span class=&quot;w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse&quot;&gt;&lt;/span&gt;
+          &lt;span&gt;Online • Caja 1&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+      &lt;button onclick=&quot;reiniciarTicket()&quot; title=&quot;Vaciar pedido&quot; class=&quot;w-9 h-9 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-200 active:scale-95 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-rotate-right text-xs&quot;&gt;&lt;/i&gt;
+      &lt;/button&gt;
+      &lt;div class=&quot;w-9 h-9 rounded-full bg-stone-800 text-amber-100 font-bold text-xs flex items-center justify-center border border-stone-700&quot;&gt;
+        LP
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;!-- Filtros de Servicio y Categorías --&gt;
+  &lt;div class=&quot;px-4 pt-3 pb-1 space-y-2.5&quot;&gt;
+    &lt;div class=&quot;grid grid-cols-3 gap-1.5 bg-stone-200/70 p-1 rounded-xl text-xs font-semibold text-stone-600&quot;&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg bg-white text-[#c85a32] shadow-sm flex items-center justify-center gap-1.5 font-bold&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-mug-saucer text-xs&quot;&gt;&lt;/i&gt; Barra
+      &lt;/button&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-bag-shopping text-xs&quot;&gt;&lt;/i&gt; Para llevar
+      &lt;/button&gt;
+      &lt;button class=&quot;py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition&quot;&gt;
+        &lt;i class=&quot;fa-solid fa-chair text-xs&quot;&gt;&lt;/i&gt; Mesa
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Pestañas de categoría --&gt;
+    &lt;div class=&quot;flex items-center gap-2 overflow-x-auto pb-1 text-xs font-medium&quot;&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Todos&#39;)&quot; id=&quot;cat-Todos&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm&quot;&gt;Todos&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Café&#39;)&quot; id=&quot;cat-Café&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;☕ Café&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Pan&#39;)&quot; id=&quot;cat-Pan&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥖 Pan&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Bollería&#39;)&quot; id=&quot;cat-Bollería&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥐 Bollería&lt;/button&gt;
+      &lt;button onclick=&quot;filtrarCategoria(&#39;Tostadas&#39;)&quot; id=&quot;cat-Tostadas&quot; class=&quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;&gt;🥪 Tostadas&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Catálogo de Productos --&gt;
+  &lt;main class=&quot;p-4 flex-1&quot;&gt;
+    &lt;div class=&quot;grid grid-cols-2 gap-3&quot; id=&quot;catalogo&quot;&gt;
+      &lt;!-- Se inyecta dinámicamente --&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+
+  &lt;!-- Barra Inferior de Cobro Fija --&gt;
+  &lt;div class=&quot;fixed bottom-0 left-0 right-0 p-3 bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200 z-40 max-w-lg mx-auto&quot;&gt;
+    &lt;button onclick=&quot;abrirCobro()&quot; id=&quot;btnCobrar&quot; disabled class=&quot;w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-brand font-bold py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-lg shadow-[#c85a32]/25 disabled:opacity-50 disabled:pointer-events-none&quot;&gt;
+      &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+        &lt;span class=&quot;w-6 h-6 rounded-lg bg-black/20 flex items-center justify-center text-xs font-mono&quot; id=&quot;cantTotal&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;text-sm font-semibold&quot;&gt;Cobrar Ticket&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;span class=&quot;text-lg tracking-tight font-extrabold&quot; id=&quot;precioTotal&quot;&gt;0,00 €&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Modal de Pasarela de Cobro y Ticket Digital --&gt;
+  &lt;div id=&quot;modalCobro&quot; class=&quot;fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4&quot;&gt;
+    &lt;div class=&quot;bg-[#fffdfa] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto&quot;&gt;
+      &lt;div class=&quot;flex items-center justify-between pb-2 border-b border-stone-200&quot;&gt;
+        &lt;div&gt;
+          &lt;h3 class=&quot;font-brand font-bold text-lg text-stone-900&quot;&gt;Cobro • LA PIRULETA&lt;/h3&gt;
+          &lt;p class=&quot;text-xs text-stone-500&quot; id=&quot;resumenModal&quot;&gt;Ticket #1042&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;button onclick=&quot;cerrarCobro()&quot; class=&quot;w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-200&quot;&gt;
+          ✕
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Importe Total --&gt;
+      &lt;div class=&quot;bg-amber-50/70 rounded-2xl p-4 text-center border border-amber-200/60&quot;&gt;
+        &lt;span class=&quot;text-xs font-semibold uppercase tracking-wider text-amber-800&quot;&gt;Total a Pagar&lt;/span&gt;
+        &lt;div class=&quot;text-3xl font-extrabold font-brand text-stone-900 mt-1&quot; id=&quot;totalModal&quot;&gt;0,00 €&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Desglose breve del ticket --&gt;
+      &lt;div class=&quot;bg-white rounded-xl p-3 border border-stone-200/80 text-xs space-y-1.5&quot; id=&quot;desgloseItems&quot;&gt;
+        &lt;!-- Rellenado por JS --&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Métodos de cobro directos --&gt;
+      &lt;div id=&quot;seccionMetodos&quot; class=&quot;space-y-2&quot;&gt;
+        &lt;label class=&quot;text-xs font-bold text-stone-500 uppercase tracking-wider&quot;&gt;Selecciona método de cobro&lt;/label&gt;
+        &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Tarjeta&#39;)&quot; class=&quot;p-3 rounded-xl border-2 border-stone-800 bg-stone-900 text-white flex flex-col items-center gap-1 active:scale-95 transition&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-credit-card text-lg text-amber-300&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Tarjeta&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Efectivo&#39;)&quot; class=&quot;p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-money-bill-wave text-lg text-emerald-600&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Efectivo&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;button onclick=&quot;finalizarVenta(&#39;Bizum&#39;)&quot; class=&quot;p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-mobile-screen-button text-lg text-sky-600&quot;&gt;&lt;/i&gt;
+            &lt;span class=&quot;text-xs font-bold&quot;&gt;Bizum&lt;/span&gt;
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Ticket digital sin papel (Éxito de cobro) --&gt;
+      &lt;div id=&quot;pantallaExito&quot; class=&quot;hidden text-center py-4 space-y-3 bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200&quot;&gt;
+        &lt;div class=&quot;w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-md&quot;&gt;✓&lt;/div&gt;
+        &lt;h4 class=&quot;font-bold text-stone-900 text-base&quot; id=&quot;exitoTitulo&quot;&gt;¡Cobro Registrado!&lt;/h4&gt;
+        &lt;p class=&quot;text-xs text-stone-600&quot;&gt;Ticket 100% digital sin papel ni impresora&lt;/p&gt;
+
+        &lt;!-- QR simulado en pantalla para escanear --&gt;
+        &lt;div class=&quot;my-2 p-3 bg-white rounded-xl inline-block border border-stone-200 shadow-inner&quot;&gt;
+          &lt;i class=&quot;fa-solid fa-qrcode text-5xl text-stone-800&quot;&gt;&lt;/i&gt;
+          &lt;p class=&quot;text-[10px] text-stone-400 mt-1 font-mono&quot;&gt;Escanear para e-Ticket&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;flex flex-col gap-2 pt-2&quot;&gt;
+          &lt;button onclick=&quot;compartirWhatsApp()&quot; class=&quot;w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition&quot;&gt;
+            &lt;i class=&quot;fa-brands fa-whatsapp text-sm&quot;&gt;&lt;/i&gt; Enviar ticket por WhatsApp
+          &lt;/button&gt;
+          &lt;button onclick=&quot;reiniciarTodo()&quot; class=&quot;w-full bg-[#c85a32] hover:bg-[#b04a25] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm active:scale-95 transition&quot;&gt;
+            Nuevo Cobro / Siguiente Venta
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    const productos = [
+      { id: 1, nombre: &quot;Flat White Doble&quot;, precio: 2.80, cat: &quot;Café&quot;, emoji: &quot;☕&quot; },
+      { id: 2, nombre: &quot;Cappuccino Avena&quot;, precio: 2.90, cat: &quot;Café&quot;, emoji: &quot;🥛&quot; },
+      { id: 3, nombre: &quot;Cold Brew Nitro&quot;, precio: 3.40, cat: &quot;Café&quot;, emoji: &quot;🧊&quot; },
+      { id: 4, nombre: &quot;Hogaza Masa Madre 1kg&quot;, precio: 4.20, cat: &quot;Pan&quot;, emoji: &quot;🥖&quot; },
+      { id: 5, nombre: &quot;Pan Centeno 500g&quot;, precio: 3.10, cat: &quot;Pan&quot;, emoji: &quot;🍞&quot; },
+      { id: 6, nombre: &quot;Croissant Mantequilla&quot;, precio: 1.95, cat: &quot;Bollería&quot;, emoji: &quot;🥐&quot; },
+      { id: 7, nombre: &quot;Pain au Chocolat&quot;, precio: 2.30, cat: &quot;Bollería&quot;, emoji: &quot;🍫&quot; },
+      { id: 8, nombre: &quot;Tostada Ibérica AOVE&quot;, precio: 4.50, cat: &quot;Tostadas&quot;, emoji: &quot;🥪&quot; }
+    ];
+
+    let carrito = {};
+    let categoriaActiva = &quot;Todos&quot;;
+
+    function filtrarCategoria(cat) {
+      categoriaActiva = cat;
+      [&quot;Todos&quot;, &quot;Café&quot;, &quot;Pan&quot;, &quot;Bollería&quot;, &quot;Tostadas&quot;].forEach(c =&gt; {
+        const btn = document.getElementById(&quot;cat-&quot; + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = &quot;px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm&quot;;
+          } else {
+            btn.className = &quot;px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm&quot;;
+          }
+        }
+      });
+      renderCatalogo();
+    }
+
+    function renderCatalogo() {
+      const contenedor = document.getElementById(&quot;catalogo&quot;);
+      const prodsFiltrados = categoriaActiva === &quot;Todos&quot; 
+        ? productos 
+        : productos.filter(p =&gt; p.cat === categoriaActiva);
+
+      contenedor.innerHTML = prodsFiltrados.map(p =&gt; {
+        const cant = carrito[p.id] || 0;
+        return `
+          &lt;div class=&quot;bg-white p-3.5 rounded-2xl border ${cant &gt; 0 ? &#39;border-[#c85a32]/60 ring-2 ring-[#c85a32]/20&#39; : &#39;border-stone-200/80&#39;} shadow-sm flex flex-col justify-between transition active:scale-[0.99]&quot;&gt;
+            &lt;div class=&quot;flex items-start justify-between&quot;&gt;
+              &lt;span class=&quot;text-2xl&quot;&gt;${p.emoji}&lt;/span&gt;
+              ${cant &gt; 0 ? `&lt;span class=&quot;bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono&quot;&gt;${cant}&lt;/span&gt;` : &#39;&#39;}
+            &lt;/div&gt;
+            &lt;div class=&quot;my-2&quot;&gt;
+              &lt;h3 class=&quot;font-bold text-stone-900 text-sm leading-snug&quot;&gt;${p.nombre}&lt;/h3&gt;
+              &lt;p class=&quot;text-xs text-stone-400 font-medium&quot;&gt;${p.cat}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;flex items-center justify-between pt-1&quot;&gt;
+              &lt;span class=&quot;font-brand font-bold text-stone-900 text-sm&quot;&gt;${p.precio.toFixed(2)} €&lt;/span&gt;
+              &lt;div class=&quot;flex items-center gap-1&quot;&gt;
+                ${cant &gt; 0 ? `
+                  &lt;button onclick=&quot;modificarCantidad(${p.id}, -1)&quot; class=&quot;w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200&quot;&gt;-&lt;/button&gt;
+                ` : &#39;&#39;}
+                &lt;button onclick=&quot;modificarCantidad(${p.id}, 1)&quot; class=&quot;w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90&quot;&gt;+&lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        `;
+      }).join(&#39;&#39;);
+      actualizarTotales();
+    }
+
+    function modificarCantidad(id, delta) {
+      carrito[id] = (carrito[id] || 0) + delta;
+      if (carrito[id] &lt;= 0) delete carrito[id];
+      renderCatalogo();
+    }
+
+    function calcularTotal() {
+      let total = 0;
+      let cantidad = 0;
+      for (const id in carrito) {
+        const prod = productos.find(p =&gt; p.id == id);
+        if (prod) {
+          total += prod.precio * carrito[id];
+          cantidad += carrito[id];
+        }
+      }
+      return { total, cantidad };
+    }
+
+    function actualizarTotales() {
+      const { total, cantidad } = calcularTotal();
+      document.getElementById(&quot;cantTotal&quot;).innerText = cantidad;
+      document.getElementById(&quot;precioTotal&quot;).innerText = total.toFixed(2).replace(&#39;.&#39;, &#39;,&#39;) + &quot; €&quot;;
+      document.getElementById(&quot;btnCobrar&quot;).disabled = cantidad === 0;
+    }
+
+    function abrirCobro() {
+      const { total, cantidad } = calcularTotal();
+      if (cantidad === 0) return;
+      document.getElementById(&quot;totalModal&quot;).innerText = total.toFixed(2).replace(&#39;.&#39;, &#39;,&#39;) + &quot; €&quot;;
+      document.getElementById(&quot;resumenModal&quot;).innerText = `${cantidad} productos • Ticket #${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const desglose = document.getElementById(&quot;desgloseItems&quot;);
+      let html = &quot;&quot;;
+      for (const id in carrito) {
+        const p = productos.find(item =&gt; item.id == id);
+        const sub = p.precio * carrito[id];
+        html += `&lt;div class=&quot;flex justify-between text-stone-600&quot;&gt;&lt;span&gt;${carrito[id]}x ${p.nombre}&lt;/span&gt;&lt;span class=&quot;font-medium&quot;&gt;${sub.toFixed(2)} €&lt;/span&gt;&lt;/div&gt;`;
+      }
+      desglose.innerHTML = html;
+
+      document.getElementById(&quot;seccionMetodos&quot;).classList.remove(&quot;hidden&quot;);
+      document.getElementById(&quot;pantallaExito&quot;).classList.add(&quot;hidden&quot;);
+      document.getElementById(&quot;modalCobro&quot;).classList.remove(&quot;hidden&quot;);
+    }
+
+    function cerrarCobro() {
+      document.getElementById(&quot;modalCobro&quot;).classList.add(&quot;hidden&quot;);
+    }
+
+    function finalizarVenta(metodo) {
+      document.getElementById(&quot;seccionMetodos&quot;).classList.add(&quot;hidden&quot;);
+      document.getElementById(&quot;exitoTitulo&quot;).innerText = `¡Cobro con ${metodo} Registrado!`;
+      document.getElementById(&quot;pantallaExito&quot;).classList.remove(&quot;hidden&quot;);
+    }
+
+    function reiniciarTicket() {
+      carrito = {};
+      renderCatalogo();
+    }
+
+    function reiniciarTodo() {
+      carrito = {};
+      renderCatalogo();
+      cerrarCobro();
+    }
+
+    function compartirWhatsApp() {
+      const { total } = calcularTotal();
+      let detalle = &quot;&quot;;
+      for (const id in carrito) {
+        const p = productos.find(item =&gt; item.id == id);
+        detalle += `• ${carrito[id]}x ${p.nombre}%0A`;
+      }
+      const texto = `🍭 *LA PIRULETA - Ticket de Compra*%0A---------------------------%0A${detalle}---------------------------%0A*Total: ${total.toFixed(2)} €*%0A¡Muchas gracias por tu visita! 😊`;
+      window.open(`https://wa.me/?text=${texto}`, &#39;_blank&#39;);
+    }
+
+    renderCatalogo();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+    </div>
+
+    <!-- Texto oculto sin escapar para el copiado exacto -->
+    <textarea id="rawCode" class="sr-only" aria-hidden="true"><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#c85a32">
+  <title>TPV LA PIRULETA</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              DEFAULT: '#c85a32',
-              dark: '#a84420',
-              light: '#fbf2e7',
-              surface: '#fff8f1',
-              card: '#ffffff',
-              border: '#f0e3d2',
-              text: '#2d241e',
-              muted: '#857468'
-            }
-          },
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
   <style>
-    /* Estilos para sensación de App Nativa */
-    * {
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
-    body {
-      background-color: #f7eee2;
-      color: #2d241e;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      overflow-x: hidden;
-      touch-action: manipulation;
+    .font-brand {
+      font-family: 'Space Grotesk', sans-serif;
     }
-    .custom-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    .custom-scroll {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .press-effect:active {
-      transform: scale(0.97);
-    }
-    .tab-active {
-      color: #c85a32;
-    }
+    ::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body class="flex justify-center min-h-screen">
+<body class="bg-[#f7f2ea] text-stone-900 min-h-screen flex flex-col justify-between pb-24 select-none">
 
-  <!-- Contenedor Maqueta Móvil -->
-  <div id="app-frame" class="w-full max-w-md min-h-screen bg-[#fff8f1] flex flex-col shadow-2xl relative pb-20">
-
-    <!-- CABECERA GLOBAL -->
-    <header class="sticky top-0 z-30 bg-[#fff8f1]/95 backdrop-blur-md border-b border-[#f0e3d2] px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-8 h-8 rounded-full bg-[#c85a32] flex items-center justify-center text-white font-bold text-sm shadow-sm">
-          🍞
+  <!-- Header Superior -->
+  <header class="sticky top-0 z-30 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center font-bold text-xl shadow-sm">
+        🍭
+      </div>
+      <div>
+        <h1 class="font-brand font-bold text-lg leading-tight tracking-tight text-stone-900">LA PIRULETA</h1>
+        <div class="flex items-center gap-1.5 text-xs text-stone-500 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+          <span>Online • Caja 1</span>
         </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="reiniciarTicket()" title="Vaciar pedido" class="w-9 h-9 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-200 active:scale-95 transition">
+        <i class="fa-solid fa-rotate-right text-xs"></i>
+      </button>
+      <div class="w-9 h-9 rounded-full bg-stone-800 text-amber-100 font-bold text-xs flex items-center justify-center border border-stone-700">
+        LP
+      </div>
+    </div>
+  </header>
+
+  <!-- Filtros de Servicio y Categorías -->
+  <div class="px-4 pt-3 pb-1 space-y-2.5">
+    <div class="grid grid-cols-3 gap-1.5 bg-stone-200/70 p-1 rounded-xl text-xs font-semibold text-stone-600">
+      <button class="py-1.5 rounded-lg bg-white text-[#c85a32] shadow-sm flex items-center justify-center gap-1.5 font-bold">
+        <i class="fa-solid fa-mug-saucer text-xs"></i> Barra
+      </button>
+      <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
+        <i class="fa-solid fa-bag-shopping text-xs"></i> Para llevar
+      </button>
+      <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
+        <i class="fa-solid fa-chair text-xs"></i> Mesa
+      </button>
+    </div>
+
+    <!-- Pestañas de categoría -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-medium">
+      <button onclick="filtrarCategoria('Todos')" id="cat-Todos" class="px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm">Todos</button>
+      <button onclick="filtrarCategoria('Café')" id="cat-Café" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">☕ Café</button>
+      <button onclick="filtrarCategoria('Pan')" id="cat-Pan" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥖 Pan</button>
+      <button onclick="filtrarCategoria('Bollería')" id="cat-Bollería" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥐 Bollería</button>
+      <button onclick="filtrarCategoria('Tostadas')" id="cat-Tostadas" class="px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm">🥪 Tostadas</button>
+    </div>
+  </div>
+
+  <!-- Catálogo de Productos -->
+  <main class="p-4 flex-1">
+    <div class="grid grid-cols-2 gap-3" id="catalogo">
+      <!-- Se inyecta dinámicamente -->
+    </div>
+  </main>
+
+  <!-- Barra Inferior de Cobro Fija -->
+  <div class="fixed bottom-0 left-0 right-0 p-3 bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200 z-40 max-w-lg mx-auto">
+    <button onclick="abrirCobro()" id="btnCobrar" disabled class="w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-brand font-bold py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-lg shadow-[#c85a32]/25 disabled:opacity-50 disabled:pointer-events-none">
+      <div class="flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-black/20 flex items-center justify-center text-xs font-mono" id="cantTotal">0</span>
+        <span class="text-sm font-semibold">Cobrar Ticket</span>
+      </div>
+      <span class="text-lg tracking-tight font-extrabold" id="precioTotal">0,00 €</span>
+    </button>
+  </div>
+
+  <!-- Modal de Pasarela de Cobro y Ticket Digital -->
+  <div id="modalCobro" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-[#fffdfa] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-stone-200">
         <div>
-          <div class="flex items-center space-x-1.5">
-            <h1 class="font-display font-bold text-base leading-none text-[#2d241e]">Miga &amp; Grano</h1>
-            <span id="header-badge" class="bg-[#f0e3d2] text-[#857468] text-[10px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase">TERMINAL</span>
-          </div>
-          <div class="flex items-center space-x-1.5 mt-0.5 text-xs text-[#857468]">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[11px] font-medium">Online • Caja 1</span>
-          </div>
+          <h3 class="font-brand font-bold text-lg text-stone-900">Cobro • LA PIRULETA</h3>
+          <p class="text-xs text-stone-500" id="resumenModal">Ticket #1042</p>
         </div>
-      </div>
-      <div class="flex items-center space-x-2">
-        <button onclick="resetApp()" title="Reiniciar datos de prueba" class="p-2 rounded-full hover:bg-[#f0e3d2] text-[#857468] press-effect transition">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-        </button>
-        <div class="w-8 h-8 rounded-full bg-[#f0e3d2] border border-[#e1d0be] flex items-center justify-center text-xs font-bold text-[#c85a32]">
-          MG
-        </div>
-      </div>
-    </header>
-
-    <!-- ================= PANTALLA 1: TERMINAL DE PEDIDOS ================= -->
-    <main id="screen-terminal" class="flex-1 flex flex-col p-4 space-y-4">
-      
-      <!-- Selector de Modo de Servicio -->
-      <div class="bg-white/80 p-1 rounded-xl border border-[#f0e3d2] grid grid-cols-3 gap-1 shadow-sm">
-        <button onclick="setServiceMode('barra', this)" class="service-tab-btn py-1.5 px-2 rounded-lg text-xs font-bold bg-[#c85a32] text-white flex items-center justify-center gap-1.5 transition">
-          <i data-lucide="coffee" class="w-3.5 h-3.5"></i> Barra
-        </button>
-        <button onclick="setServiceMode('llevar', this)" class="service-tab-btn py-1.5 px-2 rounded-lg text-xs font-semibold text-[#857468] hover:text-[#2d241e] flex items-center justify-center gap-1.5 transition">
-          <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Para llevar
-        </button>
-        <button onclick="setServiceMode('mesa', this)" class="service-tab-btn py-1.5 px-2 rounded-lg text-xs font-semibold text-[#857468] hover:text-[#2d241e] flex items-center justify-center gap-1.5 transition">
-          <i data-lucide="utensils" class="w-3.5 h-3.5"></i> Mesa
+        <button onclick="cerrarCobro()" class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-200">
+          ✕
         </button>
       </div>
 
-      <!-- Barra de Búsqueda Rápida -->
-      <div class="relative">
-        <i data-lucide="search" class="w-4 h-4 text-[#857468] absolute left-3 top-3"></i>
-        <input type="text" id="product-search" oninput="filterProducts()" placeholder="Buscar producto o código..." 
-               class="w-full bg-white pl-9 pr-10 py-2.5 rounded-xl border border-[#f0e3d2] text-sm focus:outline-none focus:border-[#c85a32] text-[#2d241e] placeholder-[#a8988d] shadow-sm">
-        <button class="absolute right-2 top-2 p-1 text-[#857468] hover:text-[#2d241e]">
-          <i data-lucide="scan-barcode" class="w-4 h-4"></i>
-        </button>
+      <!-- Importe Total -->
+      <div class="bg-amber-50/70 rounded-2xl p-4 text-center border border-amber-200/60">
+        <span class="text-xs font-semibold uppercase tracking-wider text-amber-800">Total a Pagar</span>
+        <div class="text-3xl font-extrabold font-brand text-stone-900 mt-1" id="totalModal">0,00 €</div>
       </div>
 
-      <!-- Categorías Píldoras -->
-      <div class="flex items-center space-x-2 overflow-x-auto custom-scroll -mx-4 px-4 pb-1">
-        <button onclick="filterCategory('todos', this)" class="cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#2d241e] text-white transition press-effect">Todos (8)</button>
-        <button onclick="filterCategory('cafe', this)" class="cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#857468] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">☕ Café Especial</button>
-        <button onclick="filterCategory('pan', this)" class="cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#857468] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">🥖 Masa Madre</button>
-        <button onclick="filterCategory('bolleria', this)" class="cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#857468] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">🥐 Bollería</button>
-        <button onclick="filterCategory('tostadas', this)" class="cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#857468] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">🥪 Tostadas</button>
+      <!-- Desglose breve del ticket -->
+      <div class="bg-white rounded-xl p-3 border border-stone-200/80 text-xs space-y-1.5" id="desgloseItems">
+        <!-- Rellenado por JS -->
       </div>
 
-      <!-- Cuadrícula de Productos Táctiles -->
-      <div id="products-grid" class="grid grid-cols-2 gap-3 pb-24">
-        <!-- Generado dinámicamente con JavaScript -->
-      </div>
-
-      <!-- Barra Flotante de Ticket Activo (Bottom Floating Action) -->
-      <div id="cart-bar" class="fixed bottom-20 left-0 right-0 max-w-md mx-auto px-4 z-20 transition-all duration-300">
-        <div class="bg-[#2d241e] text-white p-3.5 rounded-2xl shadow-xl flex flex-col space-y-2 border border-stone-800">
-          <div class="flex items-center justify-between text-xs text-stone-300">
-            <div class="flex items-center space-x-1.5">
-              <span id="cart-count-badge" class="bg-[#c85a32] text-white text-[11px] font-bold px-1.5 py-0.2 rounded-md">0</span>
-              <span id="cart-summary-text" class="truncate max-w-[210px] font-medium">Ticket vacío</span>
-            </div>
-            <button onclick="clearCart()" class="text-stone-400 hover:text-rose-400 p-1 text-[11px] font-semibold underline">Vaciar</button>
-          </div>
-          <button id="btn-to-pay" onclick="goToCheckout()" disabled class="w-full bg-[#c85a32] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b54c27] text-white py-3 px-4 rounded-xl font-display font-bold text-base flex items-center justify-between shadow-lg press-effect transition">
-            <span class="flex items-center gap-2">
-              <i data-lucide="receipt" class="w-5 h-5"></i>
-              Cobrar Ticket
-            </span>
-            <span id="cart-total-btn" class="text-lg">0,00 €</span>
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- ================= PANTALLA 2: PASARELA DE COBRO ================= -->
-    <main id="screen-checkout" class="hidden flex-1 flex flex-col p-4 space-y-4">
-      
-      <!-- Volver & Encabezado -->
-      <div class="flex items-center justify-between">
-        <button onclick="goToTerminal()" class="p-2 rounded-xl bg-white border border-[#f0e3d2] text-[#2d241e] press-effect shadow-sm flex items-center gap-1 text-xs font-semibold">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver a Carta
-        </button>
-        <span class="text-xs bg-[#f0e3d2] text-[#2d241e] font-bold px-2.5 py-1 rounded-full">
-          Ticket #1042
-        </span>
-      </div>
-
-      <!-- Tarjeta Total a Cobrar -->
-      <div class="bg-gradient-to-br from-white to-[#fbf2e7] border border-[#f0e3d2] rounded-2xl p-4 shadow-sm relative overflow-hidden">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-bold text-[#857468] tracking-wider uppercase">Total a Cobrar</span>
-          <span class="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Activo
-          </span>
-        </div>
-        <div id="checkout-total-display" class="font-display font-extrabold text-4xl text-[#2d241e] my-1">
-          0,00 €
-        </div>
-        <div class="flex justify-between text-xs text-[#857468] pt-1 border-t border-[#f0e3d2]/60">
-          <span>Base Imponible: <b id="checkout-base">0,00 €</b></span>
-          <span>IVA (10%): <b id="checkout-tax">0,00 €</b></span>
-        </div>
-      </div>
-
-      <!-- Añadir Propina Rápida -->
-      <div class="space-y-1.5">
-        <div class="flex justify-between items-center text-xs font-bold text-[#2d241e]">
-          <span>Añadir Propina</span>
-          <span id="tip-amount-label" class="text-[#c85a32]">+0,00 €</span>
-        </div>
-        <div class="grid grid-cols-4 gap-1.5">
-          <button onclick="selectTip(0, this)" class="tip-btn py-2 text-xs font-bold rounded-xl bg-[#2d241e] text-white border border-[#2d241e] transition press-effect">Sin</button>
-          <button onclick="selectTip(5, this)" class="tip-btn py-2 text-xs font-semibold rounded-xl bg-white text-[#2d241e] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">5%</button>
-          <button onclick="selectTip(10, this)" class="tip-btn py-2 text-xs font-semibold rounded-xl bg-white text-[#2d241e] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">10%</button>
-          <button onclick="selectTip('round', this)" class="tip-btn py-2 text-xs font-semibold rounded-xl bg-white text-[#2d241e] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect">Redondear</button>
-        </div>
-      </div>
-
-      <!-- Métodos de Pago Táctiles -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-[#2d241e] uppercase tracking-wider">Método de Pago</label>
+      <!-- Métodos de cobro directos -->
+      <div id="seccionMetodos" class="space-y-2">
+        <label class="text-xs font-bold text-stone-500 uppercase tracking-wider">Selecciona método de cobro</label>
         <div class="grid grid-cols-3 gap-2">
-          <button onclick="setPaymentMethod('tarjeta', this)" class="pay-method-btn p-3 rounded-xl bg-[#2d241e] text-white font-bold text-xs flex flex-col items-center gap-1.5 shadow-sm transition press-effect">
-            <i data-lucide="credit-card" class="w-5 h-5 text-[#c85a32]"></i>
-            TARJETA
+          <button onclick="finalizarVenta('Tarjeta')" class="p-3 rounded-xl border-2 border-stone-800 bg-stone-900 text-white flex flex-col items-center gap-1 active:scale-95 transition">
+            <i class="fa-solid fa-credit-card text-lg text-amber-300"></i>
+            <span class="text-xs font-bold">Tarjeta</span>
           </button>
-          <button onclick="setPaymentMethod('efectivo', this)" class="pay-method-btn p-3 rounded-xl bg-white text-[#2d241e] font-semibold text-xs flex flex-col items-center gap-1.5 border border-[#f0e3d2] shadow-sm transition press-effect">
-            <i data-lucide="banknote" class="w-5 h-5 text-[#857468]"></i>
-            EFECTIVO
+          <button onclick="finalizarVenta('Efectivo')" class="p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm">
+            <i class="fa-solid fa-money-bill-wave text-lg text-emerald-600"></i>
+            <span class="text-xs font-bold">Efectivo</span>
           </button>
-          <button onclick="setPaymentMethod('bizum', this)" class="pay-method-btn p-3 rounded-xl bg-white text-[#2d241e] font-semibold text-xs flex flex-col items-center gap-1.5 border border-[#f0e3d2] shadow-sm transition press-effect">
-            <i data-lucide="qr-code" class="w-5 h-5 text-[#857468]"></i>
-            BIZUM / QR
+          <button onclick="finalizarVenta('Bizum')" class="p-3 rounded-xl border border-stone-200 bg-white text-stone-800 flex flex-col items-center gap-1 active:scale-95 transition hover:bg-stone-50 shadow-sm">
+            <i class="fa-solid fa-mobile-screen-button text-lg text-sky-600"></i>
+            <span class="text-xs font-bold">Bizum</span>
           </button>
         </div>
       </div>
 
-      <!-- Panel Dinámico según Método de Pago -->
-      <div id="payment-panel-tarjeta" class="bg-white border border-[#f0e3d2] rounded-2xl p-4 text-center space-y-2 shadow-sm">
-        <div class="w-12 h-12 mx-auto rounded-full bg-[#fbf2e7] flex items-center justify-center text-[#c85a32] animate-bounce">
-          <i data-lucide="contactless" class="w-6 h-6"></i>
-        </div>
-        <div class="font-bold text-sm text-[#2d241e]">Esperando cobro con Datáfono o Tap to Pay</div>
-        <p class="text-xs text-[#857468]">Acerque la tarjeta o el smartphone del cliente a la parte posterior del terminal</p>
-      </div>
+      <!-- Ticket digital sin papel (Éxito de cobro) -->
+      <div id="pantallaExito" class="hidden text-center py-4 space-y-3 bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200">
+        <div class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-md">✓</div>
+        <h4 class="font-bold text-stone-900 text-base" id="exitoTitulo">¡Cobro Registrado!</h4>
+        <p class="text-xs text-stone-600">Ticket 100% digital sin papel ni impresora</p>
 
-      <div id="payment-panel-efectivo" class="hidden bg-white border border-[#f0e3d2] rounded-2xl p-4 space-y-3 shadow-sm">
-        <div class="flex justify-between items-center text-xs">
-          <span class="font-bold text-[#2d241e]">Importe entregado por el cliente:</span>
-          <span id="cash-change-label" class="text-emerald-700 font-extrabold text-sm">Cambio: 0,00 €</span>
+        <!-- QR simulado en pantalla para escanear -->
+        <div class="my-2 p-3 bg-white rounded-xl inline-block border border-stone-200 shadow-inner">
+          <i class="fa-solid fa-qrcode text-5xl text-stone-800"></i>
+          <p class="text-[10px] text-stone-400 mt-1 font-mono">Escanear para e-Ticket</p>
         </div>
-        <div class="grid grid-cols-4 gap-1.5">
-          <button onclick="addCashQuick(5)" class="py-2 bg-[#fbf2e7] border border-[#e8d7c4] rounded-lg text-xs font-bold text-[#2d241e] hover:bg-[#f0e3d2]">5 €</button>
-          <button onclick="addCashQuick(10)" class="py-2 bg-[#fbf2e7] border border-[#e8d7c4] rounded-lg text-xs font-bold text-[#2d241e] hover:bg-[#f0e3d2]">10 €</button>
-          <button onclick="addCashQuick(20)" class="py-2 bg-[#fbf2e7] border border-[#e8d7c4] rounded-lg text-xs font-bold text-[#2d241e] hover:bg-[#f0e3d2]">20 €</button>
-          <button onclick="addCashExact()" class="py-2 bg-[#2d241e] text-white rounded-lg text-xs font-bold">Exacto</button>
-        </div>
-      </div>
-
-      <!-- Botón Confirmar Cobro -->
-      <div class="pt-2">
-        <button onclick="executeCompletePayment()" class="w-full bg-[#c85a32] hover:bg-[#b54c27] text-white py-4 px-4 rounded-2xl font-display font-bold text-base flex items-center justify-center gap-2 shadow-xl press-effect transition">
-          <i data-lucide="check-circle" class="w-5 h-5"></i>
-          <span id="btn-confirm-pay-text">Confirmar Cobro (0,00 €)</span>
-        </button>
-      </div>
-    </main>
-
-    <!-- ================= PANTALLA 3: COBRO COMPLETADO & TICKET DIGITAL ================= -->
-    <main id="screen-success" class="hidden flex-1 flex flex-col p-4 space-y-4">
-      
-      <!-- Cartel de Éxito -->
-      <div class="bg-white border border-[#f0e3d2] rounded-2xl p-4 text-center space-y-1 shadow-sm">
-        <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200">
-          <i data-lucide="check" class="w-3.5 h-3.5"></i> COBRO COMPLETADO • OP. #1042
-        </div>
-        <div id="success-total" class="font-display font-extrabold text-3xl text-[#2d241e] pt-1">
-          0,00 €
-        </div>
-        <div class="text-xs text-[#857468]">
-          <span id="success-method">Tarjeta Contactless • Visa **** 4921</span>
+        
+        <div class="flex flex-col gap-2 pt-2">
+          <button onclick="compartirWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar ticket por WhatsApp
+          </button>
+          <button onclick="reiniciarTodo()" class="w-full bg-[#c85a32] hover:bg-[#b04a25] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm active:scale-95 transition">
+            Nuevo Cobro / Siguiente Venta
+          </button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Tarjeta Ticket Ecológico Sin Papel (QR + Envíos) -->
-      <div class="bg-white border border-[#f0e3d2] rounded-2xl p-4 space-y-3.5 shadow-sm text-center">
-        <div class="flex items-center justify-between text-xs">
-          <span class="flex items-center gap-1 text-[#c85a32] font-bold">
-            🌱 Ticket 100% Ecológico
-          </span>
-          <span class="bg-[#fbf2e7] text-[#857468] text-[10px] font-bold px-2 py-0.5 rounded">Sin Papel</span>
-        </div>
+  <script>
+    const productos = [
+      { id: 1, nombre: "Flat White Doble", precio: 2.80, cat: "Café", emoji: "☕" },
+      { id: 2, nombre: "Cappuccino Avena", precio: 2.90, cat: "Café", emoji: "🥛" },
+      { id: 3, nombre: "Cold Brew Nitro", precio: 3.40, cat: "Café", emoji: "🧊" },
+      { id: 4, nombre: "Hogaza Masa Madre 1kg", precio: 4.20, cat: "Pan", emoji: "🥖" },
+      { id: 5, nombre: "Pan Centeno 500g", precio: 3.10, cat: "Pan", emoji: "🍞" },
+      { id: 6, nombre: "Croissant Mantequilla", precio: 1.95, cat: "Bollería", emoji: "🥐" },
+      { id: 7, nombre: "Pain au Chocolat", precio: 2.30, cat: "Bollería", emoji: "🍫" },
+      { id: 8, nombre: "Tostada Ibérica AOVE", precio: 4.50, cat: "Tostadas", emoji: "🥪" }
+    ];
 
-        <!-- Código QR Dinámico -->
-        <div class="w-36 h-36 mx-auto bg-stone-50 border-2 border-stone-200 p-2 rounded-2xl flex flex-col items-center justify-center shadow-inner relative">
-          <!-- SVG QR Estilizado -->
-          <svg viewBox="0 0 100 100" class="w-full h-full text-[#2d241e] fill-current">
-            <path d="M10 10h30v30h-30z M15 15h20v20h-20z M20 20h10v10h-10z M60 10h30v30h-30z M65 15h20v20h-20z M70 20h10v10h-10z M10 60h30v30h-30z M15 65h20v20h-20z M20 70h10v10h-10z M45 15h10v10h-10z M45 35h10v10h-10z M70 45h10v15h-10z M85 45h5v20h-5z M60 70h15v10h-15z M80 70h10v20h-10z M45 60h10v10h-10z M55 75h10v15h-10z M45 80h5v10h-5z M25 45h10v10h-10z"/>
-            <rect x="42" y="42" width="16" height="16" rx="4" fill="#c85a32"/>
-          </svg>
-        </div>
-        <p class="text-xs font-bold text-[#2d241e]">Pide al cliente que escanee la pantalla</p>
-        <p class="text-[11px] text-[#857468]">Guarda el e-Ticket en Apple Wallet, Google Wallet o PDF</p>
+    let carrito = {};
+    let categoriaActiva = "Todos";
 
-        <!-- Opciones de Envío Rápido -->
-        <div class="pt-1 border-t border-[#f0e3d2] space-y-2">
-          <div class="flex gap-2">
-            <input type="tel" id="whatsapp-phone" placeholder="+34 612 345 678" class="flex-1 bg-[#fbf2e7] border border-[#f0e3d2] rounded-xl px-3 py-2 text-xs focus:outline-none">
-            <button onclick="sendTicketWhatsapp()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm press-effect">
-              <i data-lucide="send" class="w-3.5 h-3.5"></i> WhatsApp
-            </button>
+    function filtrarCategoria(cat) {
+      categoriaActiva = cat;
+      ["Todos", "Café", "Pan", "Bollería", "Tostadas"].forEach(c => {
+        const btn = document.getElementById("cat-" + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = "px-3.5 py-1.5 rounded-full bg-stone-900 text-white font-semibold whitespace-nowrap shadow-sm";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-full bg-white text-stone-600 border border-stone-200 whitespace-nowrap shadow-sm";
+          }
+        }
+      });
+      renderCatalogo();
+    }
+
+    function renderCatalogo() {
+      const contenedor = document.getElementById("catalogo");
+      const prodsFiltrados = categoriaActiva === "Todos" 
+        ? productos 
+        : productos.filter(p => p.cat === categoriaActiva);
+
+      contenedor.innerHTML = prodsFiltrados.map(p => {
+        const cant = carrito[p.id] || 0;
+        return `
+          <div class="bg-white p-3.5 rounded-2xl border ${cant > 0 ? 'border-[#c85a32]/60 ring-2 ring-[#c85a32]/20' : 'border-stone-200/80'} shadow-sm flex flex-col justify-between transition active:scale-[0.99]">
+            <div class="flex items-start justify-between">
+              <span class="text-2xl">${p.emoji}</span>
+              ${cant > 0 ? `<span class="bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono">${cant}</span>` : ''}
+            </div>
+            <div class="my-2">
+              <h3 class="font-bold text-stone-900 text-sm leading-snug">${p.nombre}</h3>
+              <p class="text-xs text-stone-400 font-medium">${p.cat}</p>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="font-brand font-bold text-stone-900 text-sm">${p.precio.toFixed(2)} €</span>
+              <div class="flex items-center gap-1">
+                ${cant > 0 ? `
+                  <button onclick="modificarCantidad(${p.id}, -1)" class="w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200">-</button>
+                ` : ''}
+                <button onclick="modificarCantidad(${p.id}, 1)" class="w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90">+</button>
+              </div>
+            </div>
           </div>
-          <button onclick="quickFinishSale()" class="text-xs text-[#857468] hover:text-[#2d241e] font-semibold py-1">
-            ✕ Cliente habitual (No necesita ticket)
-          </button>
-        </div>
-      </div>
+        `;
+      }).join('');
+      actualizarTotales();
+    }
 
-      <!-- Botón de Siguiente Venta -->
-      <div class="pt-2">
-        <button onclick="quickFinishSale()" class="w-full bg-[#c85a32] hover:bg-[#b54c27] text-white py-4 px-4 rounded-2xl font-display font-bold text-base flex items-center justify-center gap-2 shadow-xl press-effect transition">
-          <i data-lucide="plus-circle" class="w-5 h-5"></i>
-          Nuevo Cobro / Siguiente Venta
-        </button>
-      </div>
-    </main>
+    function modificarCantidad(id, delta) {
+      carrito[id] = (carrito[id] || 0) + delta;
+      if (carrito[id] <= 0) delete carrito[id];
+      renderCatalogo();
+    }
 
-    <!-- ================= BARRA DE NAVEGACIÓN INFERIOR (TABS) ================= -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-[#f0e3d2] px-6 py-2.5 z-40 flex items-center justify-around shadow-lg">
-      <button onclick="goToTerminal()" id="nav-btn-terminal" class="flex flex-col items-center gap-1 text-[#c85a32] font-bold text-[10px] press-effect transition">
-        <i data-lucide="store" class="w-5 h-5"></i>
-        <span>TERMINAL</span>
-      </button>
-      <button onclick="goToCheckout()" id="nav-btn-cobro" class="flex flex-col items-center gap-1 text-[#857468] font-semibold text-[10px] press-effect transition">
-        <i data-lucide="credit-card" class="w-5 h-5"></i>
-        <span>COBRO</span>
-      </button>
-      <button onclick="alert('Módulo de Mesas: puedes acceder cuando quieras probar la asignación de comandas a sala.')" class="flex flex-col items-center gap-1 text-[#857468] font-semibold text-[10px] press-effect transition">
-        <i data-lucide="layout-grid" class="w-5 h-5"></i>
-        <span>MESAS</span>
-      </button>
-      <button onclick="showCashModal()" class="flex flex-col items-center gap-1 text-[#857468] font-semibold text-[10px] press-effect transition">
-        <i data-lucide="vault" class="w-5 h-5"></i>
-        <span>CAJA</span>
-      </button>
-    </nav>
+    function calcularTotal() {
+      let total = 0;
+      let cantidad = 0;
+      for (const id in carrito) {
+        const prod = productos.find(p => p.id == id);
+        if (prod) {
+          total += prod.precio * carrito[id];
+          cantidad += carrito[id];
+        }
+      }
+      return { total, cantidad };
+    }
+
+    function actualizarTotales() {
+      const { total, cantidad } = calcularTotal();
+      document.getElementById("cantTotal").innerText = cantidad;
+      document.getElementById("precioTotal").innerText = total.toFixed(2).replace('.', ',') + " €";
+      document.getElementById("btnCobrar").disabled = cantidad === 0;
+    }
+
+    function abrirCobro() {
+      const { total, cantidad } = calcularTotal();
+      if (cantidad === 0) return;
+      document.getElementById("totalModal").innerText = total.toFixed(2).replace('.', ',') + " €";
+      document.getElementById("resumenModal").innerText = `${cantidad} productos • Ticket #${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const desglose = document.getElementById("desgloseItems");
+      let html = "";
+      for (const id in carrito) {
+        const p = productos.find(item => item.id == id);
+        const sub = p.precio * carrito[id];
+        html += `<div class="flex justify-between text-stone-600"><span>${carrito[id]}x ${p.nombre}</span><span class="font-medium">${sub.toFixed(2)} €</span></div>`;
+      }
+      desglose.innerHTML = html;
+
+      document.getElementById("seccionMetodos").classList.remove("hidden");
+      document.getElementById("pantallaExito").classList.add("hidden");
+      document.getElementById("modalCobro").classList.remove("hidden");
+    }
+
+    function cerrarCobro() {
+      document.getElementById("modalCobro").classList.add("hidden");
+    }
+
+    function finalizarVenta(metodo) {
+      document.getElementById("seccionMetodos").classList.add("hidden");
+      document.getElementById("exitoTitulo").innerText = `¡Cobro con ${metodo} Registrado!`;
+      document.getElementById("pantallaExito").classList.remove("hidden");
+    }
+
+    function reiniciarTicket() {
+      carrito = {};
+      renderCatalogo();
+    }
+
+    function reiniciarTodo() {
+      carrito = {};
+      renderCatalogo();
+      cerrarCobro();
+    }
+
+    function compartirWhatsApp() {
+      const { total } = calcularTotal();
+      let detalle = "";
+      for (const id in carrito) {
+        const p = productos.find(item => item.id == id);
+        detalle += `• ${carrito[id]}x ${p.nombre}%0A`;
+      }
+      const texto = `🍭 *LA PIRULETA - Ticket de Compra*%0A---------------------------%0A${detalle}---------------------------%0A*Total: ${total.toFixed(2)} €*%0A¡Muchas gracias por tu visita! 😊`;
+      window.open(`https://wa.me/?text=${texto}`, '_blank');
+    }
+
+    renderCatalogo();
+  </script>
+</body>
+</html></textarea>
 
   </div>
 
-  <!-- JAVASCRIPT DE LÓGICA COMPLETA DEL TPV -->
   <script>
-    // Catálogo Maestro de Productos
-    const PRODUCTS = [
-      { id: 'p1', name: 'Flat White Doble', price: 2.80, cat: 'cafe', tag: 'TOP', desc: 'Doble espresso 100% arábica', icon: '☕' },
-      { id: 'p2', name: 'Cappuccino Avena', price: 2.90, cat: 'cafe', desc: 'Leche vegetal cremada', icon: '🥛' },
-      { id: 'p3', name: 'Cold Brew Nitro', price: 3.40, cat: 'cafe', desc: 'Extracción 18h en frío', icon: '🧊' },
-      { id: 'p4', name: 'Hogaza Masa Madre 1kg', price: 4.20, cat: 'pan', tag: 'RECIÉN SALIDO', desc: 'Fermentación 24h a piedra', icon: '🥖' },
-      { id: 'p5', name: 'Pan de Centeno 500g', price: 3.10, cat: 'pan', desc: 'Harina integral ecológica', icon: '🍞' },
-      { id: 'p6', name: 'Croissant Mantequilla', price: 1.95, cat: 'bolleria', desc: 'Mantequilla AOP Normandía', icon: '🥐' },
-      { id: 'p7', name: 'Pain au Chocolat', price: 2.30, cat: 'bolleria', desc: 'Chocolate negro 64%', icon: '🍫' },
-      { id: 'p8', name: 'Tostada Ibérica', price: 4.50, cat: 'tostadas', tag: 'TOP', desc: 'Tomate rallado & AOVE', icon: '🥪' },
-    ];
+    function copiarCodigo() {
+      const textarea = document.getElementById('rawCode');
+      textarea.select();
+      textarea.setSelectionRange(0, 99999); // Para móviles
 
-    // Estado de la Aplicación en Memoria (Local-First)
-    let state = {
-      cart: {}, // { id: count }
-      serviceMode: 'barra',
-      currentCategory: 'todos',
-      tipPercent: 0,
-      paymentMethod: 'tarjeta',
-      totalRevenueToday: 248.50,
-      salesCountToday: 23
-    };
-
-    // Inicialización al cargar la página
-    window.addEventListener('DOMContentLoaded', () => {
-      // Cargar productos con precarga de prueba
-      state.cart = { 'p1': 2, 'p4': 1, 'p6': 1 };
-      renderProducts();
-      updateCartUI();
-      lucide.createIcons();
-    });
-
-    // Renderizar Productos
-    function renderProducts() {
-      const grid = document.getElementById('products-grid');
-      grid.innerHTML = '';
-      
-      const query = (document.getElementById('product-search')?.value || '').toLowerCase();
-      
-      const filtered = PRODUCTS.filter(p => {
-        const matchesCat = state.currentCategory === 'todos' || p.cat === state.currentCategory;
-        const matchesQuery = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
-        return matchesCat && matchesQuery;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-2 text-center py-10 text-[#857468]">
-            <p class="text-sm font-semibold">No hay productos que coincidan</p>
-          </div>
-        `;
-        return;
-      }
-
-      filtered.forEach(p => {
-        const count = state.cart[p.id] || 0;
-        const card = document.createElement('div');
-        card.className = "bg-white border border-[#f0e3d2] rounded-2xl p-3 flex flex-col justify-between shadow-sm relative press-effect transition hover:border-[#c85a32]";
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-start mb-1.5">
-              <span class="text-2xl">${p.icon}</span>
-              ${p.tag ? `<span class="bg-[#c85a32] text-white text-[9px] font-black px-1.5 py-0.5 rounded tracking-wide">${p.tag}</span>` : ''}
-              ${count > 0 ? `<span class="w-5 h-5 rounded-full bg-[#2d241e] text-white text-xs font-bold flex items-center justify-center">${count}</span>` : ''}
-            </div>
-            <h3 class="font-bold text-xs text-[#2d241e] leading-snug">${p.name}</h3>
-            <p class="text-[10px] text-[#857468] truncate mt-0.5">${p.desc}</p>
-          </div>
-          <div class="flex items-center justify-between mt-3 pt-2 border-t border-[#f0e3d2]">
-            <span class="font-display font-bold text-sm text-[#2d241e]">${p.price.toFixed(2).replace('.', ',')} €</span>
-            <div class="flex items-center space-x-1">
-              ${count > 0 ? `
-                <button onclick="removeFromCart('${p.id}', event)" class="w-7 h-7 rounded-lg bg-[#fbf2e7] text-[#2d241e] font-bold text-xs flex items-center justify-center hover:bg-[#f0e3d2]">
-                  -
-                </button>
-              ` : ''}
-              <button onclick="addToCart('${p.id}', event)" class="w-7 h-7 rounded-lg bg-[#c85a32] text-white font-bold text-xs flex items-center justify-center hover:bg-[#b54c27] shadow-sm">
-                +
-              </button>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-      lucide.createIcons();
-    }
-
-    // Funciones del Carrito
-    function addToCart(productId, e) {
-      if (e) e.stopPropagation();
-      state.cart[productId] = (state.cart[productId] || 0) + 1;
-      updateCartUI();
-      renderProducts();
-    }
-
-    function removeFromCart(productId, e) {
-      if (e) e.stopPropagation();
-      if (!state.cart[productId]) return;
-      state.cart[productId]--;
-      if (state.cart[productId] <= 0) {
-        delete state.cart[productId];
-      }
-      updateCartUI();
-      renderProducts();
-    }
-
-    function clearCart() {
-      state.cart = {};
-      updateCartUI();
-      renderProducts();
-    }
-
-    function calculateCartTotals() {
-      let subtotal = 0;
-      let totalItems = 0;
-      for (const [id, qty] of Object.entries(state.cart)) {
-        const prod = PRODUCTS.find(p => p.id === id);
-        if (prod) {
-          subtotal += prod.price * qty;
-          totalItems += qty;
-        }
-      }
-      let tip = 0;
-      if (state.tipPercent === 'round') {
-        tip = Math.ceil(subtotal) - subtotal;
-        if (tip === 0 && subtotal > 0) tip = 1.00;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textarea.value).then(onCopiadoExitoso).catch(fallbackCopiar);
       } else {
-        tip = (subtotal * state.tipPercent) / 100;
-      }
-      const total = subtotal + tip;
-      const base = total / 1.10;
-      const tax = total - base;
-      return { subtotal, tip, total, base, tax, totalItems };
-    }
-
-    function updateCartUI() {
-      const { total, totalItems } = calculateCartTotals();
-      const badge = document.getElementById('cart-count-badge');
-      const summary = document.getElementById('cart-summary-text');
-      const totalBtn = document.getElementById('cart-total-btn');
-      const btnToPay = document.getElementById('btn-to-pay');
-
-      badge.textContent = totalItems;
-      totalBtn.textContent = total.toFixed(2).replace('.', ',') + ' €';
-
-      if (totalItems > 0) {
-        summary.textContent = `${totalItems} productos seleccionados`;
-        btnToPay.disabled = false;
-      } else {
-        summary.textContent = 'Ticket vacío';
-        btnToPay.disabled = true;
+        fallbackCopiar();
       }
     }
 
-    // Navegación entre Vistas
-    function goToTerminal() {
-      document.getElementById('screen-terminal').classList.remove('hidden');
-      document.getElementById('screen-checkout').classList.add('hidden');
-      document.getElementById('screen-success').classList.add('hidden');
-      document.getElementById('header-badge').textContent = 'TERMINAL';
-      
-      setActiveNav('nav-btn-terminal');
-      window.scrollTo(0, 0);
-    }
-
-    function goToCheckout() {
-      const { totalItems } = calculateCartTotals();
-      if (totalItems === 0) {
-        alert('Añade al menos un producto al ticket para cobrar.');
-        return;
-      }
-      document.getElementById('screen-terminal').classList.add('hidden');
-      document.getElementById('screen-checkout').classList.remove('hidden');
-      document.getElementById('screen-success').classList.add('hidden');
-      document.getElementById('header-badge').textContent = 'COBRO';
-
-      setActiveNav('nav-btn-cobro');
-      refreshCheckoutView();
-      window.scrollTo(0, 0);
-    }
-
-    function refreshCheckoutView() {
-      const { total, base, tax, tip } = calculateCartTotals();
-      const formattedTotal = total.toFixed(2).replace('.', ',') + ' €';
-
-      document.getElementById('checkout-total-display').textContent = formattedTotal;
-      document.getElementById('checkout-base').textContent = base.toFixed(2).replace('.', ',') + ' €';
-      document.getElementById('checkout-tax').textContent = tax.toFixed(2).replace('.', ',') + ' €';
-      document.getElementById('tip-amount-label').textContent = '+' + tip.toFixed(2).replace('.', ',') + ' €';
-      document.getElementById('btn-confirm-pay-text').textContent = `Confirmar Cobro (${formattedTotal})`;
-    }
-
-    function executeCompletePayment() {
-      const { total } = calculateCartTotals();
-      state.totalRevenueToday += total;
-      state.salesCountToday += 1;
-
-      document.getElementById('screen-checkout').classList.add('hidden');
-      document.getElementById('screen-success').classList.remove('hidden');
-      document.getElementById('header-badge').textContent = 'ÉXITO';
-
-      const methodNames = {
-        'tarjeta': 'Tarjeta Contactless • Visa **** 4921',
-        'efectivo': 'Efectivo • Cajón abierto',
-        'bizum': 'Bizum / QR Instantáneo'
-      };
-
-      document.getElementById('success-total').textContent = total.toFixed(2).replace('.', ',') + ' €';
-      document.getElementById('success-method').textContent = methodNames[state.paymentMethod] || 'Pago Aprobado';
-      window.scrollTo(0, 0);
-    }
-
-    function quickFinishSale() {
-      state.cart = {};
-      state.tipPercent = 0;
-      updateCartUI();
-      renderProducts();
-      goToTerminal();
-    }
-
-    function sendTicketWhatsapp() {
-      const phoneInput = document.getElementById('whatsapp-phone');
-      const phone = phoneInput.value.replace(/[^0-9]/g, '') || '34612345678';
-      const { total } = calculateCartTotals();
-      const msg = encodeURIComponent(`Hola! Aquí tienes tu ticket digital de Miga & Grano por valor de ${total.toFixed(2)}€. ¡Gracias por tu visita! ☕`);
-      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-      quickFinishSale();
-    }
-
-    // Filtros de categoría y servicio
-    function filterCategory(cat, btn) {
-      state.currentCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(b => {
-        b.className = "cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#857468] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect";
-      });
-      btn.className = "cat-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#2d241e] text-white transition press-effect";
-      renderProducts();
-    }
-
-    function filterProducts() {
-      renderProducts();
-    }
-
-    function setServiceMode(mode, btn) {
-      state.serviceMode = mode;
-      document.querySelectorAll('.service-tab-btn').forEach(b => {
-        b.className = "service-tab-btn py-1.5 px-2 rounded-lg text-xs font-semibold text-[#857468] hover:text-[#2d241e] flex items-center justify-center gap-1.5 transition";
-      });
-      btn.className = "service-tab-btn py-1.5 px-2 rounded-lg text-xs font-bold bg-[#c85a32] text-white flex items-center justify-center gap-1.5 transition";
-    }
-
-    function selectTip(percent, btn) {
-      state.tipPercent = percent;
-      document.querySelectorAll('.tip-btn').forEach(b => {
-        b.className = "tip-btn py-2 text-xs font-semibold rounded-xl bg-white text-[#2d241e] border border-[#f0e3d2] hover:bg-[#faf4ed] transition press-effect";
-      });
-      btn.className = "tip-btn py-2 text-xs font-bold rounded-xl bg-[#2d241e] text-white border border-[#2d241e] transition press-effect";
-      refreshCheckoutView();
-    }
-
-    function setPaymentMethod(method, btn) {
-      state.paymentMethod = method;
-      document.querySelectorAll('.pay-method-btn').forEach(b => {
-        b.className = "pay-method-btn p-3 rounded-xl bg-white text-[#2d241e] font-semibold text-xs flex flex-col items-center gap-1.5 border border-[#f0e3d2] shadow-sm transition press-effect";
-      });
-      btn.className = "pay-method-btn p-3 rounded-xl bg-[#2d241e] text-white font-bold text-xs flex flex-col items-center gap-1.5 shadow-sm transition press-effect";
-
-      const panelTarjeta = document.getElementById('payment-panel-tarjeta');
-      const panelEfectivo = document.getElementById('payment-panel-efectivo');
-
-      if (method === 'efectivo') {
-        panelTarjeta.classList.add('hidden');
-        panelEfectivo.classList.remove('hidden');
-      } else {
-        panelTarjeta.classList.remove('hidden');
-        panelEfectivo.classList.add('hidden');
+    function fallbackCopiar() {
+      try {
+        const textarea = document.getElementById('rawCode');
+        textarea.classList.remove('sr-only');
+        textarea.select();
+        document.execCommand('copy');
+        textarea.classList.add('sr-only');
+        onCopiadoExitoso();
+      } catch (err) {
+        alert('Por favor selecciona el código manualmente y pulsa Copiar.');
       }
     }
 
-    function addCashQuick(amount) {
-      const { total } = calculateCartTotals();
-      const change = Math.max(0, amount - total);
-      document.getElementById('cash-change-label').textContent = `Cambio: ${change.toFixed(2).replace('.', ',')} €`;
-    }
+    function onCopiadoExitoso() {
+      const btn = document.getElementById('btnCopiar');
+      const icono = document.getElementById('iconoCopiar');
+      const texto = document.getElementById('textoCopiar');
 
-    function addCashExact() {
-      document.getElementById('cash-change-label').textContent = 'Cambio: 0,00 € (Importe Exacto)';
-    }
+      btn.classList.remove('bg-[#c85a32]', 'hover:bg-[#d9653a]');
+      btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+      icono.className = 'fa-solid fa-check text-sm';
+      texto.innerText = '¡Copiado con Éxito!';
 
-    function showCashModal() {
-      alert(`Resumen Arqueo Turno Mañana:\n- Ventas registradas hoy: ${state.salesCountToday}\n- Total recaudado: ${state.totalRevenueToday.toFixed(2)} €\n- Estado de sincronización: Conectado`);
-    }
-
-    function setActiveNav(navId) {
-      ['nav-btn-terminal', 'nav-btn-cobro'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.classList.remove('text-[#c85a32]', 'font-bold');
-          el.classList.add('text-[#857468]', 'font-semibold');
-        }
-      });
-      const activeEl = document.getElementById(navId);
-      if (activeEl) {
-        activeEl.classList.remove('text-[#857468]', 'font-semibold');
-        activeEl.classList.add('text-[#c85a32]', 'font-bold');
-      }
-    }
-
-    function resetApp() {
-      state.cart = { 'p1': 2, 'p4': 1, 'p6': 1 };
-      state.tipPercent = 0;
-      updateCartUI();
-      renderProducts();
-      goToTerminal();
+      setTimeout(() => {
+        btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        btn.classList.add('bg-[#c85a32]', 'hover:bg-[#d9653a]');
+        icono.className = 'fa-solid fa-copy text-sm';
+        texto.innerText = 'Copiar Todo el Código';
+      }, 3000);
     }
   </script>
 </body>
