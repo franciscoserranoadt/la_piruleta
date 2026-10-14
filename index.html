@@ -3,72 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Copiar index.html - TPV LA PIRULETA</title>
+  <title>Instalador TPV LA PIRULETA</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    pre, code, textarea { font-family: 'JetBrains Mono', monospace; }
+    .font-brand { font-family: 'Space Grotesk', sans-serif; }
   </style>
 </head>
-<body class="bg-stone-950 text-stone-100 min-h-screen p-4 sm:p-8 flex flex-col justify-between">
+<body class="bg-[#121110] text-stone-200 min-h-screen p-4 md:p-8 flex items-center justify-center">
 
-  <div class="max-w-4xl w-full mx-auto space-y-6">
-    <!-- Header de control -->
-    <header class="bg-stone-900 border border-stone-800 rounded-2xl p-5 shadow-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-[#c85a32] flex items-center justify-center text-2xl shadow-lg shadow-[#c85a32]/25">
-          🍭
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-bold text-white tracking-tight">index.html</h1>
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Listo para GitHub</span>
-          </div>
-          <p class="text-xs text-stone-400 mt-0.5">Código 100% puro del TPV Móvil LA PIRULETA (sin comentarios conflictivos)</p>
-        </div>
+  <div class="max-w-2xl w-full bg-[#1c1a17] border border-stone-800 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
+    
+    <!-- Cabecera -->
+    <div class="flex items-center gap-4 border-b border-stone-800 pb-5">
+      <div class="w-14 h-14 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center text-3xl shadow-lg shadow-[#c85a32]/30">
+        🍭
       </div>
-
-      <div class="flex items-center gap-3">
-        <button id="btnCopiar" onclick="copiarCodigo()" class="w-full sm:w-auto px-6 py-3 bg-[#c85a32] hover:bg-[#d9663b] active:scale-95 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-[#c85a32]/30 transition-all cursor-pointer">
-          <i class="fa-regular fa-copy text-base" id="iconoCopia"></i>
-          <span id="textoCopia">Copiar Todo el Código</span>
-        </button>
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Solución Definitiva para GitHub
+        </div>
+        <h1 class="font-brand text-2xl md:text-3xl font-bold text-white tracking-tight">TPV LA PIRULETA</h1>
+        <p class="text-xs md:text-sm text-stone-400">Descarga directa del archivo o copia asegurada para GitHub Pages</p>
       </div>
-    </header>
+    </div>
 
-    <!-- Instrucciones paso a paso -->
-    <div class="bg-amber-950/40 border border-amber-500/30 rounded-xl p-4 text-xs text-amber-200 flex items-start gap-3">
-      <i class="fa-solid fa-circle-info text-amber-400 text-base mt-0.5"></i>
-      <div class="space-y-1 leading-relaxed">
-        <p class="font-bold text-amber-300">Cómo pegarlo en GitHub correctamente:</p>
-        <ol class="list-decimal list-inside space-y-0.5 text-stone-300">
-          <li>Pulsa el botón naranja <strong class="text-white">"Copiar Todo el Código"</strong> arriba.</li>
-          <li>En GitHub, abre tu archivo <code class="bg-stone-800 text-amber-300 px-1.5 py-0.5 rounded">index.html</code> y pulsa el lápiz para editar.</li>
-          <li>Borra todo lo anterior y pega (<kbd class="bg-stone-800 px-1 rounded border border-stone-700">Ctrl+V</kbd> o mantener pulsado en móvil y <em>Pegar</em>).</li>
-          <li>Haz clic abajo en <strong class="text-white">"Commit changes..."</strong> asegurándote de guardar en la rama <em>main</em>.</li>
+    <!-- Explicación del problema -->
+    <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 text-xs md:text-sm text-amber-200/90 flex gap-3">
+      <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg mt-0.5 shrink-0"></i>
+      <div>
+        <p class="font-semibold text-amber-300">¿Por qué seguía saliendo la pantalla vieja?</p>
+        <p class="mt-1 text-stone-300 leading-relaxed">
+          En los navegadores móviles o visores dentro de lienzos, el botón de copiar automático suele ser bloqueado por seguridad del sistema, por lo que el portapapeles se quedaba con el código anterior.
+          <strong class="text-white">Para no depender de copiar y pegar, hemos añadido el botón de DESCARGA DIRECTA.</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- MÉTODO 1: DESCARGA DIRECTA (Recomendado) -->
+    <div class="bg-stone-900/80 border-2 border-[#c85a32] rounded-2xl p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#c85a32]">MÉTODO 1 (El más fácil y 100% infalible)</span>
+        <span class="text-[11px] bg-[#c85a32]/20 text-[#c85a32] px-2 py-0.5 rounded-md font-semibold">Recomendado</span>
+      </div>
+      <h2 class="text-lg font-bold text-white">Descargar el archivo directamente a tu dispositivo</h2>
+      <p class="text-xs text-stone-400 leading-relaxed">
+        Pulsa el botón de abajo. Se descargará el archivo <code class="bg-stone-800 text-amber-300 px-1.5 py-0.5 rounded font-mono">index.html</code> listo para usar.
+      </p>
+
+      <button id="btnDescargar" onclick="descargarIndex()" class="w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 shadow-lg shadow-[#c85a32]/20 text-sm md:text-base">
+        <i class="fa-solid fa-download text-lg"></i>
+        <span>Descargar "index.html" Listo</span>
+      </button>
+
+      <!-- Instrucciones de subida a GitHub -->
+      <div class="bg-black/40 rounded-xl p-3.5 text-xs text-stone-300 space-y-2 border border-stone-800">
+        <p class="font-bold text-stone-200 flex items-center gap-1.5">
+          <i class="fa-brands fa-github text-white"></i> Cómo subirlo a GitHub en 20 segundos:
+        </p>
+        <ol class="list-decimal list-inside space-y-1.5 text-stone-400 pl-1">
+          <li>Abre tu repositorio en GitHub (<span class="text-stone-300">scoserranoadt.github.io</span>).</li>
+          <li>Pulsa en el botón superior <strong class="text-white">"Add file"</strong> y elige <strong class="text-white">"Upload files"</strong>.</li>
+          <li>Arrastra o selecciona el archivo <code class="text-amber-300">index.html</code> que acabas de descargar.</li>
+          <li>Pulsa abajo el botón verde <strong class="text-white">"Commit changes"</strong>. ¡Y listo! Sobrescribirá el viejo automáticamente.</li>
         </ol>
       </div>
     </div>
 
-    <!-- Visor de Código editable / seleccionable directamente -->
-    <div class="relative bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-2xl">
-      <div class="bg-stone-900/90 border-b border-stone-800 px-4 py-2.5 flex items-center justify-between text-xs text-stone-400">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
-          <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-          <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-          <span class="ml-2 font-mono text-stone-300 text-[11px]">index.html (HTML5, Tailwind, JS)</span>
-        </div>
-        <button onclick="seleccionarTodo()" class="text-xs text-stone-400 hover:text-white underline cursor-pointer">
-          Seleccionar texto manualmente
+    <!-- MÉTODO 2: COPIA MANUAL CON TEXTAREA -->
+    <div class="bg-stone-900/50 border border-stone-800 rounded-2xl p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-stone-400">MÉTODO 2: Copia Manual (Si prefieres pegar)</span>
+      </div>
+      <p class="text-xs text-stone-400">
+        Si prefieres copiar, pulsa este botón que selecciona todo el texto del recuadro automáticamente:
+      </p>
+
+      <div class="flex gap-2">
+        <button onclick="copiarTextarea()" id="btnCopiar" class="flex-1 bg-stone-800 hover:bg-stone-700 active:scale-95 text-white font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 border border-stone-700 transition">
+          <i class="fa-solid fa-copy"></i>
+          <span id="txtBtnCopiar">Seleccionar y Copiar Todo</span>
         </button>
       </div>
 
-      <textarea id="codigoFuente" readonly class="w-full h-[520px] bg-stone-950 text-stone-200 font-mono text-xs p-5 outline-none resize-none selection:bg-[#c85a32] selection:text-white leading-relaxed border-none block whitespace-pre overflow-auto"><!DOCTYPE html>
+      <textarea id="codigoRaw" readonly class="w-full h-36 bg-black/60 border border-stone-800 rounded-xl p-3 text-[11px] font-mono text-stone-300 focus:outline-none focus:border-[#c85a32] resize-none select-all"></textarea>
+    </div>
+
+  </div>
+
+  <script>
+    const CODIGO_TPV = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -77,7 +106,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#c85a32">
   <title>TPV LA PIRULETA</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></` + `script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -90,7 +119,6 @@
 </head>
 <body class="bg-[#f7f2ea] text-stone-900 min-h-screen flex flex-col justify-between pb-24 select-none">
 
-  <!-- Header Superior -->
   <header class="sticky top-0 z-30 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-2xl bg-[#c85a32] text-white flex items-center justify-center font-bold text-xl shadow-sm">
@@ -114,14 +142,13 @@
     </div>
   </header>
 
-  <!-- Filtros de Servicio y Categorias -->
   <div class="px-4 pt-3 pb-1 space-y-2.5">
     <div class="grid grid-cols-3 gap-1.5 bg-stone-200/70 p-1 rounded-xl text-xs font-semibold text-stone-600">
       <button class="py-1.5 rounded-lg bg-white text-[#c85a32] shadow-sm flex items-center justify-center gap-1.5 font-bold">
         <i class="fa-solid fa-mug-saucer text-xs"></i> Barra
       </button>
       <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
-        <i class="fa-solid fa-bag-shopping text-xs"></i> Para llevar
+        <i class="fa-solid fa-bag-shopping text-xs"></i> Llevar
       </button>
       <button class="py-1.5 rounded-lg hover:bg-white/50 flex items-center justify-center gap-1.5 transition">
         <i class="fa-solid fa-chair text-xs"></i> Mesa
@@ -137,12 +164,10 @@
     </div>
   </div>
 
-  <!-- Catalogo de Productos -->
   <main class="p-4 flex-1">
     <div class="grid grid-cols-2 gap-3" id="catalogo"></div>
   </main>
 
-  <!-- Barra Inferior de Cobro Fija -->
   <div class="fixed bottom-0 left-0 right-0 p-3 bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200 z-40 max-w-lg mx-auto">
     <button onclick="abrirCobro()" id="btnCobrar" disabled class="w-full bg-[#c85a32] hover:bg-[#b04a25] active:scale-[0.98] transition-all text-white font-brand font-bold py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-lg shadow-[#c85a32]/25 disabled:opacity-50 disabled:pointer-events-none">
       <div class="flex items-center gap-2">
@@ -153,7 +178,6 @@
     </button>
   </div>
 
-  <!-- Modal de Pasarela de Cobro y Ticket Digital -->
   <div id="modalCobro" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-[#fffdfa] w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-2 border-b border-stone-200">
@@ -254,14 +278,14 @@
         var p = prodsFiltrados[i];
         var cant = carrito[p.id] || 0;
         var borde = cant > 0 ? "border-[#c85a32]/60 ring-2 ring-[#c85a32]/20" : "border-stone-200/80";
-        var badge = cant > 0 ? "<span class=\"bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono\">" + cant + "</span>" : "";
-        var btnMenos = cant > 0 ? "<button onclick=\"modificarCantidad(" + p.id + ", -1)\" class=\"w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200\">-</button>" : "";
+        var badge = cant > 0 ? "<span class=\\"bg-[#c85a32] text-white text-xs font-bold px-2 py-0.5 rounded-full font-mono\\">" + cant + "</span>" : "";
+        var btnMenos = cant > 0 ? "<button onclick=\\"modificarCantidad(" + p.id + ", -1)\\" class=\\"w-7 h-7 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 flex items-center justify-center font-bold text-sm active:bg-stone-200\\">-</button>" : "";
 
-        html += "<div class=\"bg-white p-3.5 rounded-2xl border " + borde + " shadow-sm flex flex-col justify-between transition active:scale-[0.99]\">" +
-          "<div class=\"flex items-start justify-between\"><span class=\"text-2xl\">" + p.emoji + "</span>" + badge + "</div>" +
-          "<div class=\"my-2\"><h3 class=\"font-bold text-stone-900 text-sm leading-snug\">" + p.nombre + "</h3><p class=\"text-xs text-stone-400 font-medium\">" + p.cat + "</p></div>" +
-          "<div class=\"flex items-center justify-between pt-1\"><span class=\"font-brand font-bold text-stone-900 text-sm\">" + p.precio.toFixed(2) + " €</span>" +
-          "<div class=\"flex items-center gap-1\">" + btnMenos + "<button onclick=\"modificarCantidad(" + p.id + ", 1)\" class=\"w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90\">+</button></div></div></div>";
+        html += "<div class=\\"bg-white p-3.5 rounded-2xl border " + borde + " shadow-sm flex flex-col justify-between transition active:scale-[0.99]\\">" +
+          "<div class=\\"flex items-start justify-between\\"><span class=\\"text-2xl\\">" + p.emoji + "</span>" + badge + "</div>" +
+          "<div class=\\"my-2\\"><h3 class=\\"font-bold text-stone-900 text-sm leading-snug\\">" + p.nombre + "</h3><p class=\\"text-xs text-stone-400 font-medium\\">" + p.cat + "</p></div>" +
+          "<div class=\\"flex items-center justify-between pt-1\\"><span class=\\"font-brand font-bold text-stone-900 text-sm\\">" + p.precio.toFixed(2) + " €</span>" +
+          "<div class=\\"flex items-center gap-1\\">" + btnMenos + "<button onclick=\\"modificarCantidad(" + p.id + ", 1)\\" class=\\"w-7 h-7 rounded-lg bg-[#c85a32] text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90\\">+</button></div></div></div>";
       }
       contenedor.innerHTML = html;
       actualizarTotales();
@@ -311,7 +335,7 @@
         }
         if (p) {
           var sub = p.precio * carrito[id];
-          html += "<div class=\"flex justify-between text-stone-600\"><span>" + carrito[id] + "x " + p.nombre + "</span><span class=\"font-medium\">" + sub.toFixed(2) + " €</span></div>";
+          html += "<div class=\\"flex justify-between text-stone-600\\"><span>" + carrito[id] + "x " + p.nombre + "</span><span class=\\"font-medium\\">" + sub.toFixed(2) + " €</span></div>";
         }
       }
       desglose.innerHTML = html;
@@ -358,56 +382,58 @@
     }
 
     renderCatalogo();
-  </script>
+  <\/script>
 </body>
-</html></textarea>
-    </div>
-  </div>
+</html>`;
 
-  <script>
-    function copiarCodigo() {
-      var textarea = document.getElementById('codigoFuente');
-      textarea.select();
-      textarea.setSelectionRange(0, 999999);
+    document.getElementById("codigoRaw").value = CODIGO_TPV;
 
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textarea.value).then(mostrarExito).catch(function() {
-          copiarFallback(textarea);
-        });
-      } else {
-        copiarFallback(textarea);
-      }
+    function descargarIndex() {
+      const blob = new Blob([CODIGO_TPV], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      const btn = document.getElementById("btnDescargar");
+      btn.innerHTML = '<i class="fa-solid fa-check text-lg"></i><span>¡Archivo "index.html" descargado!</span>';
+      btn.className = "w-full bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 text-sm md:text-base";
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-solid fa-download text-lg"></i><span>Volver a descargar "index.html"</span>';
+        btn.className = "w-full bg-[#c85a32] hover:bg-[#b04a25] text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 text-sm md:text-base";
+      }, 4000);
     }
 
-    function copiarFallback(textarea) {
+    function copiarTextarea() {
+      const textarea = document.getElementById("codigoRaw");
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
       try {
+        navigator.clipboard.writeText(CODIGO_TPV).then(() => {
+          actualizarBotonCopiado();
+        }).catch(() => {
+          document.execCommand('copy');
+          actualizarBotonCopiado();
+        });
+      } catch (e) {
         document.execCommand('copy');
-        mostrarExito();
-      } catch (err) {
-        alert("Por favor selecciona el texto del recuadro inferior y pulsa Copiar (Ctrl+C).");
+        actualizarBotonCopiado();
       }
     }
 
-    function mostrarExito() {
-      var btn = document.getElementById('btnCopiar');
-      var icono = document.getElementById('iconoCopia');
-      var texto = document.getElementById('textoCopia');
-
-      btn.className = "w-full sm:w-auto px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer";
-      icono.className = "fa-solid fa-check text-base";
-      texto.innerText = "¡Código Copiado!";
-
-      setTimeout(function() {
-        btn.className = "w-full sm:w-auto px-6 py-3 bg-[#c85a32] hover:bg-[#d9663b] active:scale-95 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-[#c85a32]/30 transition-all cursor-pointer";
-        icono.className = "fa-regular fa-copy text-base";
-        texto.innerText = "Copiar Todo el Código";
+    function actualizarBotonCopiado() {
+      const btn = document.getElementById("btnCopiar");
+      const txt = document.getElementById("txtBtnCopiar");
+      btn.className = "flex-1 bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition";
+      txt.innerText = "¡Copiado con éxito al portapapeles!";
+      setTimeout(() => {
+        btn.className = "flex-1 bg-stone-800 hover:bg-stone-700 text-white font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 border border-stone-700 transition";
+        txt.innerText = "Seleccionar y Copiar Todo";
       }, 3000);
-    }
-
-    function seleccionarTodo() {
-      var textarea = document.getElementById('codigoFuente');
-      textarea.focus();
-      textarea.select();
     }
   </script>
 </body>
