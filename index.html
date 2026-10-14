@@ -1,356 +1,680 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#c85a32">
-  <title>TPV LA PIRULETA</title>
 
-  <!-- PWA Manifest & Icons -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="manifest.json">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              DEFAULT: '#c85a32',
-              hover: '#b24c28',
-              light: '#fdf3ed'
-            }
-          },
-          fontFamily: {
-            heading: ['Space Grotesk', 'sans-serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif']
-          }
-        }
-      }
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#ffb59c", "on-error": "#ffffff", "tertiary-fixed-dim": "#abcfb2", "on-tertiary-fixed-variant": "#2e4e37", "secondary-container": "#f5dad0", "on-error-container": "#93000a", "surface-bright": "#fff8f1", "error-container": "#ffdad6", "tertiary-container": "#5b7c63", "inverse-on-surface": "#f8f0e5", "on-background": "#1e1b15", "surface-container-high": "#efe7dc", "on-primary-container": "#fffbff", "surface": "#fff8f1", "background": "#fff8f1", "surface-container-low": "#fbf2e7", "on-primary-fixed": "#390c00", "primary-container": "#bf542c", "on-primary-fixed-variant": "#822801", "on-secondary-fixed-variant": "#55433c", "on-primary": "#ffffff", "tertiary": "#42634c", "surface-dim": "#e1d9ce", "surface-container-highest": "#e9e1d7", "on-secondary-container": "#735e56", "on-surface": "#1e1b15", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "surface-variant": "#e9e1d7", "secondary-fixed": "#f8ddd3", "on-tertiary": "#ffffff", "primary-fixed": "#ffdbcf", "surface-container": "#f5ede2", "on-secondary-fixed": "#271812", "inverse-surface": "#343029", "error": "#ba1a1a", "surface-tint": "#a23e18", "outline-variant": "#dec0b7", "on-surface-variant": "#57423b", "tertiary-fixed": "#c7ecce", "on-tertiary-fixed": "#01210f", "secondary": "#6e5a52", "inverse-primary": "#ffb59c", "on-tertiary-container": "#f6fff4", "primary": "#9f3c16", "outline": "#8a726a", "secondary-fixed-dim": "#dbc1b7" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-tablet": "1rem", "space-md": "0.75rem", "space-sm": "0.5rem", "margin-tablet": "1.5rem", "margin": "1rem", "space-xl": "2rem", "gutter": "0.75rem", "space-lg": "1.25rem", "space-xs": "0.25rem" }, "fontFamily": { "label-numeric-lg": ["JetBrains Mono"], "headline-sm": ["Space Grotesk"], "label-numeric-sm": ["JetBrains Mono"], "headline-md": ["Space Grotesk"], "label-numeric-md": ["JetBrains Mono"], "label-caps": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-xl": ["Space Grotesk"], "headline-xl-mobile": ["Space Grotesk"], "body-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Space Grotesk"] }, "fontSize": { "label-numeric-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "label-numeric-sm": ["13px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "label-numeric-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }], "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "500" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fff8f1;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
     }
-  </script>
-
-  <style>
-    * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
-    .font-heading { font-family: 'Space Grotesk', sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
-
-  <!-- Registro del Service Worker para funcionamiento Offline y PWA -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
-          .catch(err => console.log('Fallo al registrar Service Worker:', err));
-      });
+<style>
+    body {
+      min-height: max(884px, 100dvh);
     }
-  </script>
-</head>
-<body class="bg-stone-100 text-stone-900 min-h-screen flex flex-col antialiased">
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Miga &amp; Grano Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkBfvy4GMtct870J_YgAtHlCYo-tnVWk3z0VHm-HQt2dqdogN1iXESlnXuXftSaGz6q8RT5gRd3HucatO5zUBBF-94lgdy09jdEFqsLb1-SSGtjyuhQshfPMCMCxmqsbuSkZpBfx8Bua8l-1CjL6nHSSYGLtFaqBlTpipp1isvCBrJKHeNxQOUS2VvxtqEQTDD61CHwrRQO4__O1NbT5fgjxlpIyhobAWMjYYsaOw67mqizz5kjJ3m"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight">Miga &amp; Grano</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase px-space-xs py-0.5 rounded-lg bg-surface-container">Terminal</span></div><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-label-numeric-sm text-label-numeric-sm text-tertiary font-semibold">Online • Caja 1</span></div></div></div><div class="flex items-center gap-space-sm"><button aria-label="Buscador rápido" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface active:scale-95 transition-transform duration-150"><span class="material-symbols-outlined text-[22px]">search</span></button><div class="relative flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-container/20 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpEnPmEPE7ypzzdSsQwlZx8akYvlIIRx_nrTRjaqPt-6b4jdrtlZNY_G3S2iLsMyEgqSXlk34rnHM_Jx5uSX6MfrOhL8Xk32BXPJ3d59b66Y1Yy_y1l9U5jAb45kxuDNrdCmsQbfglNXesFStJh82AsCnKDyl4qXMZXeIowEsu7ey4Sn_5PSCnm1E68AD9rHBIrrFBhOpGcf4B1XOuJnDf1Biss6kfESU_9kWxdnfw-4fs_HXzmlTE"/><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary ring-2 ring-surface"></span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full pb-24">
+<!-- Top Context Ribbon -->
+<div class="px-margin pt-space-md pb-space-sm flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Gestión LA PIRULETA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Panel autónomo del propietario</span>
+</div>
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-label-caps">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+      MODO ADMIN
+    </span>
+</div>
+<!-- Segmented Section Tabs -->
+<div class="px-margin pb-space-md">
+<div class="p-1 rounded-xl bg-surface-container flex gap-1 shadow-sm overflow-x-auto">
+<button class="flex-1 min-h-[44px] px-space-sm py-2 rounded-lg font-headline-sm text-[13px] leading-tight flex items-center justify-center gap-1.5 transition-all bg-on-surface text-surface shadow-sm" id="tab-btn-products" onclick="switchSection('products')">
+<span class="material-symbols-outlined text-[18px]">bakery_dining</span>
+<span>Productos</span>
+</button>
+<button class="flex-1 min-h-[44px] px-space-sm py-2 rounded-lg font-headline-sm text-[13px] leading-tight flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface" id="tab-btn-fiscal" onclick="switchSection('fiscal')">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>Ticket y CIF</span>
+</button>
+<button class="flex-1 min-h-[44px] px-space-sm py-2 rounded-lg font-headline-sm text-[13px] leading-tight flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface" id="tab-btn-taxes" onclick="switchSection('taxes')">
+<span class="material-symbols-outlined text-[18px]">percent</span>
+<span>Impuestos</span>
+</button>
+</div>
+</div>
+<!-- SECTION 1: PRODUCTOS Y CATEGORÍAS -->
+<section class="flex flex-col gap-space-md px-margin" id="section-products">
+<!-- Visual Bakery Banner -->
+<div class="relative w-full h-32 rounded-xl overflow-hidden shadow-sm flex items-end p-space-md">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A warm artisanal bakery display counter at La Piruleta, featuring fresh sourdough bread, golden croissants, and delicate pastries on wooden boards with soft golden sunlight, photographed in a rustic modern editorial style with terracotta and cream hues." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpeS_ZDtLRcUWMNxRz5WUUux0btfVxi8zSNW_9cv-Yb99Z48j-XbxFGyyUO8jI_TiEZa3VQzpLezdvwtdhfdD8WXjbKJWcNzM6J5N_2PIHSeIp8GiK7Kt4esGdwFg6HXC7F_tIT4DEHv2qJnVCiCocrHE3AG6HYqRgKw42AQE32RD9XMnsROvoe80iGfo3fn1fytHeaWdofJlgbiVMbRQVWOvW9klCGcn5y7JLn7mFR6d-rG4nUBM5')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/40 to-transparent"></div>
+<div class="relative z-10 flex items-center justify-between w-full text-surface-bright">
+<div>
+<span class="font-label-caps text-label-caps text-primary-fixed uppercase tracking-wider block">Carta Activa</span>
+<p class="font-headline-sm text-headline-sm text-surface-bright font-bold">16 Especialidades Vivas</p>
+</div>
+<span class="text-right font-label-numeric-sm text-label-numeric-sm bg-surface-bright/20 backdrop-blur-md px-2.5 py-1 rounded-full text-surface-bright">Panadería &amp; Café</span>
+</div>
+</div>
+<!-- Quick Action Bar -->
+<div class="grid grid-cols-2 gap-space-sm">
+<button class="min-h-[48px] px-space-sm py-2.5 rounded-xl bg-surface-container-high text-on-surface active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-sm" onclick="openCategoryModal()">
+<span class="material-symbols-outlined text-primary text-[20px]">add_circle</span>
+<span class="font-headline-sm text-[14px]">Nueva Categoría</span>
+</button>
+<button class="min-h-[48px] px-space-sm py-2.5 rounded-xl bg-primary text-on-primary active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-md" onclick="openProductModal()">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="font-headline-sm text-[14px]">Nuevo Producto</span>
+</button>
+</div>
+<!-- Category Chips Filter -->
+<div class="flex items-center gap-space-xs overflow-x-auto py-1">
+<button class="cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-secondary text-on-secondary shadow-sm whitespace-nowrap" onclick="filterCategory('all', this)">Todos</button>
+<button class="cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-surface-container text-on-surface whitespace-nowrap" onclick="filterCategory('Café', this)">☕ Café</button>
+<button class="cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-surface-container text-on-surface whitespace-nowrap" onclick="filterCategory('Panadería', this)">🥖 Panadería</button>
+<button class="cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-surface-container text-on-surface whitespace-nowrap" onclick="filterCategory('Bollería', this)">🥐 Bollería</button>
+<button class="cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-surface-container text-on-surface whitespace-nowrap" onclick="filterCategory('Bebidas', this)">🥤 Bebidas</button>
+</div>
+<!-- Products List -->
+<div class="flex flex-col gap-space-sm" id="products-list-container">
+<!-- Injected via JavaScript for instant client reactivity -->
+</div>
+</section>
+<!-- SECTION 2: DATOS FISCALES Y TICKET -->
+<section class="hidden flex-col gap-space-md px-margin" id="section-fiscal">
+<div class="rounded-xl bg-surface-container-low p-space-md flex flex-col gap-space-sm shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">badge</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Datos de la Empresa</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Esta información se imprime en cada ticket fiscal y factura simplificada del TPV.</p>
+<div class="flex flex-col gap-3 pt-2">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Nombre Comercial</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="fiscal-commercial" placeholder="Ej: LA PIRULETA" type="text" value="LA PIRULETA"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Razón Social y NIF / CIF</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="fiscal-cif" placeholder="Nombre fiscal y CIF" type="text" value="PANADERIA LA PIRULETA S.L. - B-89234120"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Dirección Física</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="fiscal-address" placeholder="Dirección completa del local" type="text" value="Calle del Horno, 14, 28004 Madrid"/>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Teléfono</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="fiscal-phone" placeholder="Teléfono del local" type="tel" value="+34 912 34 56 78"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Nº Serie TPV</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="fiscal-series" placeholder="Prefijo serie" type="text" value="T-2025/C1"/>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Mensaje de Pie de Ticket</label>
+<textarea class="w-full p-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40 resize-none" id="fiscal-footer" rows="2">¡Gracias por endulzar tu día con La Piruleta! Vuelva pronto.</textarea>
+</div>
+<!-- Correlative Toggle Switch -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-sm mt-1">
+<div class="flex flex-col pr-2">
+<span class="font-headline-sm text-[15px] text-on-surface">Ticket Correlativo Oficial</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Numeración legal consecutiva (RD 1619/2012)</span>
+</div>
+<button class="w-14 h-8 rounded-full bg-tertiary-container relative p-1 transition-colors" id="toggle-correlative" onclick="toggleCorrelativeState()">
+<span class="block w-6 h-6 rounded-full bg-surface-bright shadow-sm transition-transform translate-x-6" id="toggle-dot"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Ticket Preview Simulation Card -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-md flex flex-col gap-2 relative overflow-hidden">
+<div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-surface-container-high">
+<span class="font-label-caps text-label-caps uppercase text-primary font-bold">Vista Previa Ticket</span>
+<span class="font-label-numeric-sm text-label-numeric-sm text-on-surface-variant">58mm / 80mm</span>
+</div>
+<div class="text-center pt-2">
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-wider" id="preview-title">LA PIRULETA</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant" id="preview-cif">PANADERIA LA PIRULETA S.L. - B-89234120</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant" id="preview-address">Calle del Horno, 14, Madrid</p>
+</div>
+<div class="flex justify-between font-label-numeric-sm text-[12px] pt-1 text-on-surface-variant">
+<span>FACTURA SIMPL: #T-00492</span>
+<span>24/10/2025 10:14</span>
+</div>
+<div class="py-2 flex flex-col gap-1 text-[13px] font-body-sm">
+<div class="flex justify-between">
+<span>1x Café Doble Origen</span>
+<span class="font-label-numeric-sm text-[13px]">1,80€</span>
+</div>
+<div class="flex justify-between">
+<span>1x Barra Pan Tradicional</span>
+<span class="font-label-numeric-sm text-[13px]">1,20€</span>
+</div>
+</div>
+<div class="flex justify-between font-headline-sm text-headline-sm text-on-surface pt-1 border-t-2 border-dashed border-surface-container-high">
+<span>TOTAL</span>
+<span class="text-primary font-label-numeric-md">3,00 €</span>
+</div>
+<p class="font-body-sm text-[11px] text-center text-on-surface-variant pt-2 italic" id="preview-footer">¡Gracias por endulzar tu día con La Piruleta! Vuelva pronto.</p>
+</div>
+</section>
+<!-- SECTION 3: IMPUESTOS E IVA -->
+<section class="hidden flex-col gap-space-md px-margin" id="section-taxes">
+<div class="rounded-xl bg-surface-container-low p-space-md flex flex-col gap-space-sm shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">account_balance</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tipos Impositivos IVA</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Configura los porcentajes vigentes para pan común (superreducido) y hostelería/cafetería.</p>
+<div class="flex flex-col gap-space-sm pt-2">
+<div class="p-space-sm rounded-xl bg-surface-container-lowest flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-10 h-10 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-sm text-headline-sm">4%</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[15px] text-on-surface">IVA Superreducido</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Pan común, harinas básicas, leche</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-md bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[11px]">ACTIVO</span>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-lowest flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-10 h-10 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-sm text-headline-sm">10%</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[15px] text-on-surface">IVA Reducido Hostelería</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Cafés, bollería, bebidas no azucaradas</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-md bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[11px]">ACTIVO</span>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-lowest flex items-center justify-between shadow-sm opacity-80">
+<div class="flex items-center gap-space-sm">
+<span class="w-10 h-10 rounded-lg bg-surface-container text-on-surface flex items-center justify-center font-headline-sm text-headline-sm">21%</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[15px] text-on-surface">IVA General</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Bebidas azucaradas o alcohólicas, merchandising</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-caps text-[11px]">OPCIONAL</span>
+</div>
+</div>
+</div>
+<!-- Legal Note Banner -->
+<div class="p-space-md rounded-xl bg-surface-container flex items-start gap-3 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">verified</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] text-on-surface">Cumplimiento TicketBAI / VeriFactu</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant leading-relaxed">
+          Los precios mostrados en el terminal siempre llevan el impuesto incluido al consumidor (PVP), desglosando la cuota en el cierre de turno y arqueo de caja.
+        </p>
+</div>
+</div>
+</section>
+<!-- STICKY BOTTOM SAVE ACTION BAR -->
+<div class="fixed bottom-20 left-0 right-0 px-margin py-3 z-40 bg-surface/90 backdrop-blur-md shadow-lg flex items-center gap-3">
+<div class="flex-1 flex flex-col">
+<span class="font-label-caps text-label-caps text-tertiary flex items-center gap-1" id="sync-status">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+        Sincronizado Localmente
+      </span>
+<span class="font-body-sm text-[11px] text-on-surface-variant truncate">Los cambios se aplican al instante en el mostrador</span>
+</div>
+<button class="min-h-[52px] px-6 rounded-xl bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center gap-2 active:scale-95 transition-transform shadow-md hover:bg-primary-container" onclick="saveAllConfigurations()">
+<span class="material-symbols-outlined text-[20px]">save</span>
+<span>Guardar</span>
+</button>
+</div>
+<!-- MODAL: AÑADIR / EDITAR PRODUCTO -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-margin" id="product-modal">
+<div class="w-full max-w-md bg-surface-bright rounded-t-2xl sm:rounded-2xl p-space-lg flex flex-col gap-space-md shadow-2xl animate-fade-in max-h-[795px] overflow-y-auto">
+<div class="flex items-center justify-between pb-2 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">edit_note</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="modal-product-title">Nuevo Producto</h2>
+</div>
+<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container text-on-surface-variant active:scale-90 transition-transform" onclick="closeProductModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-sm" id="product-form" onsubmit="handleProductSubmit(event)">
+<input id="prod-id" type="hidden" value=""/>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Nombre del Producto</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="prod-name" placeholder="Ej: Croissant Artesano de Mantequilla" required="" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Precio PVP (€)</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-label-numeric-md text-label-numeric-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="prod-price" min="0" placeholder="1.90" required="" step="0.05" type="number"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">IVA Aplicable</label>
+<select class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="prod-vat">
+<option value="10">10% (Hostelería)</option>
+<option value="4">4% (Pan Común)</option>
+<option value="21">21% (Especial)</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Categoría</label>
+<select class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="prod-category">
+<option value="Café">☕ Café y Tés</option>
+<option value="Panadería">🥖 Panadería y Masa Madre</option>
+<option value="Bollería">🥐 Bollería Dulce &amp; Salada</option>
+<option value="Bebidas">🥤 Bebidas Frías</option>
+</select>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Icono Rápido de Tecla</label>
+<div class="flex items-center gap-2 overflow-x-auto py-1">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="prod-icon" type="radio" value="bakery_dining"/>
+<div class="h-11 rounded-lg bg-surface-container flex items-center justify-center text-on-surface peer-checked:bg-primary peer-checked:text-on-primary">
+<span class="material-symbols-outlined text-[20px]">bakery_dining</span>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="prod-icon" type="radio" value="coffee"/>
+<div class="h-11 rounded-lg bg-surface-container flex items-center justify-center text-on-surface peer-checked:bg-primary peer-checked:text-on-primary">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="prod-icon" type="radio" value="cake"/>
+<div class="h-11 rounded-lg bg-surface-container flex items-center justify-center text-on-surface peer-checked:bg-primary peer-checked:text-on-primary">
+<span class="material-symbols-outlined text-[20px]">cake</span>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="prod-icon" type="radio" value="local_drink"/>
+<div class="h-11 rounded-lg bg-surface-container flex items-center justify-center text-on-surface peer-checked:bg-primary peer-checked:text-on-primary">
+<span class="material-symbols-outlined text-[20px]">local_drink</span>
+</div>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-sm">
+<button class="flex-1 min-h-[48px] rounded-xl bg-surface-container text-on-surface font-headline-sm text-[14px]" onclick="closeProductModal()" type="button">Cancelar</button>
+<button class="flex-1 min-h-[48px] rounded-xl bg-primary text-on-primary font-headline-sm text-[14px] shadow-md" type="submit">Guardar Producto</button>
+</div>
+</form>
+</div>
+</div>
+<!-- MODAL: NUEVA CATEGORÍA -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-margin" id="category-modal">
+<div class="w-full max-w-md bg-surface-bright rounded-t-2xl sm:rounded-2xl p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center justify-between pb-2 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">category</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Añadir Categoría</h2>
+</div>
+<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container text-on-surface-variant" onclick="closeCategoryModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Nombre de la Categoría</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm focus:ring-2 focus:ring-primary/40" id="cat-name-input" placeholder="Ej: Especialidades Sin Gluten" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Emoji / Distintivo</label>
+<input class="w-full h-[50px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none shadow-sm" id="cat-emoji-input" placeholder="🥖" type="text" value="🏷️"/>
+</div>
+<div class="flex items-center gap-space-sm pt-space-sm">
+<button class="flex-1 min-h-[48px] rounded-xl bg-surface-container text-on-surface font-headline-sm text-[14px]" onclick="closeCategoryModal()">Cancelar</button>
+<button class="flex-1 min-h-[48px] rounded-xl bg-primary text-on-primary font-headline-sm text-[14px] shadow-md" onclick="addNewCategory()">Crear Categoría</button>
+</div>
+</div>
+</div>
+</div>
+<!-- TOAST NOTIFICATION -->
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-space-md py-2.5 rounded-full shadow-xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-2" id="toast">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">check_circle</span>
+<span class="font-headline-sm text-[13px]" id="toast-text">Configuración sincronizada</span>
+</div>
+</div>
+<script>
+  // Initial Store Data for La Piruleta Artisanal Hearth POS
+  const DEFAULT_PRODUCTS = [
+    { id: '1', name: 'Barra Rústica Masa Madre', price: 1.30, vat: 4, category: 'Panadería', icon: 'bakery_dining' },
+    { id: '2', name: 'Hogaza Centeno y Espelta', price: 3.20, vat: 4, category: 'Panadería', icon: 'bakery_dining' },
+    { id: '3', name: 'Croissant Mantequilla Pura', price: 1.80, vat: 10, category: 'Bollería', icon: 'cake' },
+    { id: '4', name: 'Café Flat White Doble', price: 2.10, vat: 10, category: 'Café', icon: 'coffee' },
+    { id: '5', name: 'Napolitana de Chocolate 70%', price: 2.00, vat: 10, category: 'Bollería', icon: 'cake' },
+    { id: '6', name: 'Zumo Naranja Natural', price: 2.50, vat: 10, category: 'Bebidas', icon: 'local_drink' },
+    { id: '7', name: 'Pan Gallego Tradicional', price: 1.50, vat: 4, category: 'Panadería', icon: 'bakery_dining' },
+    { id: '8', name: 'Café con Leche Avena', price: 1.90, vat: 10, category: 'Café', icon: 'coffee' }
+  ];
 
-  <!-- CABECERA PRINCIPAL -->
-  <header class="bg-stone-900 text-white px-4 py-3 sticky top-0 z-30 shadow-md">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#c85a32] to-[#e05638] flex items-center justify-center shadow-md">
-          <span class="text-xl">🍭</span>
+  let currentCategoryFilter = 'all';
+  let isCorrelativeActive = true;
+
+  // Retrieve products from localStorage or populate default
+  function getStoredProducts() {
+    try {
+      const stored = localStorage.getItem('lapiruleta_products');
+      return stored ? JSON.parse(stored) : DEFAULT_PRODUCTS;
+    } catch (e) {
+      return DEFAULT_PRODUCTS;
+    }
+  }
+
+  function setStoredProducts(prods) {
+    localStorage.setItem('lapiruleta_products', JSON.stringify(prods));
+  }
+
+  // Switch between tabs
+  function switchSection(section) {
+    const sProducts = document.getElementById('section-products');
+    const sFiscal = document.getElementById('section-fiscal');
+    const sTaxes = document.getElementById('section-taxes');
+
+    const bProducts = document.getElementById('tab-btn-products');
+    const bFiscal = document.getElementById('tab-btn-fiscal');
+    const bTaxes = document.getElementById('tab-btn-taxes');
+
+    sProducts.classList.add('hidden');
+    sFiscal.classList.add('hidden');
+    sTaxes.classList.add('hidden');
+
+    const defaultBtnClass = 'flex-1 min-h-[44px] px-space-sm py-2 rounded-lg font-headline-sm text-[13px] leading-tight flex items-center justify-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface';
+    const activeBtnClass = 'flex-1 min-h-[44px] px-space-sm py-2 rounded-lg font-headline-sm text-[13px] leading-tight flex items-center justify-center gap-1.5 transition-all bg-on-surface text-surface shadow-sm';
+
+    bProducts.className = defaultBtnClass;
+    bFiscal.className = defaultBtnClass;
+    bTaxes.className = defaultBtnClass;
+
+    if (section === 'products') {
+      sProducts.classList.remove('hidden');
+      bProducts.className = activeBtnClass;
+    } else if (section === 'fiscal') {
+      sFiscal.classList.remove('hidden');
+      bFiscal.className = activeBtnClass;
+      updateTicketPreview();
+    } else if (section === 'taxes') {
+      sTaxes.classList.remove('hidden');
+      bTaxes.className = activeBtnClass;
+    }
+  }
+
+  // Render Product List
+  function renderProductsList() {
+    const container = document.getElementById('products-list-container');
+    const products = getStoredProducts();
+    const filtered = currentCategoryFilter === 'all' 
+      ? products 
+      : products.filter(p => p.category.toLowerCase() === currentCategoryFilter.toLowerCase());
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="rounded-xl bg-surface-container-low p-space-xl text-center flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-[36px] text-outline">search_off</span>
+          <p class="font-headline-sm text-headline-sm text-on-surface">No hay productos en esta categoría</p>
+          <span class="font-body-sm text-body-sm text-on-surface-variant">Toca '+ Nuevo Producto' para registrar uno.</span>
         </div>
-        <div>
-          <h1 class="text-base font-bold tracking-tight font-heading leading-tight">LA PIRULETA</h1>
-          <div class="flex items-center gap-1.5 text-[11px] text-stone-400">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Online • Caja 1</span>
-          </div>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="location.reload()" class="w-8 h-8 rounded-lg bg-stone-800 text-stone-300 flex items-center justify-center active:scale-95 text-xs" title="Recargar">
-          🔄
-        </button>
-        <span class="text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-full font-medium">LP</span>
-      </div>
-    </div>
-
-    <!-- MODO DE SERVICIO -->
-    <div class="grid grid-cols-3 gap-1.5 mt-3 bg-stone-800/80 p-1 rounded-xl text-xs font-semibold">
-      <button onclick="setModo(this, 'Barra')" class="modo-btn py-1.5 rounded-lg bg-stone-100 text-stone-900 shadow-sm transition">☕ Barra</button>
-      <button onclick="setModo(this, 'Llevar')" class="modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition">🛍️ Llevar</button>
-      <button onclick="setModo(this, 'Mesa')" class="modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition">🪑 Mesa</button>
-    </div>
-  </header>
-
-  <!-- BARRA DE CATEGORÍAS -->
-  <nav class="bg-white border-b border-stone-200 px-3 py-2.5 sticky top-[97px] z-20 shadow-xs">
-    <div id="categoriasList" class="flex gap-2 overflow-x-auto no-scrollbar py-0.5">
-      <!-- Inyectado por JS -->
-    </div>
-  </nav>
-
-  <!-- CATÁLOGO DE PRODUCTOS -->
-  <main class="flex-1 p-3 pb-28 overflow-y-auto">
-    <div id="productosGrid" class="grid grid-cols-2 gap-2.5">
-      <!-- Inyectado por JS -->
-    </div>
-  </main>
-
-  <!-- BARRA INFERIOR / RESUMEN TICKET -->
-  <footer class="fixed bottom-0 inset-x-0 bg-white border-t border-stone-200 p-3 shadow-2xl z-30">
-    <div class="flex items-center justify-between gap-3 max-w-lg mx-auto">
-      <div class="cursor-pointer" onclick="abrirModalTicket()">
-        <p class="text-[11px] text-stone-500 font-semibold tracking-wider uppercase">Ticket actual</p>
-        <div class="flex items-baseline gap-1.5">
-          <span id="totalBadge" class="text-xl font-bold font-heading text-stone-900">0.00 €</span>
-          <span id="itemsBadge" class="text-xs text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full font-semibold">0 uds</span>
-        </div>
-      </div>
-      <button id="btnCobrar" onclick="abrirModalCobro()" disabled class="flex-1 max-w-[200px] bg-stone-300 text-stone-500 font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition cursor-not-allowed">
-        <span>Cobrar</span>
-        <span class="text-xs">➔</span>
-      </button>
-    </div>
-  </footer>
-
-  <!-- MODAL DE COBRO Y DESGLOSE -->
-  <div id="modalCobro" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom duration-200">
-      <div class="flex justify-between items-center pb-3 border-b border-stone-100">
-        <h3 class="font-bold text-lg font-heading text-stone-900">Cobrar Ticket</h3>
-        <button onclick="cerrarModalCobro()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center font-bold">✕</button>
-      </div>
-
-      <!-- Resumen de Importe -->
-      <div class="py-4 text-center bg-stone-50 rounded-2xl my-3">
-        <span class="text-xs text-stone-500 uppercase tracking-widest font-semibold">Total a Cobrar</span>
-        <div id="modalTotalCobro" class="text-3xl font-extrabold text-stone-900 font-heading">0.00 €</div>
-      </div>
-
-      <!-- Métodos de pago -->
-      <div class="space-y-2 mb-4">
-        <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Método de pago</p>
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="seleccionarMetodo(this, 'Tarjeta')" class="metodo-btn p-3 rounded-xl border-2 border-[#c85a32] bg-[#fdf3ed] text-[#c85a32] font-bold text-xs flex flex-col items-center gap-1">
-            <span class="text-xl">💳</span>
-            <span>Tarjeta</span>
-          </button>
-          <button onclick="seleccionarMetodo(this, 'Efectivo')" class="metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50">
-            <span class="text-xl">💶</span>
-            <span>Efectivo</span>
-          </button>
-          <button onclick="seleccionarMetodo(this, 'Bizum')" class="metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50">
-            <span class="text-xl">📱</span>
-            <span>Bizum</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Botón Finalizar Venta -->
-      <button onclick="procesarVenta()" class="w-full bg-[#c85a32] hover:bg-[#b24c28] text-white font-bold py-3.5 rounded-xl text-base shadow-lg shadow-[#c85a32]/25 active:scale-98 transition flex items-center justify-center gap-2">
-        <span>Completar Cobro</span>
-        <span>✓</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- MODAL TICKET DIGITAL FINALIZADO -->
-  <div id="modalExito" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl">
-      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">✓</div>
-      <h3 class="text-xl font-bold font-heading text-stone-900">¡Cobro Completado!</h3>
-      <p id="ticketInfoExito" class="text-sm text-stone-500 mt-1">Ticket #1042 • 0.00 €</p>
-
-      <div class="my-5 p-3.5 bg-stone-50 border border-stone-200 rounded-2xl text-left text-xs space-y-1.5 text-stone-600">
-        <div class="flex justify-between font-bold text-stone-800">
-          <span>LA PIRULETA</span>
-          <span>CAFETERÍA/PAN</span>
-        </div>
-        <div class="border-t border-stone-200 my-1"></div>
-        <div id="ticketDesgloseExito" class="space-y-1"></div>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <button onclick="enviarWhatsApp()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-emerald-700">
-          <span>📱 Enviar Ticket por WhatsApp</span>
-        </button>
-        <button onclick="nuevaVenta()" class="w-full bg-stone-100 text-stone-700 font-bold py-3 rounded-xl text-sm hover:bg-stone-200">
-          Nueva Venta
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // CATÁLOGO DE PRODUCTOS (Completamente editable)
-    const CATALOGO = [
-      { id: 1, nombre: 'Flat White Doble', precio: 2.80, cat: 'Café', icono: '☕' },
-      { id: 2, nombre: 'Cappuccino Avena', precio: 2.90, cat: 'Café', icono: '🥛' },
-      { id: 3, nombre: 'Cold Brew Nitro', precio: 3.40, cat: 'Café', icono: '🧊' },
-      { id: 4, nombre: 'Hogaza Masa Madre 1kg', precio: 4.20, cat: 'Pan', icono: '🥖' },
-      { id: 5, nombre: 'Baguette Rústica', precio: 1.60, cat: 'Pan', icono: '🥖' },
-      { id: 6, nombre: 'Croissant Mantequilla', precio: 2.10, cat: 'Bollería', icono: '🥐' },
-      { id: 7, nombre: 'Pain au Chocolat', precio: 2.40, cat: 'Bollería', icono: '🍫' },
-      { id: 8, nombre: 'Tosta Aguacate & Tomate', precio: 5.50, cat: 'Tostadas', icono: '🥪' },
-      { id: 9, nombre: 'Zumo Naranja Natural', precio: 2.70, cat: 'Bebidas', icono: '🍊' },
-      { id: 10, nombre: 'Piruleta Dulce Especial', precio: 1.50, cat: 'Dulces', icono: '🍭' }
-    ];
-
-    const CATEGORIAS = ['Todos', 'Café', 'Pan', 'Bollería', 'Tostadas', 'Bebidas', 'Dulces'];
-    let categoriaActual = 'Todos';
-    let ticket = [];
-    let metodoPagoActual = 'Tarjeta';
-    let modoServicio = 'Barra';
-
-    // RENDERIZAR CATEGORÍAS
-    function renderCategorias() {
-      const container = document.getElementById('categoriasList');
-      container.innerHTML = CATEGORIAS.map(cat => {
-        const active = cat === categoriaActual;
-        return `
-          <button onclick="filtrarCategoria('${cat}')" 
-            class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${active ? 'bg-stone-900 text-white shadow-xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">
-            ${cat}
-          </button>
-        `;
-      }).join('');
+      `;
+      return;
     }
 
-    // RENDERIZAR PRODUCTOS
-    function renderProductos() {
-      const container = document.getElementById('productosGrid');
-      const filtrados = categoriaActual === 'Todos' ? CATALOGO : CATALOGO.filter(p => p.cat === categoriaActual);
-
-      container.innerHTML = filtrados.map(prod => `
-        <div onclick="agregarAlTicket(${prod.id})" 
-          class="bg-white p-3.5 rounded-2xl border border-stone-200/90 shadow-xs flex flex-col justify-between active:scale-97 transition cursor-pointer hover:border-[#c85a32]/50">
-          <div class="flex items-start justify-between">
-            <span class="text-2xl">${prod.icono}</span>
-            <span class="text-[10px] font-semibold text-stone-400 bg-stone-50 px-2 py-0.5 rounded-md">${prod.cat}</span>
+    container.innerHTML = filtered.map(p => {
+      const vatBadgeColor = p.vat === 4 ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-secondary-container text-on-secondary-container';
+      return `
+        <div class="rounded-xl bg-surface-container-lowest p-space-md flex items-center justify-between shadow-sm active:translate-y-0.5 transition-transform">
+          <div class="flex items-center gap-space-sm min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+              <span class="material-symbols-outlined text-[22px]">${p.icon || 'bakery_dining'}</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="font-headline-sm text-[15px] text-on-surface truncate font-semibold">${p.name}</span>
+              </div>
+              <div class="flex items-center gap-2 pt-0.5">
+                <span class="font-label-numeric-sm text-[12px] text-on-surface-variant">${p.category}</span>
+                <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-label-numeric-sm font-bold ${vatBadgeColor}">IVA ${p.vat}%</span>
+              </div>
+            </div>
           </div>
-          <div class="mt-2">
-            <h4 class="font-bold text-sm text-stone-900 leading-tight">${prod.nombre}</h4>
-            <div class="flex items-baseline justify-between mt-2">
-              <span class="font-extrabold text-[#c85a32] text-sm">${prod.precio.toFixed(2)} €</span>
-              <span class="w-6 h-6 rounded-full bg-[#fdf3ed] text-[#c85a32] flex items-center justify-center font-bold text-xs">+</span>
+          <div class="flex items-center gap-space-sm flex-shrink-0">
+            <span class="font-label-numeric-md text-label-numeric-md text-primary font-bold">${Number(p.price).toFixed(2)}€</span>
+            <div class="flex items-center gap-1">
+              <button onclick="editProduct('${p.id}')" aria-label="Editar ${p.name}" class="w-9 h-9 min-w-[36px] min-h-[36px] rounded-lg bg-surface-container flex items-center justify-center text-on-surface active:scale-90 transition-transform">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+              </button>
+              <button onclick="deleteProduct('${p.id}')" aria-label="Eliminar ${p.name}" class="w-9 h-9 min-w-[36px] min-h-[36px] rounded-lg bg-error-container text-on-error-container flex items-center justify-center active:scale-90 transition-transform">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </button>
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+    }).join('');
+  }
+
+  function filterCategory(category, element) {
+    currentCategoryFilter = category;
+    document.querySelectorAll('.cat-chip').forEach(c => {
+      c.className = 'cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-surface-container text-on-surface whitespace-nowrap';
+    });
+    element.className = 'cat-chip min-h-[40px] px-4 py-2 rounded-full font-headline-sm text-[13px] bg-secondary text-on-secondary shadow-sm whitespace-nowrap';
+    renderProductsList();
+  }
+
+  // Modals Management
+  function openProductModal(prod = null) {
+    const modal = document.getElementById('product-modal');
+    const title = document.getElementById('modal-product-title');
+    const idField = document.getElementById('prod-id');
+    const nameField = document.getElementById('prod-name');
+    const priceField = document.getElementById('prod-price');
+    const vatField = document.getElementById('prod-vat');
+    const catField = document.getElementById('prod-category');
+
+    if (prod) {
+      title.innerText = 'Editar Producto';
+      idField.value = prod.id;
+      nameField.value = prod.name;
+      priceField.value = prod.price;
+      vatField.value = prod.vat;
+      catField.value = prod.category;
+    } else {
+      title.innerText = 'Nuevo Producto';
+      idField.value = '';
+      nameField.value = '';
+      priceField.value = '';
+      vatField.value = '10';
+      catField.value = 'Panadería';
     }
 
-    // AGREGAR AL TICKET
-    function agregarAlTicket(id) {
-      const prod = CATALOGO.find(p => p.id === id);
-      const itemExistente = ticket.find(i => i.id === id);
-      if (itemExistente) {
-        itemExistente.cantidad++;
-      } else {
-        ticket.push({ ...prod, cantidad: 1 });
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function openCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    document.getElementById('cat-name-input').value = '';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function handleProductSubmit(e) {
+    e.preventDefault();
+    const id = document.getElementById('prod-id').value;
+    const name = document.getElementById('prod-name').value.trim();
+    const price = parseFloat(document.getElementById('prod-price').value);
+    const vat = parseInt(document.getElementById('prod-vat').value);
+    const category = document.getElementById('prod-category').value;
+    
+    const selectedIconElem = document.querySelector('input[name="prod-icon"]:checked');
+    const icon = selectedIconElem ? selectedIconElem.value : 'bakery_dining';
+
+    let prods = getStoredProducts();
+
+    if (id) {
+      // Update
+      prods = prods.map(p => p.id === id ? { ...p, name, price, vat, category, icon } : p);
+      showToast('Producto actualizado con éxito');
+    } else {
+      // Create
+      const newProd = {
+        id: Date.now().toString(),
+        name,
+        price,
+        vat,
+        category,
+        icon
+      };
+      prods.unshift(newProd);
+      showToast('Nuevo producto añadido al catálogo');
+    }
+
+    setStoredProducts(prods);
+    renderProductsList();
+    closeProductModal();
+  }
+
+  function editProduct(id) {
+    const prods = getStoredProducts();
+    const p = prods.find(item => item.id === id);
+    if (p) openProductModal(p);
+  }
+
+  function deleteProduct(id) {
+    if (confirm('¿Deseas retirar este producto de la venta activa?')) {
+      let prods = getStoredProducts();
+      prods = prods.filter(p => p.id !== id);
+      setStoredProducts(prods);
+      renderProductsList();
+      showToast('Producto eliminado');
+    }
+  }
+
+  function addNewCategory() {
+    const catName = document.getElementById('cat-name-input').value.trim();
+    if (!catName) return;
+
+    // Add into product select dropdown
+    const select = document.getElementById('prod-category');
+    const opt = document.createElement('option');
+    opt.value = catName;
+    opt.innerText = catName;
+    select.appendChild(opt);
+
+    closeCategoryModal();
+    showToast(`Categoría "${catName}" añadida`);
+  }
+
+  function toggleCorrelativeState() {
+    isCorrelativeActive = !isCorrelativeActive;
+    const dot = document.getElementById('toggle-dot');
+    const btn = document.getElementById('toggle-correlative');
+    if (isCorrelativeActive) {
+      dot.className = 'block w-6 h-6 rounded-full bg-surface-bright shadow-sm transition-transform translate-x-6';
+      btn.className = 'w-14 h-8 rounded-full bg-tertiary-container relative p-1 transition-colors';
+    } else {
+      dot.className = 'block w-6 h-6 rounded-full bg-surface-bright shadow-sm transition-transform translate-x-0';
+      btn.className = 'w-14 h-8 rounded-full bg-surface-variant relative p-1 transition-colors';
+    }
+  }
+
+  // Update real-time ticket preview
+  function updateTicketPreview() {
+    const comm = document.getElementById('fiscal-commercial').value;
+    const cif = document.getElementById('fiscal-cif').value;
+    const addr = document.getElementById('fiscal-address').value;
+    const foot = document.getElementById('fiscal-footer').value;
+
+    document.getElementById('preview-title').innerText = comm || 'LA PIRULETA';
+    document.getElementById('preview-cif').innerText = cif || 'PANADERIA LA PIRULETA S.L.';
+    document.getElementById('preview-address').innerText = addr || 'Dirección local';
+    document.getElementById('preview-footer').innerText = foot || '¡Gracias por su visita!';
+  }
+
+  // Live input sync to preview
+  document.getElementById('fiscal-commercial')?.addEventListener('input', updateTicketPreview);
+  document.getElementById('fiscal-cif')?.addEventListener('input', updateTicketPreview);
+  document.getElementById('fiscal-address')?.addEventListener('input', updateTicketPreview);
+  document.getElementById('fiscal-footer')?.addEventListener('input', updateTicketPreview);
+
+  function saveAllConfigurations() {
+    const fiscalData = {
+      commercial: document.getElementById('fiscal-commercial').value,
+      cif: document.getElementById('fiscal-cif').value,
+      address: document.getElementById('fiscal-address').value,
+      phone: document.getElementById('fiscal-phone').value,
+      series: document.getElementById('fiscal-series').value,
+      footer: document.getElementById('fiscal-footer').value,
+      correlative: isCorrelativeActive
+    };
+    localStorage.setItem('lapiruleta_fiscal', JSON.stringify(fiscalData));
+
+    // Micro visual feedback
+    const syncStatus = document.getElementById('sync-status');
+    syncStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Base de Datos Actualizada';
+    showToast('Toda la configuración fue guardada en el TPV');
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+    toastText.innerText = msg;
+    toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+    }, 2800);
+  }
+
+  // Load Saved Fiscal Data on start
+  function loadFiscalSettings() {
+    try {
+      const stored = localStorage.getItem('lapiruleta_fiscal');
+      if (stored) {
+        const d = JSON.parse(stored);
+        if (d.commercial) document.getElementById('fiscal-commercial').value = d.commercial;
+        if (d.cif) document.getElementById('fiscal-cif').value = d.cif;
+        if (d.address) document.getElementById('fiscal-address').value = d.address;
+        if (d.phone) document.getElementById('fiscal-phone').value = d.phone;
+        if (d.series) document.getElementById('fiscal-series').value = d.series;
+        if (d.footer) document.getElementById('fiscal-footer').value = d.footer;
+        if (typeof d.correlative === 'boolean' && d.correlative !== isCorrelativeActive) {
+          toggleCorrelativeState();
+        }
       }
-      actualizarResumenTicket();
-    }
+    } catch(e) {}
+  }
 
-    // ACTUALIZAR BADGES Y BOTÓN COBRAR
-    function actualizarResumenTicket() {
-      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-      const totalUds = ticket.reduce((sum, item) => sum + item.cantidad, 0);
-
-      document.getElementById('totalBadge').innerText = total.toFixed(2) + ' €';
-      document.getElementById('itemsBadge').innerText = totalUds + (totalUds === 1 ? ' ud' : ' uds');
-
-      const btnCobrar = document.getElementById('btnCobrar');
-      if (totalUds > 0) {
-        btnCobrar.disabled = false;
-        btnCobrar.className = 'flex-1 max-w-[200px] bg-[#c85a32] hover:bg-[#b24c28] text-white font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#c85a32]/25 active:scale-95 transition cursor-pointer';
-      } else {
-        btnCobrar.disabled = true;
-        btnCobrar.className = 'flex-1 max-w-[200px] bg-stone-300 text-stone-500 font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition cursor-not-allowed';
-      }
-    }
-
-    function filtrarCategoria(cat) {
-      categoriaActual = cat;
-      renderCategorias();
-      renderProductos();
-    }
-
-    function setModo(btn, modo) {
-      modoServicio = modo;
-      document.querySelectorAll('.modo-btn').forEach(b => {
-        b.className = 'modo-btn py-1.5 rounded-lg text-stone-300 hover:text-white transition';
-      });
-      btn.className = 'modo-btn py-1.5 rounded-lg bg-stone-100 text-stone-900 shadow-sm transition';
-    }
-
-    function abrirModalCobro() {
-      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-      document.getElementById('modalTotalCobro').innerText = total.toFixed(2) + ' €';
-      document.getElementById('modalCobro').classList.remove('hidden');
-    }
-
-    function cerrarModalCobro() {
-      document.getElementById('modalCobro').classList.add('hidden');
-    }
-
-    function seleccionarMetodo(btn, metodo) {
-      metodoPagoActual = metodo;
-      document.querySelectorAll('.metodo-btn').forEach(b => {
-        b.className = 'metodo-btn p-3 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs flex flex-col items-center gap-1 hover:bg-stone-50';
-      });
-      btn.className = 'metodo-btn p-3 rounded-xl border-2 border-[#c85a32] bg-[#fdf3ed] text-[#c85a32] font-bold text-xs flex flex-col items-center gap-1';
-    }
-
-    function procesarVenta() {
-      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-      cerrarModalCobro();
-
-      document.getElementById('ticketInfoExito').innerText = 'Ticket #' + Math.floor(1000 + Math.random() * 9000) + ' • ' + total.toFixed(2) + ' € (' + metodoPagoActual + ')';
-      
-      const desglose = document.getElementById('ticketDesgloseExito');
-      desglose.innerHTML = ticket.map(i => `
-        <div class="flex justify-between">
-          <span>${i.cantidad}x ${i.nombre}</span>
-          <span class="font-semibold">${(i.precio * i.cantidad).toFixed(2)} €</span>
-        </div>
-      `).join('');
-
-      document.getElementById('modalExito').classList.remove('hidden');
-    }
-
-    function nuevaVenta() {
-      ticket = [];
-      actualizarResumenTicket();
-      document.getElementById('modalExito').classList.add('hidden');
-    }
-
-    function enviarWhatsApp() {
-      const total = ticket.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-      let texto = '🧾 *Ticket LA PIRULETA*\n';
-      texto += '---------------------\n';
-      ticket.forEach(i => {
-        texto += `${i.cantidad}x ${i.nombre} - ${(i.precio * i.cantidad).toFixed(2)}€\n`;
-      });
-      texto += '---------------------\n';
-      texto += `*Total:* ${total.toFixed(2)}€ (${metodoPagoActual})\n`;
-      texto += '¡Gracias por su visita a La Piruleta! 🍭';
-      
-      window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank');
-    }
-
-    // INICIALIZAR
-    renderCategorias();
-    renderProductos();
-  </script>
-</body>
-</html>
+  // Bootstrap
+  document.addEventListener('DOMContentLoaded', () => {
+    renderProductsList();
+    loadFiscalSettings();
+  });
+  // Immediate render fallback if DOMContentLoaded fired
+  renderProductsList();
+  loadFiscalSettings();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(45,30,24,0.06)]" data-active-classes="text-primary font-bold"><div class="h-20 px-space-sm grid grid-cols-4 items-center"><a class="min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform duration-150" data-path="terminal" href="#"><span class="material-symbols-outlined text-[24px]">point_of_sale</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Terminal</span></a><a class="min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform duration-150" data-path="cobro" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Cobro</span></a><a class="min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform duration-150" data-path="mesas" href="#"><span class="material-symbols-outlined text-[24px]">table_restaurant</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Mesas</span></a><a class="min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform duration-150" data-path="caja" href="#"><span class="material-symbols-outlined text-[24px]">lock_clock</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Caja</span></a></div></nav></body></html>
