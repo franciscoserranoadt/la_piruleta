@@ -40,7 +40,7 @@
   </script>
   <style>
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
-    input, textarea { user-select: text; }
+    input, textarea, select { user-select: text; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff8f1; color: #2c1a14; }
   </style>
 </head>
@@ -66,7 +66,7 @@
       </div>
     </div>
     
-    <!-- Acciones Cabecera: LUPA, EDITOR CARTA Y AJUSTES FISCALES -->
+    <!-- Acciones Cabecera: LUPA, GESTOR DE CARTA Y AJUSTES FISCALES -->
     <div class="flex items-center gap-2">
       <button id="btnLupa" onclick="toggleBuscador()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-600 transition-all cursor-pointer" title="Buscar productos">
         <i class="fa-solid fa-magnifying-glass text-sm"></i>
@@ -91,7 +91,7 @@
     </div>
   </div>
 
-  <!-- VISTA 1: TERMINAL (CATÁLOGO) -->
+  <!-- VISTA 1: TERMINAL (CATÁLOGO DINÁMICO) -->
   <section id="vista-terminal" class="vista-seccion px-4 py-4 space-y-4">
     <div class="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl text-xs font-bold text-center">
       <button onclick="seleccionarServicio('barra', this)" class="btn-servicio py-2 rounded-lg bg-white shadow-sm text-orange-600">☕ Barra</button>
@@ -99,16 +99,9 @@
       <button onclick="seleccionarServicio('mesa', this)" class="btn-servicio py-2 rounded-lg text-slate-600">🪑 Mesa</button>
     </div>
 
-    <!-- Pestañas de Categoría -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
-      <button onclick="filtrarCategoria('todos', this)" class="btn-cat px-4 py-2 rounded-xl bg-slate-800 text-white shadow-sm shrink-0">Todos</button>
-      <button onclick="filtrarCategoria('cafe', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">☕ Café</button>
-      <button onclick="filtrarCategoria('pan', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">🥖 Pan</button>
-      <button onclick="filtrarCategoria('bolleria', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">🥐 Bollería</button>
-      <button onclick="filtrarCategoria('tostadas', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">🥪 Tostadas</button>
-      <button onclick="abrirModalEditorCarta()" class="px-3 py-2 rounded-xl bg-orange-100 text-orange-800 font-bold shrink-0 flex items-center gap-1 border border-orange-200">
-        <i class="fa-solid fa-plus text-xs"></i> Carta
-      </button>
+    <!-- Pestañas de Categoría Dinámicas -->
+    <div id="contenedorPestanasCategorias" class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
+      <!-- Se generan automáticamente desde la lista de categorías -->
     </div>
 
     <!-- Rejilla de Productos -->
@@ -251,7 +244,7 @@
         </div>
       </div>
 
-      <!-- 4 Botones de Acción de Mesa -->
+      <!-- Botones de Acción de Mesa -->
       <div class="space-y-2 text-xs font-bold">
         <button onclick="mesaAccionAñadirProducto()" class="w-full py-3 px-4 rounded-xl bg-orange-600 text-white flex items-center justify-between active:scale-98 shadow-sm">
           <span>➕ Añadir Productos a Mesa</span>
@@ -324,42 +317,85 @@
     </div>
   </div>
 
-  <!-- MODAL DE EDICIÓN DE CARTA (SINCRONIZADA CON FIREBASE) -->
-  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
+  <!-- MODAL DE GESTIÓN DE CARTA EN LA NUBE (PRODUCTOS & CATEGORÍAS) -->
+  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-4 space-y-3 shadow-2xl max-h-[90vh] flex flex-col">
+      
+      <!-- Cabecera del Gestor -->
       <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-orange-600"></i>
+          <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
           <h3 class="font-bold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
         </div>
         <button onclick="cerrarModalEditorCarta()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-sm"></i>
-        </button>
-      </div>
-      
-      <!-- Formulario para Añadir / Editar Producto -->
-      <div class="bg-orange-50/60 p-3 rounded-xl border border-orange-100 space-y-2 text-xs shrink-0">
-        <span class="font-bold text-orange-950 block">Añadir Nuevo Producto</span>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
-          <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <select id="nuevoProdCat" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
-            <option value="cafe">☕ Café</option>
-            <option value="pan">🥖 Pan</option>
-            <option value="bolleria">🥐 Bollería</option>
-            <option value="tostadas">🥪 Tostadas</option>
-          </select>
-          <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
-        </div>
-        <button onclick="guardarNuevoProducto()" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold text-xs shadow-sm">
-          Guardar en la Nube
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
 
-      <!-- Lista de Productos Existentes -->
-      <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
+      <!-- Pestañas internas: Productos vs Categorías -->
+      <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
+        <button id="tabSubProd" onclick="cambiarSubTabGestor('articulos')" class="py-1.5 rounded-lg bg-white shadow-xs text-orange-600">📦 Artículos</button>
+        <button id="tabSubCat" onclick="cambiarSubTabGestor('categorias')" class="py-1.5 rounded-lg text-slate-600">🏷️ Categorías</button>
+      </div>
+
+      <!-- SECCIÓN A: ARTÍCULOS (CREAR O EDITAR EXISTENTES) -->
+      <div id="secGestorArticulos" class="space-y-3 flex-1 flex flex-col overflow-hidden">
+        <!-- Formulario Producto -->
+        <div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-100/90 space-y-2 text-xs shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-orange-950 block text-[11px] uppercase tracking-wide" id="tituloFormProducto">Añadir Nuevo Producto</span>
+            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[10px] text-rose-500 font-bold hover:underline">
+              Cancelar Edición
+            </button>
+          </div>
+          <input type="hidden" id="prodEditId" value="">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+            <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <select id="nuevoProdCat" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+              <!-- Se llena con las categorías dinámicas -->
+            </select>
+            <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+          </div>
+          <button onclick="guardarProductoCloud()" id="btnGuardarProducto" class="w-full py-2 bg-orange-600 hover:bg-orange-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-sm flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+            <span id="btnTextoGuardarProd">Guardar en la Nube</span>
+          </button>
+        </div>
+
+        <!-- Lista de Productos Existentes con Botones de Editar y Borrar -->
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
+      </div>
+
+      <!-- SECCIÓN B: CATEGORÍAS (CREAR O MODIFICAR CATEGORÍAS) -->
+      <div id="secGestorCategorias" class="space-y-3 flex-1 flex flex-col overflow-hidden hidden">
+        <!-- Formulario Categoría -->
+        <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100/90 space-y-2 text-xs shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-950 block text-[11px] uppercase tracking-wide" id="tituloFormCat">Añadir Nueva Categoría</span>
+            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[10px] text-rose-500 font-bold hover:underline">
+              Cancelar Edición
+            </button>
+          </div>
+          <input type="hidden" id="catEditId" value="">
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" class="col-span-2 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-amber-500">
+            <input type="text" id="nuevaCatIcono" placeholder="Emoji 🧃" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-amber-500 text-center">
+          </div>
+          <button onclick="guardarCategoriaCloud()" id="btnGuardarCat" class="w-full py-2 bg-amber-600 hover:bg-amber-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-sm flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-folder-plus text-xs"></i>
+            <span id="btnTextoGuardarCat">Guardar Categoría</span>
+          </button>
+        </div>
+
+        <!-- Lista de Categorías Existentes -->
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorCategorias"></div>
+      </div>
+
     </div>
   </div>
 
@@ -384,7 +420,7 @@
     </button>
   </nav>
 
-  <!-- JAVASCRIPT: LÓGICA COMPLETA DE TPV, MESAS, FIREBASE Y DATOS FISCALES -->
+  <!-- JAVASCRIPT: LÓGICA COMPLETA DE TPV, MESAS, FIREBASE, ARTÍCULOS Y CATEGORÍAS -->
   <script>
     // 1. CONFIGURACIÓN FIREBASE FIRESTORE
     const firebaseConfig = {
@@ -397,7 +433,6 @@
     };
 
     let db = null;
-    let productosFirestore = [];
     try {
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
@@ -406,6 +441,17 @@
       console.warn("Modo local activo:", err);
       document.getElementById('txtEstadoCloud').innerText = "Modo Local";
     }
+
+    // Categorías base iniciales
+    const categoriasBase = [
+      { id: 'cafe', nombre: 'Café', icono: '☕' },
+      { id: 'pan', nombre: 'Pan', icono: '🥖' },
+      { id: 'bolleria', nombre: 'Bollería', icono: '🥐' },
+      { id: 'tostadas', nombre: 'Tostadas', icono: '🥪' }
+    ];
+
+    let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
+    let categoriaActivaFiltro = 'todos';
 
     // Catálogo base de seguridad
     const catalogoBase = [
@@ -460,11 +506,13 @@
       localStorage.setItem('piruleta_mesas', JSON.stringify(mesas));
       localStorage.setItem('piruleta_caja', JSON.stringify(caja));
       localStorage.setItem('piruleta_catalogo', JSON.stringify(catalogo));
+      localStorage.setItem('piruleta_categorias', JSON.stringify(categorias));
       localStorage.setItem('piruleta_datos_fiscales', JSON.stringify(datosFiscales));
     }
 
-    // SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
+    // 2. SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
     if (db) {
+      // Escuchar Productos
       db.collection("productos").onSnapshot((snapshot) => {
         if (!snapshot.empty) {
           const list = [];
@@ -476,10 +524,24 @@
           renderCatalogo();
           renderListaEditor();
         } else {
-          // Si está vacía la colección, poblarla con el catálogo inicial
-          catalogoBase.forEach(item => {
-            db.collection("productos").add(item);
+          catalogoBase.forEach(item => db.collection("productos").add(item));
+        }
+      });
+
+      // Escuchar Categorías
+      db.collection("categorias").onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => {
+            list.push({ docId: doc.id, ...doc.data() });
           });
+          categorias = list;
+          guardarDatosLocales();
+          renderPestanasCategorias();
+          actualizarSelectCategorias();
+          renderListaCategoriasEditor();
+        } else {
+          categoriasBase.forEach(c => db.collection("categorias").add(c));
         }
       });
     }
@@ -524,35 +586,56 @@
       renderCatalogo(filtrados);
     }
 
-    // AJUSTES Y DATOS FISCALES
-    function toggleAjustesModal() {
-      const modal = document.getElementById('modalAjustes');
-      modal.classList.toggle('hidden');
-      if (!modal.classList.contains('hidden')) {
-        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
-        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
-        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
-        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
-        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
-        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
-        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
-      }
+    // GESTIÓN DE CATEGORÍAS EN INTERFAZ
+    function renderPestanasCategorias() {
+      const cont = document.getElementById('contenedorPestanasCategorias');
+      if (!cont) return;
+      cont.innerHTML = `
+        <button onclick="filtrarCategoria('todos', this)" class="btn-cat px-4 py-2 rounded-xl ${categoriaActivaFiltro === 'todos' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0">Todos</button>
+      `;
+      categorias.forEach(c => {
+        const catId = c.id || c.docId || c.nombre.toLowerCase();
+        const esActiva = (categoriaActivaFiltro === catId);
+        const btn = document.createElement('button');
+        btn.className = `btn-cat px-4 py-2 rounded-xl ${esActiva ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0`;
+        btn.innerHTML = `${c.icono || '🏷️'} ${c.nombre}`;
+        btn.onclick = () => filtrarCategoria(catId, btn);
+        cont.appendChild(btn);
+      });
+
+      // Botón directo para abrir gestor
+      const btnAdd = document.createElement('button');
+      btnAdd.className = 'px-3 py-2 rounded-xl bg-orange-100 text-orange-800 font-bold shrink-0 flex items-center gap-1 border border-orange-200';
+      btnAdd.innerHTML = '<i class="fa-solid fa-plus text-xs"></i> Carta';
+      btnAdd.onclick = abrirModalEditorCarta;
+      cont.appendChild(btnAdd);
     }
 
-    function guardarAjustes() {
-      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
-      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
-      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
-      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
-      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
-      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
-      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
+    function actualizarSelectCategorias() {
+      const sel = document.getElementById('nuevoProdCat');
+      if (!sel) return;
+      sel.innerHTML = '';
+      categorias.forEach(c => {
+        const catId = c.id || c.docId || c.nombre.toLowerCase();
+        const opt = document.createElement('option');
+        opt.value = catId;
+        opt.innerText = `${c.icono || '🏷️'} ${c.nombre}`;
+        sel.appendChild(opt);
+      });
+    }
 
-      guardarDatosLocales();
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
-      toggleAjustesModal();
-      alert('¡Datos fiscales guardados con éxito!');
+    function filtrarCategoria(cat, btn) {
+      categoriaActivaFiltro = cat;
+      document.querySelectorAll('.btn-cat').forEach(b => {
+        b.className = 'btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0';
+      });
+      if (btn) btn.className = 'btn-cat px-4 py-2 rounded-xl bg-slate-800 text-white shadow-sm shrink-0';
+      if (cat === 'todos') {
+        renderCatalogo(catalogo);
+      } else {
+        const filtrados = catalogo.filter(p => p.categoria === cat);
+        renderCatalogo(filtrados);
+      }
     }
 
     // CATÁLOGO & PRODUCTOS
@@ -561,18 +644,20 @@
       if (!grid) return;
       grid.innerHTML = '';
       lista.forEach(prod => {
+        const catObj = categorias.find(c => (c.id === prod.categoria || c.docId === prod.categoria || c.nombre.toLowerCase() === prod.categoria));
+        const catNombre = catObj ? catObj.nombre : prod.categoria;
         const card = document.createElement('div');
         card.className = 'bg-white rounded-2xl p-4 border border-orange-100/80 shadow-sm flex flex-col justify-between active:scale-95 transition-all cursor-pointer';
         card.innerHTML = `
           <div class="flex items-start justify-between">
             <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${prod.categoria}</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate max-w-[80px]">${catNombre}</span>
           </div>
           <div class="mt-3">
             <h4 class="font-bold text-xs text-slate-800 leading-tight">${prod.nombre}</h4>
             <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
               <span class="font-extrabold text-sm text-slate-900">${Number(prod.precio).toFixed(2)} €</span>
-              <button onclick="event.stopPropagation(); agregarAlTicket(${prod.id || "'" + prod.docId + "'"})" class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm hover:bg-orange-500">
+              <button onclick="event.stopPropagation(); agregarAlTicket(${prod.id ? prod.id : `'` + prod.docId + `'`})" class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm hover:bg-orange-500">
                 +
               </button>
             </div>
@@ -581,19 +666,6 @@
         card.onclick = () => agregarAlTicket(prod.id || prod.docId);
         grid.appendChild(card);
       });
-    }
-
-    function filtrarCategoria(cat, btn) {
-      document.querySelectorAll('.btn-cat').forEach(b => {
-        b.className = 'btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0';
-      });
-      btn.className = 'btn-cat px-4 py-2 rounded-xl bg-slate-800 text-white shadow-sm shrink-0';
-      if (cat === 'todos') {
-        renderCatalogo(catalogo);
-      } else {
-        const filtrados = catalogo.filter(p => p.categoria === cat);
-        renderCatalogo(filtrados);
-      }
     }
 
     function seleccionarServicio(tipo, btn) {
@@ -703,7 +775,6 @@
       else if (metodoPagoActivo === 'bizum') caja.bizum += total;
       caja.total += total;
 
-      // Si se cobraba una mesa, liberarla automáticamente
       if (mesaActivaSeleccionada) {
         mesaActivaSeleccionada.ocupada = false;
         mesaActivaSeleccionada.ticket = [];
@@ -863,34 +934,96 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       alert('Cierre Z completado y caja reiniciada a 0.00 €.');
     }
 
-    // GESTOR DE CARTA EN LA NUBE (FIREBASE)
+    // AJUSTES & DATOS FISCALES
+    function toggleAjustesModal() {
+      const modal = document.getElementById('modalAjustes');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
+        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
+        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
+        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
+        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
+        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
+        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
+      }
+    }
+
+    function guardarAjustes() {
+      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
+      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
+      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
+      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
+      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
+      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
+      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
+
+      guardarDatosLocales();
+      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
+      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
+      toggleAjustesModal();
+      alert('¡Datos fiscales guardados con éxito!');
+    }
+
+    // GESTOR DE CARTA EN LA NUBE (PRODUCTOS & CATEGORÍAS)
     function abrirModalEditorCarta() {
       document.getElementById('modalEditorCarta').classList.remove('hidden');
+      cambiarSubTabGestor('articulos');
       renderListaEditor();
+      renderListaCategoriasEditor();
+      actualizarSelectCategorias();
     }
     function cerrarModalEditorCarta() {
+      cancelarEdicionProducto();
+      cancelarEdicionCategoria();
       document.getElementById('modalEditorCarta').classList.add('hidden');
     }
 
+    function cambiarSubTabGestor(tab) {
+      const tabProd = document.getElementById('tabSubProd');
+      const tabCat = document.getElementById('tabSubCat');
+      const secProd = document.getElementById('secGestorArticulos');
+      const secCat = document.getElementById('secGestorCategorias');
+
+      if (tab === 'articulos') {
+        tabProd.className = 'py-1.5 rounded-lg bg-white shadow-xs text-orange-600';
+        tabCat.className = 'py-1.5 rounded-lg text-slate-600';
+        secProd.classList.remove('hidden');
+        secCat.classList.add('hidden');
+      } else {
+        tabCat.className = 'py-1.5 rounded-lg bg-white shadow-xs text-amber-600';
+        tabProd.className = 'py-1.5 rounded-lg text-slate-600';
+        secCat.classList.remove('hidden');
+        secProd.classList.add('hidden');
+      }
+    }
+
+    // --- SUB-MÓDULO: ARTÍCULOS (CREAR & EDITAR EXISTENTES) ---
     function renderListaEditor() {
       const container = document.getElementById('listaEditorProductos');
       if (!container) return;
       container.innerHTML = '';
       catalogo.forEach(p => {
+        const catObj = categorias.find(c => (c.id === p.categoria || c.docId === p.categoria || c.nombre.toLowerCase() === p.categoria));
+        const catNombre = catObj ? catObj.nombre : p.categoria;
         const row = document.createElement('div');
-        row.className = 'py-2 flex items-center justify-between';
+        row.className = 'py-2 flex items-center justify-between gap-2 hover:bg-slate-50 px-1 rounded-lg transition-colors';
+        const pIdStr = p.docId ? `'${p.docId}'` : p.id;
         row.innerHTML = `
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
             <span class="text-lg">${p.icono || '☕'}</span>
-            <div>
-              <span class="font-bold text-slate-800">${p.nombre}</span>
-              <span class="text-[10px] text-slate-400 block">${p.categoria}</span>
+            <div class="min-w-0">
+              <span class="font-bold text-slate-800 block truncate">${p.nombre}</span>
+              <span class="text-[10px] text-slate-400 block">${catNombre}</span>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-orange-600">${Number(p.precio).toFixed(2)} €</span>
-            <button onclick="eliminarProductoCloud('${p.docId || p.id}')" class="text-rose-500 hover:text-rose-700 p-1">
-              <i class="fa-solid fa-trash-can"></i>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="font-bold text-orange-600 text-xs">${Number(p.precio).toFixed(2)} €</span>
+            <button onclick="cargarProductoParaEditar(${pIdStr})" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-orange-600 flex items-center justify-center transition-all" title="Editar artículo">
+              <i class="fa-solid fa-pen text-xs"></i>
+            </button>
+            <button onclick="eliminarProductoCloud(${pIdStr})" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition-all" title="Eliminar artículo">
+              <i class="fa-solid fa-trash-can text-xs"></i>
             </button>
           </div>
         `;
@@ -898,7 +1031,32 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       });
     }
 
-    function guardarNuevoProducto() {
+    function cargarProductoParaEditar(id) {
+      const prod = catalogo.find(p => (p.docId == id || p.id == id));
+      if (!prod) return;
+      document.getElementById('prodEditId').value = prod.docId || prod.id;
+      document.getElementById('nuevoProdNombre').value = prod.nombre;
+      document.getElementById('nuevoProdPrecio').value = prod.precio;
+      document.getElementById('nuevoProdCat').value = prod.categoria;
+      document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
+
+      document.getElementById('tituloFormProducto').innerText = 'Modificar Artículo';
+      document.getElementById('btnTextoGuardarProd').innerText = 'Guardar Cambios';
+      document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
+    }
+
+    function cancelarEdicionProducto() {
+      document.getElementById('prodEditId').value = '';
+      document.getElementById('nuevoProdNombre').value = '';
+      document.getElementById('nuevoProdPrecio').value = '';
+      document.getElementById('nuevoProdIcono').value = '';
+      document.getElementById('tituloFormProducto').innerText = 'Añadir Nuevo Producto';
+      document.getElementById('btnTextoGuardarProd').innerText = 'Guardar en la Nube';
+      document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
+    }
+
+    function guardarProductoCloud() {
+      const editId = document.getElementById('prodEditId').value;
       const nom = document.getElementById('nuevoProdNombre').value.trim();
       const pre = parseFloat(document.getElementById('nuevoProdPrecio').value);
       const cat = document.getElementById('nuevoProdCat').value;
@@ -910,19 +1068,39 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       }
 
       const item = { nombre: nom, precio: pre, categoria: cat, icono: ico };
-      if (db) {
-        db.collection("productos").add(item).then(() => {
-          document.getElementById('nuevoProdNombre').value = '';
-          document.getElementById('nuevoProdPrecio').value = '';
-          alert('¡Producto guardado en la nube!');
-        });
+
+      if (editId) {
+        // Modo Edición
+        if (db && typeof editId === 'string' && editId.length > 10) {
+          db.collection("productos").doc(editId).update(item).then(() => {
+            cancelarEdicionProducto();
+            alert('¡Artículo actualizado en la nube con éxito!');
+          });
+        } else {
+          const idx = catalogo.findIndex(p => (p.id == editId || p.docId == editId));
+          if (idx !== -1) catalogo[idx] = { ...catalogo[idx], ...item };
+          guardarDatosLocales();
+          renderCatalogo();
+          renderListaEditor();
+          cancelarEdicionProducto();
+          alert('¡Artículo actualizado!');
+        }
       } else {
-        item.id = Date.now();
-        catalogo.push(item);
-        guardarDatosLocales();
-        renderCatalogo();
-        renderListaEditor();
-        alert('Guardado localmente.');
+        // Modo Creación
+        if (db) {
+          db.collection("productos").add(item).then(() => {
+            cancelarEdicionProducto();
+            alert('¡Nuevo producto añadido en la nube!');
+          });
+        } else {
+          item.id = Date.now();
+          catalogo.push(item);
+          guardarDatosLocales();
+          renderCatalogo();
+          renderListaEditor();
+          cancelarEdicionProducto();
+          alert('Guardado localmente.');
+        }
       }
     }
 
@@ -938,10 +1116,127 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       }
     }
 
-    // INICIALIZACIÓN
+    // --- SUB-MÓDULO: CATEGORÍAS (CREAR & MODIFICAR CATEGORÍAS) ---
+    function renderListaCategoriasEditor() {
+      const container = document.getElementById('listaEditorCategorias');
+      if (!container) return;
+      container.innerHTML = '';
+      categorias.forEach(c => {
+        const row = document.createElement('div');
+        row.className = 'py-2 flex items-center justify-between gap-2 hover:bg-slate-50 px-1 rounded-lg transition-colors';
+        const cIdStr = c.docId ? `'${c.docId}'` : `'${c.id}'`;
+        row.innerHTML = `
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span class="text-lg">${c.icono || '🏷️'}</span>
+            <span class="font-bold text-slate-800 text-xs truncate">${c.nombre}</span>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="cargarCategoriaParaEditar(${cIdStr})" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-all" title="Modificar categoría">
+              <i class="fa-solid fa-pen text-xs"></i>
+            </button>
+            <button onclick="eliminarCategoriaCloud(${cIdStr})" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition-all" title="Eliminar categoría">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function cargarCategoriaParaEditar(id) {
+      const cat = categorias.find(c => (c.docId == id || c.id == id));
+      if (!cat) return;
+      document.getElementById('catEditId').value = cat.docId || cat.id;
+      document.getElementById('nuevaCatNombre').value = cat.nombre;
+      document.getElementById('nuevaCatIcono').value = cat.icono || '🏷️';
+
+      document.getElementById('tituloFormCat').innerText = 'Modificar Categoría';
+      document.getElementById('btnTextoGuardarCat').innerText = 'Guardar Cambios';
+      document.getElementById('btnCancelarEdicionCat').classList.remove('hidden');
+    }
+
+    function cancelarEdicionCategoria() {
+      document.getElementById('catEditId').value = '';
+      document.getElementById('nuevaCatNombre').value = '';
+      document.getElementById('nuevaCatIcono').value = '';
+      document.getElementById('tituloFormCat').innerText = 'Añadir Nueva Categoría';
+      document.getElementById('btnTextoGuardarCat').innerText = 'Guardar Categoría';
+      document.getElementById('btnCancelarEdicionCat').classList.add('hidden');
+    }
+
+    function guardarCategoriaCloud() {
+      const editId = document.getElementById('catEditId').value;
+      const nom = document.getElementById('nuevaCatNombre').value.trim();
+      const ico = document.getElementById('nuevaCatIcono').value.trim() || '🏷️';
+
+      if (!nom) {
+        alert('Por favor, indica un nombre para la categoría.');
+        return;
+      }
+
+      const item = { nombre: nom, icono: ico, id: nom.toLowerCase().replace(/\s+/g, '_') };
+
+      if (editId) {
+        // Editar categoría
+        if (db && typeof editId === 'string' && editId.length > 10) {
+          db.collection("categorias").doc(editId).update({ nombre: nom, icono: ico }).then(() => {
+            cancelarEdicionCategoria();
+            alert('¡Categoría actualizada con éxito!');
+          });
+        } else {
+          const idx = categorias.findIndex(c => (c.id == editId || c.docId == editId));
+          if (idx !== -1) categorias[idx] = { ...categorias[idx], nombre: nom, icono: ico };
+          guardarDatosLocales();
+          renderPestanasCategorias();
+          actualizarSelectCategorias();
+          renderListaCategoriasEditor();
+          renderCatalogo();
+          cancelarEdicionCategoria();
+          alert('¡Categoría actualizada!');
+        }
+      } else {
+        // Añadir nueva categoría
+        if (db) {
+          db.collection("categorias").add(item).then(() => {
+            cancelarEdicionCategoria();
+            alert('¡Nueva categoría añadida a la nube!');
+          });
+        } else {
+          categorias.push(item);
+          guardarDatosLocales();
+          renderPestanasCategorias();
+          actualizarSelectCategorias();
+          renderListaCategoriasEditor();
+          cancelarEdicionCategoria();
+          alert('Categoría añadida localmente.');
+        }
+      }
+    }
+
+    function eliminarCategoriaCloud(id) {
+      if (categorias.length <= 1) {
+        alert('Debes conservar al menos una categoría en el sistema.');
+        return;
+      }
+      if (!confirm('¿Eliminar esta categoría? Los productos asociados permanecerán en el catálogo.')) return;
+      if (db && typeof id === 'string' && id.length > 10) {
+        db.collection("categorias").doc(id).delete();
+      } else {
+        categorias = categorias.filter(c => (c.id != id && c.docId != id));
+        guardarDatosLocales();
+        renderPestanasCategorias();
+        actualizarSelectCategorias();
+        renderListaCategoriasEditor();
+        renderCatalogo();
+      }
+    }
+
+    // INICIALIZACIÓN GENERAL
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre || "LA PIRULETA";
       document.getElementById('headerCajaNum').innerText = datosFiscales.caja || "Caja 1";
+      renderPestanasCategorias();
+      actualizarSelectCategorias();
       renderCatalogo();
       renderMesas();
       actualizarInterfazCaja();
