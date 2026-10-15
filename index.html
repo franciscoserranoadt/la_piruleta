@@ -9,15 +9,15 @@
   <title>TPV LA PIRULETA</title>
   <link rel="manifest" href="./manifest.json">
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"><\/script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Firebase App & Firestore SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"><\/script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"><\/script>
 
   <script>
     tailwind.config = {
@@ -37,11 +37,13 @@
         }
       }
     }
-  </script>
+  <\/script>
   <style>
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     input, textarea, select { user-select: text; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff8f1; color: #2c1a14; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen bg-[#fff8f1] flex flex-col text-slate-800 pb-20 select-none">
@@ -66,12 +68,12 @@
       </div>
     </div>
     
-    <!-- Acciones Cabecera: LUPA, GESTOR DE CARTA Y AJUSTES FISCALES -->
+    <!-- Acciones Cabecera: LUPA, EDITOR CARTA Y AJUSTES FISCALES -->
     <div class="flex items-center gap-2">
       <button id="btnLupa" onclick="toggleBuscador()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-600 transition-all cursor-pointer" title="Buscar productos">
         <i class="fa-solid fa-magnifying-glass text-sm"></i>
       </button>
-      <button onclick="abrirModalEditorCarta()" class="w-10 h-10 rounded-full bg-orange-500 text-white hover:bg-orange-600 active:scale-95 flex items-center justify-center transition-all shadow-sm cursor-pointer" title="Editar carta en la nube">
+      <button onclick="abrirModalEditorCarta()" class="w-10 h-10 rounded-full bg-orange-500 text-white hover:bg-orange-600 active:scale-95 flex items-center justify-center transition-all shadow-sm cursor-pointer" title="Editar carta y categorías en la nube">
         <i class="fa-solid fa-pen-to-square text-sm"></i>
       </button>
       <button id="btnAjustes" onclick="toggleAjustesModal()" class="w-10 h-10 rounded-full bg-amber-100/70 hover:bg-amber-100 active:scale-95 flex items-center justify-center text-amber-800 transition-all cursor-pointer" title="Datos fiscales y ajustes">
@@ -91,17 +93,46 @@
     </div>
   </div>
 
-  <!-- VISTA 1: TERMINAL (CATÁLOGO DINÁMICO) -->
+  <!-- TOAST DE NOTIFICACIÓN DE ARTÍCULO AÑADIDO -->
+  <div id="toastArticuloAñadido" class="fixed top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-bold shadow-xl z-50 hidden flex items-center gap-2 border border-slate-700 transition-all">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+    <span id="toastArticuloTexto">Añadido al ticket</span>
+  </div>
+
+  <!-- BANNER INFORMATIVO CUANDO UNA MESA ESTÁ EN COMANDA ACTIVA -->
+  <div id="bannerMesaActiva" class="hidden bg-gradient-to-r from-orange-600 to-amber-600 text-white px-4 py-2.5 flex items-center justify-between shadow-md sticky top-[61px] z-20">
+    <div class="flex items-center gap-2">
+      <span class="text-base">🪑</span>
+      <div>
+        <div class="flex items-center gap-1.5 leading-tight">
+          <span class="font-extrabold text-xs" id="bannerMesaNombre">Mesa 1</span>
+          <span class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full font-bold" id="bannerMesaPax">2 pax</span>
+        </div>
+        <span class="text-[11px] text-orange-100 font-semibold" id="bannerMesaTotal">0.00 € (0 arts.)</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="cambiarVista('cobro')" class="px-2.5 py-1 rounded-lg bg-white text-orange-700 font-extrabold text-[11px] shadow-sm active:scale-95">
+        Ver Ticket
+      </button>
+      <button onclick="terminarComandaMesa()" class="px-2 py-1 rounded-lg bg-black/20 text-white font-bold text-[11px] hover:bg-black/30 active:scale-95" title="Guardar comanda y volver a Barra">
+        Salir
+      </button>
+    </div>
+  </div>
+
+  <!-- VISTA 1: TERMINAL (CATÁLOGO) -->
   <section id="vista-terminal" class="vista-seccion px-4 py-4 space-y-4">
+    <!-- Selector de Servicio -->
     <div class="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl text-xs font-bold text-center">
       <button onclick="seleccionarServicio('barra', this)" class="btn-servicio py-2 rounded-lg bg-white shadow-sm text-orange-600">☕ Barra</button>
       <button onclick="seleccionarServicio('llevar', this)" class="btn-servicio py-2 rounded-lg text-slate-600">🛍️ Llevar</button>
-      <button onclick="seleccionarServicio('mesa', this)" class="btn-servicio py-2 rounded-lg text-slate-600">🪑 Mesa</button>
+      <button onclick="cambiarVista('mesas')" class="btn-servicio py-2 rounded-lg text-slate-600">🪑 Mesas</button>
     </div>
 
     <!-- Pestañas de Categoría Dinámicas -->
-    <div id="contenedorPestanasCategorias" class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
-      <!-- Se generan automáticamente desde la lista de categorías -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold" id="pestañasCategorias">
+      <!-- Se generan dinámicamente -->
     </div>
 
     <!-- Rejilla de Productos -->
@@ -244,7 +275,7 @@
         </div>
       </div>
 
-      <!-- Botones de Acción de Mesa -->
+      <!-- 4 Botones de Acción de Mesa -->
       <div class="space-y-2 text-xs font-bold">
         <button onclick="mesaAccionAñadirProducto()" class="w-full py-3 px-4 rounded-xl bg-orange-600 text-white flex items-center justify-between active:scale-98 shadow-sm">
           <span>➕ Añadir Productos a Mesa</span>
@@ -317,82 +348,67 @@
     </div>
   </div>
 
-  <!-- MODAL DE GESTIÓN DE CARTA EN LA NUBE (PRODUCTOS & CATEGORÍAS) -->
-  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-4 space-y-3 shadow-2xl max-h-[90vh] flex flex-col">
-      
-      <!-- Cabecera del Gestor -->
+  <!-- MODAL DE EDICIÓN DE CARTA & CATEGORÍAS (SINCRONIZADO CON FIREBASE) -->
+  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl max-h-[88vh] flex flex-col">
       <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">
-            <i class="fa-solid fa-pen-to-square"></i>
-          </div>
-          <h3 class="font-bold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
+          <i class="fa-solid fa-pen-to-square text-orange-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">Gestor de Carta y Categorías</h3>
         </div>
         <button onclick="cerrarModalEditorCarta()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-base"></i>
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <!-- Pestañas internas: Productos vs Categorías -->
-      <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
-        <button id="tabSubProd" onclick="cambiarSubTabGestor('articulos')" class="py-1.5 rounded-lg bg-white shadow-xs text-orange-600">📦 Artículos</button>
-        <button id="tabSubCat" onclick="cambiarSubTabGestor('categorias')" class="py-1.5 rounded-lg text-slate-600">🏷️ Categorías</button>
+      <!-- Selector de Subpestaña: Artículos vs Categorías -->
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
+        <button onclick="cambiarTabEditor('articulos', this)" class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600">📦 Artículos</button>
+        <button onclick="cambiarTabEditor('categorias', this)" class="btn-tab-editor py-1.5 rounded-lg text-slate-600">🏷️ Categorías</button>
       </div>
-
-      <!-- SECCIÓN A: ARTÍCULOS (CREAR O EDITAR EXISTENTES) -->
-      <div id="secGestorArticulos" class="space-y-3 flex-1 flex flex-col overflow-hidden">
-        <!-- Formulario Producto -->
-        <div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-100/90 space-y-2 text-xs shrink-0">
+      
+      <!-- SUBPESTAÑA 1: GESTIÓN DE ARTÍCULOS -->
+      <div id="editorTabArticulos" class="space-y-3 flex-1 flex flex-col overflow-hidden">
+        <!-- Formulario Crear/Editar Artículo -->
+        <div class="bg-orange-50/60 p-3 rounded-xl border border-orange-100 space-y-2 text-xs shrink-0">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-orange-950 block text-[11px] uppercase tracking-wide" id="tituloFormProducto">Añadir Nuevo Producto</span>
-            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[10px] text-rose-500 font-bold hover:underline">
-              Cancelar Edición
-            </button>
+            <span class="font-bold text-orange-950 block" id="tituloFormArticulo">Añadir Nuevo Producto</span>
+            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar</button>
           </div>
-          <input type="hidden" id="prodEditId" value="">
+          <input type="hidden" id="editandoProdId" value="">
           <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
-            <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+            <input type="text" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+            <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
           </div>
           <div class="grid grid-cols-2 gap-2">
-            <select id="nuevoProdCat" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
-              <!-- Se llena con las categorías dinámicas -->
-            </select>
-            <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-orange-500">
+            <select id="nuevoProdCat" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs"></select>
+            <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
           </div>
-          <button onclick="guardarProductoCloud()" id="btnGuardarProducto" class="w-full py-2 bg-orange-600 hover:bg-orange-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-sm flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-            <span id="btnTextoGuardarProd">Guardar en la Nube</span>
+          <button id="btnGuardarProd" onclick="guardarNuevoProducto()" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold text-xs shadow-sm">
+            Guardar en la Nube
           </button>
         </div>
 
-        <!-- Lista de Productos Existentes con Botones de Editar y Borrar -->
+        <!-- Lista de Productos Existentes con botón de EDITAR y ELIMINAR -->
         <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
       </div>
 
-      <!-- SECCIÓN B: CATEGORÍAS (CREAR O MODIFICAR CATEGORÍAS) -->
-      <div id="secGestorCategorias" class="space-y-3 flex-1 flex flex-col overflow-hidden hidden">
-        <!-- Formulario Categoría -->
-        <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100/90 space-y-2 text-xs shrink-0">
+      <!-- SUBPESTAÑA 2: GESTIÓN DE CATEGORÍAS -->
+      <div id="editorTabCategorias" class="hidden space-y-3 flex-1 flex flex-col overflow-hidden">
+        <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100 space-y-2 text-xs shrink-0">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-amber-950 block text-[11px] uppercase tracking-wide" id="tituloFormCat">Añadir Nueva Categoría</span>
-            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[10px] text-rose-500 font-bold hover:underline">
-              Cancelar Edición
-            </button>
+            <span class="font-bold text-amber-950 block" id="tituloFormCategoria">Nueva Categoría</span>
+            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar</button>
           </div>
-          <input type="hidden" id="catEditId" value="">
-          <div class="grid grid-cols-3 gap-2">
-            <input type="text" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" class="col-span-2 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-amber-500">
-            <input type="text" id="nuevaCatIcono" placeholder="Emoji 🧃" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:outline-amber-500 text-center">
+          <input type="hidden" id="editandoCatId" value="">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+            <input type="text" id="nuevaCatIcono" placeholder="Emoji (ej. 🧃)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
           </div>
-          <button onclick="guardarCategoriaCloud()" id="btnGuardarCat" class="w-full py-2 bg-amber-600 hover:bg-amber-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-sm flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-folder-plus text-xs"></i>
-            <span id="btnTextoGuardarCat">Guardar Categoría</span>
+          <button id="btnGuardarCat" onclick="guardarCategoria()" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold text-xs shadow-sm">
+            Guardar Categoría
           </button>
         </div>
-
-        <!-- Lista de Categorías Existentes -->
         <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorCategorias"></div>
       </div>
 
@@ -420,7 +436,7 @@
     </button>
   </nav>
 
-  <!-- JAVASCRIPT: LÓGICA COMPLETA DE TPV, MESAS, FIREBASE, ARTÍCULOS Y CATEGORÍAS -->
+  <!-- JAVASCRIPT: LÓGICA COMPLETA DE TPV, MESAS VINCULADAS, FIREBASE Y DATOS FISCALES -->
   <script>
     // 1. CONFIGURACIÓN FIREBASE FIRESTORE
     const firebaseConfig = {
@@ -442,16 +458,13 @@
       document.getElementById('txtEstadoCloud').innerText = "Modo Local";
     }
 
-    // Categorías base iniciales
+    // Categorías base
     const categoriasBase = [
       { id: 'cafe', nombre: 'Café', icono: '☕' },
       { id: 'pan', nombre: 'Pan', icono: '🥖' },
       { id: 'bolleria', nombre: 'Bollería', icono: '🥐' },
       { id: 'tostadas', nombre: 'Tostadas', icono: '🥪' }
     ];
-
-    let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
-    let categoriaActivaFiltro = 'todos';
 
     // Catálogo base de seguridad
     const catalogoBase = [
@@ -465,10 +478,12 @@
       { id: 8, nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, icono: '🥪' }
     ];
 
+    let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
     let catalogo = JSON.parse(localStorage.getItem('piruleta_catalogo')) || catalogoBase;
     let ticketActual = [];
     let metodoPagoActivo = 'tarjeta';
-    let servicioActivo = 'Barra';
+    let servicioActivo = 'BARRA';
+    let categoriaFiltroActiva = 'todos';
     let mesaActivaSeleccionada = null;
 
     // Mesas iniciales con comensales y comanda por mesa
@@ -510,38 +525,47 @@
       localStorage.setItem('piruleta_datos_fiscales', JSON.stringify(datosFiscales));
     }
 
-    // 2. SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
+    // SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
     if (db) {
-      // Escuchar Productos
+      // 1. Productos
       db.collection("productos").onSnapshot((snapshot) => {
         if (!snapshot.empty) {
           const list = [];
           snapshot.forEach(doc => {
-            list.push({ docId: doc.id, ...doc.data() });
+            const data = doc.data();
+            list.push({ 
+              id: doc.id, 
+              docId: doc.id, 
+              nombre: data.nombre, 
+              precio: Number(data.precio) || 0, 
+              categoria: data.categoria || 'cafe', 
+              icono: data.icono || '☕' 
+            });
           });
           catalogo = list;
           guardarDatosLocales();
           renderCatalogo();
           renderListaEditor();
         } else {
-          catalogoBase.forEach(item => db.collection("productos").add(item));
+          catalogoBase.forEach(item => {
+            db.collection("productos").add(item);
+          });
         }
       });
 
-      // Escuchar Categorías
+      // 2. Categorías
       db.collection("categorias").onSnapshot((snapshot) => {
         if (!snapshot.empty) {
-          const list = [];
+          const catList = [];
           snapshot.forEach(doc => {
-            list.push({ docId: doc.id, ...doc.data() });
+            const d = doc.data();
+            catList.push({ id: doc.id, docId: doc.id, nombre: d.nombre, icono: d.icono || '🏷️' });
           });
-          categorias = list;
+          categorias = catList;
           guardarDatosLocales();
-          renderPestanasCategorias();
-          actualizarSelectCategorias();
-          renderListaCategoriasEditor();
-        } else {
-          categoriasBase.forEach(c => db.collection("categorias").add(c));
+          renderPestañasCategorias();
+          renderListaEditorCategorias();
+          actualizarSelectorCategoriasProducto();
         }
       });
     }
@@ -564,6 +588,7 @@
 
       if (vistaId === 'mesas') renderMesas();
       if (vistaId === 'caja') actualizarInterfazCaja();
+      if (vistaId === 'cobro') actualizarTicketVisual();
     }
 
     // BUSCADOR CON LUPA
@@ -586,56 +611,136 @@
       renderCatalogo(filtrados);
     }
 
-    // GESTIÓN DE CATEGORÍAS EN INTERFAZ
-    function renderPestanasCategorias() {
-      const cont = document.getElementById('contenedorPestanasCategorias');
-      if (!cont) return;
-      cont.innerHTML = `
-        <button onclick="filtrarCategoria('todos', this)" class="btn-cat px-4 py-2 rounded-xl ${categoriaActivaFiltro === 'todos' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0">Todos</button>
-      `;
-      categorias.forEach(c => {
-        const catId = c.id || c.docId || c.nombre.toLowerCase();
-        const esActiva = (categoriaActivaFiltro === catId);
+    // FEEDBACK VISUAL RÁPIDO
+    function mostrarFeedbackAñadido(nombreProd) {
+      const toast = document.getElementById('toastArticuloAñadido');
+      const txt = document.getElementById('toastArticuloTexto');
+      txt.innerText = `+1 ${nombreProd} al ticket`;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 1400);
+    }
+
+    // BANNER DE MESA ACTIVA
+    function actualizarBannerMesaActiva() {
+      const banner = document.getElementById('bannerMesaActiva');
+      if (!banner) return;
+      if (mesaActivaSeleccionada) {
+        const total = ticketActual.reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
+        const numItems = ticketActual.reduce((acc, curr) => acc + (Number(curr.cantidad) || 1), 0);
+        banner.classList.remove('hidden');
+        document.getElementById('bannerMesaNombre').innerText = mesaActivaSeleccionada.nombre;
+        document.getElementById('bannerMesaPax').innerText = (mesaActivaSeleccionada.pax || 2) + ' pax';
+        document.getElementById('bannerMesaTotal').innerText = total.toFixed(2) + ' € (' + numItems + ' arts.)';
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function terminarComandaMesa() {
+      if (mesaActivaSeleccionada) {
+        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
+          if (ticketActual.length > 0) mesas[idx].ocupada = true;
+        }
+        guardarDatosLocales();
+      }
+      mesaActivaSeleccionada = null;
+      ticketActual = [];
+      servicioActivo = 'BARRA';
+      document.getElementById('ticketDestinoTexto').innerText = 'Servicio: BARRA';
+      actualizarTicketVisual();
+      actualizarBannerMesaActiva();
+      renderMesas();
+    }
+
+    // AJUSTES Y DATOS FISCALES
+    function toggleAjustesModal() {
+      const modal = document.getElementById('modalAjustes');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
+        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
+        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
+        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
+        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
+        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
+        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
+      }
+    }
+
+    function guardarAjustes() {
+      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
+      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
+      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
+      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
+      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
+      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
+      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
+
+      guardarDatosLocales();
+      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
+      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
+      toggleAjustesModal();
+      alert('¡Datos fiscales guardados con éxito!');
+    }
+
+    // PESTAÑAS DE CATEGORÍA
+    function renderPestañasCategorias() {
+      const container = document.getElementById('pestañasCategorias');
+      if (!container) return;
+      container.innerHTML = '';
+
+      // Botón "Todos"
+      const btnTodos = document.createElement('button');
+      btnTodos.onclick = () => filtrarCategoria('todos', btnTodos);
+      btnTodos.className = `btn-cat px-4 py-2 rounded-xl ${categoriaFiltroActiva === 'todos' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0`;
+      btnTodos.innerText = 'Todos';
+      container.appendChild(btnTodos);
+
+      // Botones por categoría
+      categorias.forEach(cat => {
         const btn = document.createElement('button');
-        btn.className = `btn-cat px-4 py-2 rounded-xl ${esActiva ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0`;
-        btn.innerHTML = `${c.icono || '🏷️'} ${c.nombre}`;
-        btn.onclick = () => filtrarCategoria(catId, btn);
-        cont.appendChild(btn);
+        btn.onclick = () => filtrarCategoria(cat.id, btn);
+        btn.className = `btn-cat px-4 py-2 rounded-xl ${categoriaFiltroActiva === cat.id ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100'} shrink-0`;
+        btn.innerHTML = `${cat.icono || '🏷️'} ${cat.nombre}`;
+        container.appendChild(btn);
       });
 
-      // Botón directo para abrir gestor
-      const btnAdd = document.createElement('button');
-      btnAdd.className = 'px-3 py-2 rounded-xl bg-orange-100 text-orange-800 font-bold shrink-0 flex items-center gap-1 border border-orange-200';
-      btnAdd.innerHTML = '<i class="fa-solid fa-plus text-xs"></i> Carta';
-      btnAdd.onclick = abrirModalEditorCarta;
-      cont.appendChild(btnAdd);
+      // Botón añadir/gestionar carta
+      const btnMas = document.createElement('button');
+      btnMas.onclick = abrirModalEditorCarta;
+      btnMas.className = 'px-3 py-2 rounded-xl bg-orange-100 text-orange-800 font-bold shrink-0 flex items-center gap-1 border border-orange-200';
+      btnMas.innerHTML = '<i class="fa-solid fa-plus text-xs"></i> Carta';
+      container.appendChild(btnMas);
     }
 
-    function actualizarSelectCategorias() {
-      const sel = document.getElementById('nuevoProdCat');
-      if (!sel) return;
-      sel.innerHTML = '';
-      categorias.forEach(c => {
-        const catId = c.id || c.docId || c.nombre.toLowerCase();
-        const opt = document.createElement('option');
-        opt.value = catId;
-        opt.innerText = `${c.icono || '🏷️'} ${c.nombre}`;
-        sel.appendChild(opt);
-      });
-    }
-
-    function filtrarCategoria(cat, btn) {
-      categoriaActivaFiltro = cat;
+    function filtrarCategoria(catId, btn) {
+      categoriaFiltroActiva = catId;
       document.querySelectorAll('.btn-cat').forEach(b => {
         b.className = 'btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0';
       });
       if (btn) btn.className = 'btn-cat px-4 py-2 rounded-xl bg-slate-800 text-white shadow-sm shrink-0';
-      if (cat === 'todos') {
+
+      if (catId === 'todos') {
         renderCatalogo(catalogo);
       } else {
-        const filtrados = catalogo.filter(p => p.categoria === cat);
+        const filtrados = catalogo.filter(p => p.categoria === catId);
         renderCatalogo(filtrados);
       }
+    }
+
+    function seleccionarServicio(tipo, btn) {
+      document.querySelectorAll('.btn-servicio').forEach(b => {
+        b.className = 'btn-servicio py-2 rounded-lg text-slate-600';
+      });
+      if (btn) btn.className = 'btn-servicio py-2 rounded-lg bg-white shadow-sm text-orange-600';
+      servicioActivo = tipo.toUpperCase();
+      document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
     }
 
     // CATÁLOGO & PRODUCTOS
@@ -644,71 +749,110 @@
       if (!grid) return;
       grid.innerHTML = '';
       lista.forEach(prod => {
-        const catObj = categorias.find(c => (c.id === prod.categoria || c.docId === prod.categoria || c.nombre.toLowerCase() === prod.categoria));
-        const catNombre = catObj ? catObj.nombre : prod.categoria;
+        const prodId = prod.id || prod.docId;
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-2xl p-4 border border-orange-100/80 shadow-sm flex flex-col justify-between active:scale-95 transition-all cursor-pointer';
+        card.className = 'bg-white rounded-2xl p-4 border border-orange-100/80 shadow-sm flex flex-col justify-between active:scale-95 transition-all cursor-pointer hover:border-orange-200';
         card.innerHTML = `
           <div class="flex items-start justify-between">
             <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate max-w-[80px]">${catNombre}</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${prod.categoria}</span>
           </div>
           <div class="mt-3">
             <h4 class="font-bold text-xs text-slate-800 leading-tight">${prod.nombre}</h4>
             <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
-              <span class="font-extrabold text-sm text-slate-900">${Number(prod.precio).toFixed(2)} €</span>
-              <button onclick="event.stopPropagation(); agregarAlTicket(${prod.id ? prod.id : `'` + prod.docId + `'`})" class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm hover:bg-orange-500">
+              <span class="font-extrabold text-sm text-slate-900">${Number(prod.precio || 0).toFixed(2)} €</span>
+              <button onclick="event.stopPropagation(); agregarAlTicket('${prodId}')" class="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shadow-sm hover:bg-orange-500 active:scale-90 transition-all">
                 +
               </button>
             </div>
           </div>
         `;
-        card.onclick = () => agregarAlTicket(prod.id || prod.docId);
+        card.onclick = () => agregarAlTicket(prodId);
         grid.appendChild(card);
       });
     }
 
-    function seleccionarServicio(tipo, btn) {
-      document.querySelectorAll('.btn-servicio').forEach(b => {
-        b.className = 'btn-servicio py-2 rounded-lg text-slate-600';
-      });
-      btn.className = 'btn-servicio py-2 rounded-lg bg-white shadow-sm text-orange-600';
-      servicioActivo = tipo.toUpperCase();
-      document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
-    }
-
-    // TICKET & COBRO
+    // ==========================================
+    // TICKET & COBRO (TOTALMENTE VINCULADOS A MESAS)
+    // ==========================================
     function agregarAlTicket(id) {
-      const prod = catalogo.find(p => (p.id == id || p.docId == id));
-      if (!prod) return;
-      const existe = ticketActual.find(i => (i.id == id || i.docId == id));
-      if (existe) {
-        existe.cantidad += 1;
-      } else {
-        ticketActual.push({ ...prod, cantidad: 1 });
+      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
+      if (!prod) {
+        console.warn("Producto no encontrado:", id);
+        return;
       }
+
+      const existe = ticketActual.find(i => String(i.id) === String(id) || String(i.docId) === String(id));
+      if (existe) {
+        existe.cantidad = (Number(existe.cantidad) || 0) + 1;
+      } else {
+        ticketActual.push({
+          id: prod.id || prod.docId,
+          docId: prod.docId || prod.id,
+          nombre: prod.nombre,
+          precio: Number(prod.precio) || 0,
+          categoria: prod.categoria,
+          icono: prod.icono || '☕',
+          cantidad: 1
+        });
+      }
+
+      // Si hay una mesa seleccionada en comanda activa, sincronizar inmediatamente
+      if (mesaActivaSeleccionada) {
+        mesaActivaSeleccionada.ocupada = true;
+        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ocupada = true;
+          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
+        }
+      }
+
+      guardarDatosLocales();
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
+      mostrarFeedbackAñadido(prod.nombre);
     }
 
     function cambiarCantidad(id, delta) {
-      const item = ticketActual.find(i => (i.id == id || i.docId == id));
+      const item = ticketActual.find(i => String(i.id) === String(id) || String(i.docId) === String(id));
       if (!item) return;
-      item.cantidad += delta;
+      item.cantidad = (Number(item.cantidad) || 0) + delta;
       if (item.cantidad <= 0) {
-        ticketActual = ticketActual.filter(i => (i.id != id && i.docId != id));
+        ticketActual = ticketActual.filter(i => String(i.id) !== String(id) && String(i.docId) !== String(id));
       }
+
+      if (mesaActivaSeleccionada) {
+        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
+        }
+      }
+
+      guardarDatosLocales();
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
     }
 
     function vaciarTicket() {
       ticketActual = [];
+      if (mesaActivaSeleccionada) {
+        mesaActivaSeleccionada.ticket = [];
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ticket = [];
+        }
+      }
+      guardarDatosLocales();
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
     }
 
     function actualizarTicketVisual() {
       const container = document.getElementById('ticketItems');
       const badge = document.getElementById('badgeTicketCount');
-      const totalCount = ticketActual.reduce((acc, curr) => acc + curr.cantidad, 0);
+      const totalCount = ticketActual.reduce((acc, curr) => acc + (Number(curr.cantidad) || 0), 0);
 
       if (totalCount > 0) {
         badge.innerText = totalCount;
@@ -728,21 +872,21 @@
       container.innerHTML = '';
       let subtotal = 0;
       ticketActual.forEach(item => {
-        const itemTotal = Number(item.precio) * item.cantidad;
+        const itemTotal = Number(item.precio || 0) * (Number(item.cantidad) || 1);
         subtotal += itemTotal;
+        const itemId = item.id || item.docId;
         const div = document.createElement('div');
         div.className = 'py-2 flex items-center justify-between text-xs';
-        const itemId = item.id || `'${item.docId}'`;
         div.innerHTML = `
           <div class="flex-1">
             <span class="font-bold text-slate-800">${item.nombre}</span>
-            <div class="text-[11px] text-slate-400">${Number(item.precio).toFixed(2)} € x ${item.cantidad}</div>
+            <div class="text-[11px] text-slate-400">${Number(item.precio || 0).toFixed(2)} € x ${item.cantidad}</div>
           </div>
           <div class="flex items-center gap-2">
             <div class="flex items-center border border-slate-200 rounded-lg bg-slate-50">
-              <button onclick="cambiarCantidad(${itemId}, -1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">-</button>
+              <button onclick="cambiarCantidad('${itemId}', -1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">-</button>
               <span class="w-6 text-center font-bold">${item.cantidad}</span>
-              <button onclick="cambiarCantidad(${itemId}, 1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">+</button>
+              <button onclick="cambiarCantidad('${itemId}', 1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">+</button>
             </div>
             <span class="font-bold text-slate-900 w-14 text-right">${itemTotal.toFixed(2)} €</span>
           </div>
@@ -769,25 +913,35 @@
         alert('No hay productos en el ticket.');
         return;
       }
-      const total = ticketActual.reduce((acc, curr) => acc + (Number(curr.precio) * curr.cantidad), 0);
+      const total = ticketActual.reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
       if (metodoPagoActivo === 'efectivo') caja.efectivo += total;
       else if (metodoPagoActivo === 'tarjeta') caja.tarjeta += total;
       else if (metodoPagoActivo === 'bizum') caja.bizum += total;
       caja.total += total;
 
+      // Si se cobraba una mesa, liberarla automáticamente
       if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ocupada = false;
-        mesaActivaSeleccionada.ticket = [];
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ocupada = false;
+          mesas[idx].ticket = [];
+        }
         mesaActivaSeleccionada = null;
+        servicioActivo = 'BARRA';
+        document.getElementById('ticketDestinoTexto').innerText = 'Servicio: BARRA';
       }
 
       guardarDatosLocales();
       vaciarTicket();
+      actualizarBannerMesaActiva();
+      renderMesas();
       alert('¡Cobro de ' + total.toFixed(2) + ' € completado con éxito!');
       cambiarVista('terminal');
     }
 
+    // ==========================================
     // GESTIÓN DE MESAS Y MENÚ DE OPCIONES
+    // ==========================================
     function abrirModalMesa(id) {
       const mesa = mesas.find(m => m.id === id);
       if (!mesa) return;
@@ -798,7 +952,7 @@
         : `LIBRE (${mesa.pax || 2} Pax)`;
       document.getElementById('txtComensalesModal').innerText = mesa.pax || 2;
       
-      const totalMesa = (mesa.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio) * curr.cantidad), 0);
+      const totalMesa = (mesa.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
       document.getElementById('txtTotalMesaModal').innerText = totalMesa.toFixed(2) + ' €';
 
       document.getElementById('modalMesaOpciones').classList.remove('hidden');
@@ -821,29 +975,39 @@
       mesaActivaSeleccionada.ocupada = true;
       servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
       document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
-      ticketActual = [...(mesaActivaSeleccionada.ticket || [])];
+      
+      // Cargar la comanda existente de la mesa en el ticket de trabajo
+      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
+      
       guardarDatosLocales();
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
       cerrarModalMesa();
       cambiarVista('terminal');
     }
 
     function mesaAccionVerTicket() {
       if (!mesaActivaSeleccionada) return;
-      ticketActual = [...(mesaActivaSeleccionada.ticket || [])];
+      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
+      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
+      document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
       cerrarModalMesa();
       cambiarVista('cobro');
     }
 
     function mesaAccionCobrar() {
       if (!mesaActivaSeleccionada) return;
-      ticketActual = [...(mesaActivaSeleccionada.ticket || [])];
+      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
+      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
+      document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
       if (ticketActual.length === 0) {
-        alert('Esta mesa no tiene productos acumulados.');
+        alert('Esta mesa no tiene productos en el ticket.');
         return;
       }
       actualizarTicketVisual();
+      actualizarBannerMesaActiva();
       cerrarModalMesa();
       cambiarVista('cobro');
     }
@@ -853,16 +1017,31 @@
       if (confirm(`¿Anular y liberar ${mesaActivaSeleccionada.nombre}?`)) {
         mesaActivaSeleccionada.ocupada = false;
         mesaActivaSeleccionada.ticket = [];
+        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
+        if (idx !== -1) {
+          mesas[idx].ocupada = false;
+          mesas[idx].ticket = [];
+        }
+        mesaActivaSeleccionada = null;
+        ticketActual = [];
+        servicioActivo = 'BARRA';
+        document.getElementById('ticketDestinoTexto').innerText = 'Servicio: BARRA';
         guardarDatosLocales();
+        actualizarTicketVisual();
+        actualizarBannerMesaActiva();
         renderMesas();
         cerrarModalMesa();
       }
     }
 
     function liberarTodasLasMesas() {
-      if (confirm('¿Liberar todas las mesas?')) {
+      if (confirm('¿Liberar todas las mesas y vaciar sus cuentas?')) {
         mesas.forEach(m => { m.ocupada = false; m.ticket = []; });
+        mesaActivaSeleccionada = null;
+        ticketActual = [];
         guardarDatosLocales();
+        actualizarTicketVisual();
+        actualizarBannerMesaActiva();
         renderMesas();
       }
     }
@@ -872,7 +1051,7 @@
       if (!grid) return;
       grid.innerHTML = '';
       mesas.forEach(m => {
-        const total = (m.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio) * curr.cantidad), 0);
+        const total = (m.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
         const div = document.createElement('div');
         div.className = `p-4 rounded-2xl border transition-all active:scale-95 cursor-pointer ${
           m.ocupada ? 'bg-rose-50/80 border-rose-200 text-rose-950 shadow-sm' : 'bg-white border-orange-100 text-slate-800 shadow-sm'
@@ -934,95 +1113,72 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       alert('Cierre Z completado y caja reiniciada a 0.00 €.');
     }
 
-    // AJUSTES & DATOS FISCALES
-    function toggleAjustesModal() {
-      const modal = document.getElementById('modalAjustes');
-      modal.classList.toggle('hidden');
-      if (!modal.classList.contains('hidden')) {
-        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
-        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
-        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
-        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
-        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
-        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
-        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
-      }
-    }
-
-    function guardarAjustes() {
-      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
-      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
-      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
-      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
-      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
-      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
-      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
-
-      guardarDatosLocales();
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
-      toggleAjustesModal();
-      alert('¡Datos fiscales guardados con éxito!');
-    }
-
-    // GESTOR DE CARTA EN LA NUBE (PRODUCTOS & CATEGORÍAS)
+    // ==========================================
+    // GESTOR DE CARTA Y CATEGORÍAS (FIREBASE)
+    // ==========================================
     function abrirModalEditorCarta() {
       document.getElementById('modalEditorCarta').classList.remove('hidden');
-      cambiarSubTabGestor('articulos');
       renderListaEditor();
-      renderListaCategoriasEditor();
-      actualizarSelectCategorias();
+      renderListaEditorCategorias();
+      actualizarSelectorCategoriasProducto();
     }
     function cerrarModalEditorCarta() {
+      document.getElementById('modalEditorCarta').classList.add('hidden');
       cancelarEdicionProducto();
       cancelarEdicionCategoria();
-      document.getElementById('modalEditorCarta').classList.add('hidden');
     }
 
-    function cambiarSubTabGestor(tab) {
-      const tabProd = document.getElementById('tabSubProd');
-      const tabCat = document.getElementById('tabSubCat');
-      const secProd = document.getElementById('secGestorArticulos');
-      const secCat = document.getElementById('secGestorCategorias');
-
+    function cambiarTabEditor(tab, btn) {
+      document.querySelectorAll('.btn-tab-editor').forEach(b => {
+        b.className = 'btn-tab-editor py-1.5 rounded-lg text-slate-600';
+      });
+      btn.className = 'btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600';
       if (tab === 'articulos') {
-        tabProd.className = 'py-1.5 rounded-lg bg-white shadow-xs text-orange-600';
-        tabCat.className = 'py-1.5 rounded-lg text-slate-600';
-        secProd.classList.remove('hidden');
-        secCat.classList.add('hidden');
+        document.getElementById('editorTabArticulos').classList.remove('hidden');
+        document.getElementById('editorTabCategorias').classList.add('hidden');
       } else {
-        tabCat.className = 'py-1.5 rounded-lg bg-white shadow-xs text-amber-600';
-        tabProd.className = 'py-1.5 rounded-lg text-slate-600';
-        secCat.classList.remove('hidden');
-        secProd.classList.add('hidden');
+        document.getElementById('editorTabArticulos').classList.add('hidden');
+        document.getElementById('editorTabCategorias').classList.remove('hidden');
       }
     }
 
-    // --- SUB-MÓDULO: ARTÍCULOS (CREAR & EDITAR EXISTENTES) ---
+    function actualizarSelectorCategoriasProducto() {
+      const select = document.getElementById('nuevoProdCat');
+      if (!select) return;
+      const valorPrevio = select.value;
+      select.innerHTML = '';
+      categorias.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.innerText = `${cat.icono || '🏷️'} ${cat.nombre}`;
+        select.appendChild(opt);
+      });
+      if (valorPrevio) select.value = valorPrevio;
+    }
+
+    // ARTÍCULOS: LISTAR, CREAR, EDITAR Y ELIMINAR
     function renderListaEditor() {
       const container = document.getElementById('listaEditorProductos');
       if (!container) return;
       container.innerHTML = '';
       catalogo.forEach(p => {
-        const catObj = categorias.find(c => (c.id === p.categoria || c.docId === p.categoria || c.nombre.toLowerCase() === p.categoria));
-        const catNombre = catObj ? catObj.nombre : p.categoria;
+        const pId = p.id || p.docId;
         const row = document.createElement('div');
-        row.className = 'py-2 flex items-center justify-between gap-2 hover:bg-slate-50 px-1 rounded-lg transition-colors';
-        const pIdStr = p.docId ? `'${p.docId}'` : p.id;
+        row.className = 'py-2 flex items-center justify-between';
         row.innerHTML = `
-          <div class="flex items-center gap-2 flex-1 min-w-0">
+          <div class="flex items-center gap-2">
             <span class="text-lg">${p.icono || '☕'}</span>
-            <div class="min-w-0">
-              <span class="font-bold text-slate-800 block truncate">${p.nombre}</span>
-              <span class="text-[10px] text-slate-400 block">${catNombre}</span>
+            <div>
+              <span class="font-bold text-slate-800">${p.nombre}</span>
+              <span class="text-[10px] text-slate-400 block">${p.categoria}</span>
             </div>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="font-bold text-orange-600 text-xs">${Number(p.precio).toFixed(2)} €</span>
-            <button onclick="cargarProductoParaEditar(${pIdStr})" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-orange-600 flex items-center justify-center transition-all" title="Editar artículo">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-orange-600">${Number(p.precio || 0).toFixed(2)} €</span>
+            <button onclick="cargarProductoParaEdicion('${pId}')" class="text-amber-600 hover:text-amber-800 p-1" title="Editar">
               <i class="fa-solid fa-pen text-xs"></i>
             </button>
-            <button onclick="eliminarProductoCloud(${pIdStr})" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition-all" title="Eliminar artículo">
+            <button onclick="eliminarProductoCloud('${pId}')" class="text-rose-500 hover:text-rose-700 p-1" title="Eliminar">
               <i class="fa-solid fa-trash-can text-xs"></i>
             </button>
           </div>
@@ -1031,69 +1187,69 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       });
     }
 
-    function cargarProductoParaEditar(id) {
-      const prod = catalogo.find(p => (p.docId == id || p.id == id));
+    function cargarProductoParaEdicion(id) {
+      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
       if (!prod) return;
-      document.getElementById('prodEditId').value = prod.docId || prod.id;
+      document.getElementById('editandoProdId').value = id;
       document.getElementById('nuevoProdNombre').value = prod.nombre;
       document.getElementById('nuevoProdPrecio').value = prod.precio;
       document.getElementById('nuevoProdCat').value = prod.categoria;
       document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
-
-      document.getElementById('tituloFormProducto').innerText = 'Modificar Artículo';
-      document.getElementById('btnTextoGuardarProd').innerText = 'Guardar Cambios';
+      document.getElementById('tituloFormArticulo').innerText = "Editar Producto: " + prod.nombre;
+      document.getElementById('btnGuardarProd').innerText = "Guardar Cambios";
       document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
     }
 
     function cancelarEdicionProducto() {
-      document.getElementById('prodEditId').value = '';
+      document.getElementById('editandoProdId').value = '';
       document.getElementById('nuevoProdNombre').value = '';
       document.getElementById('nuevoProdPrecio').value = '';
       document.getElementById('nuevoProdIcono').value = '';
-      document.getElementById('tituloFormProducto').innerText = 'Añadir Nuevo Producto';
-      document.getElementById('btnTextoGuardarProd').innerText = 'Guardar en la Nube';
+      document.getElementById('tituloFormArticulo').innerText = "Añadir Nuevo Producto";
+      document.getElementById('btnGuardarProd').innerText = "Guardar en la Nube";
       document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
     }
 
-    function guardarProductoCloud() {
-      const editId = document.getElementById('prodEditId').value;
+    function guardarNuevoProducto() {
+      const idEdicion = document.getElementById('editandoProdId').value;
       const nom = document.getElementById('nuevoProdNombre').value.trim();
       const pre = parseFloat(document.getElementById('nuevoProdPrecio').value);
       const cat = document.getElementById('nuevoProdCat').value;
       const ico = document.getElementById('nuevoProdIcono').value.trim() || '☕';
 
       if (!nom || isNaN(pre)) {
-        alert('Por favor, indica nombre y precio válido.');
+        alert('Por favor, indica un nombre y un precio válido.');
         return;
       }
 
       const item = { nombre: nom, precio: pre, categoria: cat, icono: ico };
 
-      if (editId) {
-        // Modo Edición
-        if (db && typeof editId === 'string' && editId.length > 10) {
-          db.collection("productos").doc(editId).update(item).then(() => {
+      if (idEdicion) {
+        // EDICIÓN
+        if (db && typeof idEdicion === 'string' && idEdicion.length > 10) {
+          db.collection("productos").doc(idEdicion).update(item).then(() => {
             cancelarEdicionProducto();
-            alert('¡Artículo actualizado en la nube con éxito!');
+            alert('¡Producto actualizado en la nube!');
           });
         } else {
-          const idx = catalogo.findIndex(p => (p.id == editId || p.docId == editId));
+          const idx = catalogo.findIndex(p => String(p.id) === String(idEdicion) || String(p.docId) === String(idEdicion));
           if (idx !== -1) catalogo[idx] = { ...catalogo[idx], ...item };
           guardarDatosLocales();
           renderCatalogo();
           renderListaEditor();
           cancelarEdicionProducto();
-          alert('¡Artículo actualizado!');
+          alert('¡Producto actualizado!');
         }
       } else {
-        // Modo Creación
+        // CREACIÓN
         if (db) {
           db.collection("productos").add(item).then(() => {
             cancelarEdicionProducto();
-            alert('¡Nuevo producto añadido en la nube!');
+            alert('¡Producto guardado en la nube!');
           });
         } else {
           item.id = Date.now();
+          item.docId = String(item.id);
           catalogo.push(item);
           guardarDatosLocales();
           renderCatalogo();
@@ -1105,36 +1261,35 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
     }
 
     function eliminarProductoCloud(id) {
-      if (!confirm('¿Eliminar producto?')) return;
+      if (!confirm('¿Eliminar este producto de la carta?')) return;
       if (db && typeof id === 'string' && id.length > 10) {
         db.collection("productos").doc(id).delete();
       } else {
-        catalogo = catalogo.filter(p => (p.id != id && p.docId != id));
+        catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
         guardarDatosLocales();
         renderCatalogo();
         renderListaEditor();
       }
     }
 
-    // --- SUB-MÓDULO: CATEGORÍAS (CREAR & MODIFICAR CATEGORÍAS) ---
-    function renderListaCategoriasEditor() {
+    // CATEGORÍAS: LISTAR, CREAR, EDITAR Y ELIMINAR
+    function renderListaEditorCategorias() {
       const container = document.getElementById('listaEditorCategorias');
       if (!container) return;
       container.innerHTML = '';
       categorias.forEach(c => {
         const row = document.createElement('div');
-        row.className = 'py-2 flex items-center justify-between gap-2 hover:bg-slate-50 px-1 rounded-lg transition-colors';
-        const cIdStr = c.docId ? `'${c.docId}'` : `'${c.id}'`;
+        row.className = 'py-2 flex items-center justify-between';
         row.innerHTML = `
-          <div class="flex items-center gap-2 flex-1 min-w-0">
-            <span class="text-lg">${c.icono || '🏷️'}</span>
-            <span class="font-bold text-slate-800 text-xs truncate">${c.nombre}</span>
+          <div class="flex items-center gap-2">
+            <span class="text-base">${c.icono || '🏷️'}</span>
+            <span class="font-bold text-slate-800">${c.nombre}</span>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <button onclick="cargarCategoriaParaEditar(${cIdStr})" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-all" title="Modificar categoría">
+          <div class="flex items-center gap-2">
+            <button onclick="cargarCategoriaParaEdicion('${c.id}')" class="text-amber-600 hover:text-amber-800 p-1" title="Editar">
               <i class="fa-solid fa-pen text-xs"></i>
             </button>
-            <button onclick="eliminarCategoriaCloud(${cIdStr})" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition-all" title="Eliminar categoría">
+            <button onclick="eliminarCategoria('${c.id}')" class="text-rose-500 hover:text-rose-700 p-1" title="Eliminar">
               <i class="fa-solid fa-trash-can text-xs"></i>
             </button>
           </div>
@@ -1143,29 +1298,28 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
       });
     }
 
-    function cargarCategoriaParaEditar(id) {
-      const cat = categorias.find(c => (c.docId == id || c.id == id));
+    function cargarCategoriaParaEdicion(id) {
+      const cat = categorias.find(c => c.id === id);
       if (!cat) return;
-      document.getElementById('catEditId').value = cat.docId || cat.id;
+      document.getElementById('editandoCatId').value = id;
       document.getElementById('nuevaCatNombre').value = cat.nombre;
       document.getElementById('nuevaCatIcono').value = cat.icono || '🏷️';
-
-      document.getElementById('tituloFormCat').innerText = 'Modificar Categoría';
-      document.getElementById('btnTextoGuardarCat').innerText = 'Guardar Cambios';
+      document.getElementById('tituloFormCategoria').innerText = "Editar Categoría: " + cat.nombre;
+      document.getElementById('btnGuardarCat').innerText = "Guardar Cambios";
       document.getElementById('btnCancelarEdicionCat').classList.remove('hidden');
     }
 
     function cancelarEdicionCategoria() {
-      document.getElementById('catEditId').value = '';
+      document.getElementById('editandoCatId').value = '';
       document.getElementById('nuevaCatNombre').value = '';
       document.getElementById('nuevaCatIcono').value = '';
-      document.getElementById('tituloFormCat').innerText = 'Añadir Nueva Categoría';
-      document.getElementById('btnTextoGuardarCat').innerText = 'Guardar Categoría';
+      document.getElementById('tituloFormCategoria').innerText = "Nueva Categoría";
+      document.getElementById('btnGuardarCat').innerText = "Guardar Categoría";
       document.getElementById('btnCancelarEdicionCat').classList.add('hidden');
     }
 
-    function guardarCategoriaCloud() {
-      const editId = document.getElementById('catEditId').value;
+    function guardarCategoria() {
+      const idEdicion = document.getElementById('editandoCatId').value;
       const nom = document.getElementById('nuevaCatNombre').value.trim();
       const ico = document.getElementById('nuevaCatIcono').value.trim() || '🏷️';
 
@@ -1174,73 +1328,56 @@ ${datosFiscales.pieTicket || '¡Gracias por su visita!'}`;
         return;
       }
 
-      const item = { nombre: nom, icono: ico, id: nom.toLowerCase().replace(/\s+/g, '_') };
-
-      if (editId) {
-        // Editar categoría
-        if (db && typeof editId === 'string' && editId.length > 10) {
-          db.collection("categorias").doc(editId).update({ nombre: nom, icono: ico }).then(() => {
-            cancelarEdicionCategoria();
-            alert('¡Categoría actualizada con éxito!');
-          });
-        } else {
-          const idx = categorias.findIndex(c => (c.id == editId || c.docId == editId));
-          if (idx !== -1) categorias[idx] = { ...categorias[idx], nombre: nom, icono: ico };
-          guardarDatosLocales();
-          renderPestanasCategorias();
-          actualizarSelectCategorias();
-          renderListaCategoriasEditor();
-          renderCatalogo();
-          cancelarEdicionCategoria();
-          alert('¡Categoría actualizada!');
+      if (idEdicion) {
+        // EDICIÓN
+        const idx = categorias.findIndex(c => c.id === idEdicion);
+        if (idx !== -1) {
+          categorias[idx].nombre = nom;
+          categorias[idx].icono = ico;
+        }
+        if (db && typeof idEdicion === 'string' && idEdicion.length > 10) {
+          db.collection("categorias").doc(idEdicion).update({ nombre: nom, icono: ico });
         }
       } else {
-        // Añadir nueva categoría
+        // CREACIÓN
+        const catId = nom.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+        const nuevaCat = { id: catId, nombre: nom, icono: ico };
+        categorias.push(nuevaCat);
         if (db) {
-          db.collection("categorias").add(item).then(() => {
-            cancelarEdicionCategoria();
-            alert('¡Nueva categoría añadida a la nube!');
-          });
-        } else {
-          categorias.push(item);
-          guardarDatosLocales();
-          renderPestanasCategorias();
-          actualizarSelectCategorias();
-          renderListaCategoriasEditor();
-          cancelarEdicionCategoria();
-          alert('Categoría añadida localmente.');
+          db.collection("categorias").add(nuevaCat);
         }
       }
+
+      guardarDatosLocales();
+      renderPestañasCategorias();
+      renderListaEditorCategorias();
+      actualizarSelectorCategoriasProducto();
+      cancelarEdicionCategoria();
+      alert('¡Categoría guardada con éxito!');
     }
 
-    function eliminarCategoriaCloud(id) {
-      if (categorias.length <= 1) {
-        alert('Debes conservar al menos una categoría en el sistema.');
-        return;
-      }
-      if (!confirm('¿Eliminar esta categoría? Los productos asociados permanecerán en el catálogo.')) return;
+    function eliminarCategoria(id) {
+      if (!confirm('¿Eliminar esta categoría?')) return;
+      categorias = categorias.filter(c => c.id !== id);
       if (db && typeof id === 'string' && id.length > 10) {
         db.collection("categorias").doc(id).delete();
-      } else {
-        categorias = categorias.filter(c => (c.id != id && c.docId != id));
-        guardarDatosLocales();
-        renderPestanasCategorias();
-        actualizarSelectCategorias();
-        renderListaCategoriasEditor();
-        renderCatalogo();
       }
+      guardarDatosLocales();
+      renderPestañasCategorias();
+      renderListaEditorCategorias();
+      actualizarSelectorCategoriasProducto();
     }
 
-    // INICIALIZACIÓN GENERAL
+    // INICIALIZACIÓN DE LA APLICACIÓN
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre || "LA PIRULETA";
       document.getElementById('headerCajaNum').innerText = datosFiscales.caja || "Caja 1";
-      renderPestanasCategorias();
-      actualizarSelectCategorias();
+      renderPestañasCategorias();
       renderCatalogo();
       renderMesas();
       actualizarInterfazCaja();
+      actualizarBannerMesaActiva();
     });
-  </script>
+  <\/script>
 </body>
 </html>
