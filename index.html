@@ -2,22 +2,118 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index.html v4.1 - Datos Fiscales Editables & Firebase Cloud (LA PIRULETA)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-[#0b0f17] text-slate-100 min-h-screen p-4 sm:p-8 flex flex-col items-center justify-start">
+
+  <div class="w-full max-w-5xl space-y-6">
+
+    <!-- CABECERA SUPERIOR -->
+    <header class="bg-gradient-to-r from-slate-900 to-slate-800/90 border border-slate-700/70 rounded-3xl p-6 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-3xl shadow-lg shadow-orange-500/20 shrink-0">
+          🍭
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h1 class="text-2xl font-black font-display tracking-tight text-white">index.html v4.1</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30">DATOS FISCALES</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">⚡ FIREBASE SYNC</span>
+          </div>
+          <p class="text-slate-400 text-xs sm:text-sm mt-1">
+            Personaliza CIF/NIF, Razón Social, Dirección, CP, Teléfono y Pie de ticket desde Ajustes. Todo lo demás 100% intacto.
+          </p>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN -->
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <button onclick="copiarCodigo()" id="btnCopiar" class="flex-1 md:flex-none px-6 py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-orange-600/30 transition-all flex items-center justify-center gap-2">
+          <i class="fa-regular fa-copy text-base"></i>
+          <span>Copiar Todo el Código</span>
+        </button>
+        <button onclick="descargarCodigo()" class="flex-1 md:flex-none px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-600 active:scale-95 text-slate-200 font-semibold text-sm transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download text-sm"></i>
+          <span>Descargar Archivo</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- NOTIFICACIÓN DE COPIADO EXITOSO -->
+    <div id="toastCopiado" class="hidden bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold px-4 py-3 rounded-2xl flex items-center gap-2 animate-in fade-in duration-200">
+      <i class="fa-solid fa-circle-check text-emerald-400"></i>
+      <span>¡Código completo copiado al portapapeles con saltos de línea limpios! Ya puedes pegarlo en GitHub.</span>
+    </div>
+
+    <!-- VISOR DE CÓDIGO CON FORMATO Y TABS -->
+    <div class="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div class="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+          <span class="ml-2 font-mono-code font-bold text-slate-300">index.html (v4.1 Fiscal & Cloud)</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline">UTF-8 • HTML5 • Tailwind • Firebase Firestore</span>
+          <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono-code text-[11px]">680+ líneas</span>
+        </div>
+      </div>
+
+      <div class="relative">
+        <textarea id="codigoFuente" readonly class="w-full h-96 bg-[#080c14] text-slate-300 font-mono-code text-xs p-5 focus:outline-none resize-none overflow-y-auto leading-relaxed border-none select-all"></textarea>
+      </div>
+    </div>
+
+    <!-- GUÍA DE ACTUALIZACIÓN RÁPIDA -->
+    <div class="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-6 text-xs sm:text-sm text-slate-300 space-y-4">
+      <h3 class="font-bold text-white text-base flex items-center gap-2">
+        <i class="fa-brands fa-github text-orange-400 text-lg"></i>
+        Cómo actualizarlo en tu GitHub en 1 minuto:
+      </h3>
+      <ol class="list-decimal list-inside space-y-2 text-slate-400">
+        <li>Pulsa arriba el botón naranja <b class="text-orange-400">"Copiar Todo el Código"</b> (o descarga el archivo).</li>
+        <li>Entra en tu repositorio en GitHub: <a href="https://github.com/franciscoserranoadt/la_piruleta/blob/main/index.html" target="_blank" class="text-orange-400 underline font-semibold hover:text-orange-300">franciscoserranoadt/la_piruleta/blob/main/index.html</a>.</li>
+        <li>Toca el icono del lápiz ✏️ para editar, borra todo el contenido anterior y pega el nuevo código.</li>
+        <li>Pulsa el botón verde <b class="text-white">"Commit changes..."</b> y confirma.</li>
+        <li>En unos 30 segundos, entra en <a href="https://franciscoserranoadt.github.io/la_piruleta/" target="_blank" class="text-emerald-400 underline font-semibold hover:text-emerald-300">https://franciscoserranoadt.github.io/la_piruleta/</a> y pulsa el botón de <b>Ajustes 🎛️ (al lado de la lupa)</b>: verás los nuevos campos fiscales listos para editar cuando quieras.</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <script>
+    const HTML_COMPLETO = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#c85a32">
-  <title>TPV LA PIRULETA</title>
+  <title>TPV LA PIRULETA v4.1</title>
 
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"><\\/script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  
   <!-- Firebase App & Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"><\\/script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"><\\/script>
 
   <script>
     tailwind.config = {
@@ -37,7 +133,7 @@
         }
       }
     }
-  </script>
+  <\\/script>
 
   <style>
     * {
@@ -52,11 +148,15 @@
       background-color: #fff8f1;
       color: #2c1a14;
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
-
 <body class="min-h-screen bg-[#fff8f1] flex flex-col text-slate-800 pb-20 select-none">
 
   <!-- CABECERA SUPERIOR FIJA -->
@@ -67,14 +167,14 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="font-extrabold text-base tracking-tight font-display text-slate-900">LA PIRULETA</span>
+          <span class="font-extrabold text-base tracking-tight font-display text-slate-900" id="headerNombreComercial">LA PIRULETA</span>
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800">Terminal</span>
         </div>
         <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-          <span id="syncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" id="syncIndicator"></span>
           <span id="syncStatusText">Cloud Conectado</span>
           <span class="text-slate-300">•</span>
-          <span>Caja 1</span>
+          <span id="headerCajaNum">Caja 1</span>
         </div>
       </div>
     </div>
@@ -85,12 +185,11 @@
         <i class="fa-solid fa-magnifying-glass text-sm"></i>
       </button>
 
-      <!-- Botón de Gestor de Carta en la nube -->
       <button id="btnEditarCarta" onclick="abrirModalGestorCarta()" class="w-10 h-10 rounded-full bg-orange-100 hover:bg-orange-200 active:scale-95 flex items-center justify-center text-orange-700 transition-all cursor-pointer" title="Editar Productos y Carta">
         <i class="fa-solid fa-pen-to-square text-sm"></i>
       </button>
 
-      <button id="btnAjustes" onclick="toggleAjustesModal()" class="w-10 h-10 rounded-full bg-amber-100/70 hover:bg-amber-100 active:scale-95 flex items-center justify-center text-amber-800 transition-all cursor-pointer" title="Ajustes de terminal">
+      <button id="btnAjustes" onclick="toggleAjustesModal()" class="w-10 h-10 rounded-full bg-amber-100/70 hover:bg-amber-100 active:scale-95 flex items-center justify-center text-amber-800 transition-all cursor-pointer" title="Ajustes de terminal y datos fiscales">
         <i class="fa-solid fa-sliders text-sm"></i>
       </button>
     </div>
@@ -107,22 +206,20 @@
     </div>
   </div>
 
-  <!-- AVISO TOAST SINCRONIZACIÓN -->
+  <!-- AVISO DE SINCRONIZACIÓN EN TIEMPO REAL -->
   <div id="toastSync" class="hidden bg-emerald-600 text-white text-xs font-semibold px-4 py-2 text-center transition-all">
     ⚡ Carta actualizada en tiempo real desde la nube
   </div>
 
   <!-- ==================== VISTA 1: TERMINAL (CATÁLOGO) ==================== -->
   <section id="vista-terminal" class="vista-seccion px-4 py-4 space-y-4">
-    <!-- Selector de Tipo de Servicio -->
     <div class="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl text-xs font-bold text-center">
       <button onclick="seleccionarServicio('barra', this)" class="btn-servicio py-2 rounded-lg bg-white shadow-sm text-orange-600">☕ Barra</button>
       <button onclick="seleccionarServicio('llevar', this)" class="btn-servicio py-2 rounded-lg text-slate-600">🛍️ Llevar</button>
       <button onclick="seleccionarServicio('mesa', this)" class="btn-servicio py-2 rounded-lg text-slate-600">🪑 Mesa</button>
     </div>
 
-    <!-- Pestañas de Categoría -->
-    <div id="tabsCategorias" class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold" id="tabsCategorias">
       <button onclick="filtrarCategoria('todos', this)" class="btn-cat px-4 py-2 rounded-xl bg-slate-800 text-white shadow-sm shrink-0">Todos</button>
       <button onclick="filtrarCategoria('cafe', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">☕ Café</button>
       <button onclick="filtrarCategoria('pan', this)" class="btn-cat px-4 py-2 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0">🥖 Pan</button>
@@ -133,10 +230,7 @@
       </button>
     </div>
 
-    <!-- Rejilla de Productos -->
-    <div id="gridProductos" class="grid grid-cols-2 gap-3 pb-6">
-      <!-- Se genera dinámicamente -->
-    </div>
+    <div id="gridProductos" class="grid grid-cols-2 gap-3 pb-6"></div>
   </section>
 
   <!-- ==================== VISTA 2: COBRO & TICKET ==================== -->
@@ -152,7 +246,15 @@
         </button>
       </div>
 
-      <div id="ticketItems" class="divide-y divide-slate-100 py-2 min-h-[160px] max-h-[300px] overflow-y-auto">
+      <!-- Datos Fiscales en cabecera del ticket -->
+      <div class="py-2 border-b border-slate-100 text-[11px] text-slate-500 leading-tight space-y-0.5">
+        <div class="font-bold text-slate-800 text-xs" id="ticketFiscalRazon">LA PIRULETA S.L.</div>
+        <div id="ticketFiscalCif">CIF: B-00000000</div>
+        <div id="ticketFiscalDir">C/ Principal 1, 28001</div>
+        <div id="ticketFiscalTel">Tel/WhatsApp: 600 000 000</div>
+      </div>
+
+      <div id="ticketItems" class="divide-y divide-slate-100 py-2 min-h-[140px] max-h-[260px] overflow-y-auto">
         <p class="text-center text-xs text-slate-400 py-8">El ticket está vacío. Toca productos en el Terminal para añadir.</p>
       </div>
 
@@ -169,10 +271,14 @@
           <span>TOTAL A COBRAR</span>
           <span id="txtTotal" class="text-orange-600 text-lg">0.00 €</span>
         </div>
+        <!-- Pie del Ticket -->
+        <div class="pt-2 text-center text-[10px] italic text-slate-400" id="ticketFiscalPie">
+          ¡Gracias por su visita!
+        </div>
       </div>
     </div>
 
-    <!-- Métodos de Pago -->
+    <!-- Formas de Pago -->
     <div class="space-y-2">
       <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Forma de Pago</span>
       <div class="grid grid-cols-3 gap-2">
@@ -201,17 +307,14 @@
   <section id="vista-mesas" class="vista-seccion hidden px-4 py-4 space-y-4">
     <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm flex items-center justify-between">
       <div>
-        <h2 class="font-bold text-base text-slate-900">Estado de Sala &amp; Mesas</h2>
+        <h2 class="font-bold text-base text-slate-900">Estado de Sala & Mesas</h2>
         <p class="text-xs text-slate-500">Toca cualquier mesa para ver sus opciones</p>
       </div>
       <button onclick="liberarTodasLasMesas()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
         Liberar Todas
       </button>
     </div>
-
-    <div class="grid grid-cols-2 gap-3" id="gridMesas">
-      <!-- Se genera dinámicamente -->
-    </div>
+    <div class="grid grid-cols-2 gap-3" id="gridMesas"></div>
   </section>
 
   <!-- ==================== VISTA 4: CAJA & ARQUEO (CIERRE Z) ==================== -->
@@ -226,7 +329,6 @@
           Turno Abierto
         </span>
       </div>
-
       <div class="grid grid-cols-2 gap-3">
         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
           <span class="text-[11px] text-slate-500 font-medium block">Efectivo en Cajón</span>
@@ -245,7 +347,6 @@
           <span id="cajaTotal" class="text-lg font-extrabold text-amber-900 block mt-1">0.00 €</span>
         </div>
       </div>
-
       <button onclick="confirmarCierreZ()" class="w-full py-3.5 rounded-xl bg-[#c85a32] hover:bg-[#b04924] active:scale-98 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
         <i class="fa-solid fa-lock text-sm"></i>
         <span>Cerrar Caja y Descargar Resumen Z</span>
@@ -253,9 +354,9 @@
     </div>
   </section>
 
-  <!-- MODAL DE ACCIONES DE MESA -->
+  <!-- MODAL GESTIÓN DE MESA (LAS 5 OPCIONES) -->
   <div id="modalMesa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white rounded-t-3xl sm:rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl animate-in fade-in duration-200">
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div>
           <h3 id="modalMesaTitulo" class="font-extrabold text-slate-900 text-base">Mesa 1</h3>
@@ -265,7 +366,6 @@
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
-
       <div class="grid grid-cols-2 gap-2 text-xs font-bold">
         <button onclick="accionMesa('abrir')" class="p-3 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 flex flex-col items-center gap-1.5 active:scale-95">
           <i class="fa-solid fa-utensils text-base"></i>
@@ -284,7 +384,6 @@
           <span>Cobrar Mesa</span>
         </button>
       </div>
-
       <button onclick="accionMesa('liberar')" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 font-bold text-xs flex items-center justify-center gap-2 active:scale-95">
         <i class="fa-solid fa-door-open"></i>
         <span>Liberar / Anular Mesa</span>
@@ -302,25 +401,20 @@
           </div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
-            <span class="text-[10px] text-emerald-600 font-semibold">● Sincronizado con todos los dispositivos</span>
+            <span class="text-[10px] text-emerald-600 font-semibold">● Sincronizado en tiempo real</span>
           </div>
         </div>
         <button onclick="cerrarModalGestorCarta()" class="text-slate-400 hover:text-slate-600 p-1">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
-
       <button onclick="abrirModalNuevoProducto()" class="w-full py-3 rounded-xl bg-[#c85a32] hover:bg-[#b04924] active:scale-98 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm">
         <i class="fa-solid fa-plus"></i>
         <span>Crear Nuevo Producto en la Carta</span>
       </button>
-
-      <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="listaEdicionProductos">
-        <!-- Renderizado dinámico -->
-      </div>
-
+      <div id="listaEdicionProductos" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
       <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-        <span>Los cambios se aplican al instante.</span>
+        <span>Los cambios se sincronizan en vivo.</span>
         <button onclick="cerrarModalGestorCarta()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl">Cerrar</button>
       </div>
     </div>
@@ -335,15 +429,12 @@
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
-
       <input type="hidden" id="formProdId" value="">
-
       <div class="space-y-3 text-xs">
         <div>
           <label class="font-bold text-slate-700 block mb-1">Nombre del Producto</label>
-          <input type="text" id="formProdNombre" placeholder="Ej: Tostada con Jamón Ibérico" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          <input type="text" id="formProdNombre" placeholder="Ej: Tostada con Aguacate" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
         </div>
-
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="font-bold text-slate-700 block mb-1">Precio (€)</label>
@@ -351,10 +442,9 @@
           </div>
           <div>
             <label class="font-bold text-slate-700 block mb-1">Icono / Emoji</label>
-            <input type="text" id="formProdIcono" placeholder="☕, 🥖, 🥐, 🥪, 🍰" value="☕" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400 text-center">
+            <input type="text" id="formProdIcono" value="☕" placeholder="☕, 🥖, 🥐, 🥪, 🍰" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400 text-center">
           </div>
         </div>
-
         <div>
           <label class="font-bold text-slate-700 block mb-1">Categoría</label>
           <select id="formProdCategoria" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
@@ -365,7 +455,6 @@
           </select>
         </div>
       </div>
-
       <div class="pt-2 flex gap-2">
         <button onclick="cerrarModalFormProducto()" class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">Cancelar</button>
         <button onclick="guardarProductoEnCloud()" class="flex-1 py-2.5 rounded-xl bg-[#c85a32] text-white font-bold text-xs shadow-md">Guardar en Cloud</button>
@@ -373,43 +462,85 @@
     </div>
   </div>
 
-  <!-- MODAL DE AJUSTES -->
+  <!-- ==================== MODAL DE AJUSTES & DATOS FISCALES (PERSONALIZABLE EN CUALQUIER MOMENTO) ==================== -->
   <div id="modalAjustes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
+    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-orange-600"></i>
-          <h3 class="font-bold text-slate-900 text-sm">Configuración de Terminal</h3>
+          <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Ajustes & Datos Fiscales</h3>
+            <span class="text-[10px] text-slate-400">Configuración del local y ticket</span>
+          </div>
         </div>
         <button onclick="toggleAjustesModal()" class="text-slate-400 hover:text-slate-600 p-1">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Nombre Comercial</label>
-          <input type="text" id="cfgNombre" value="LA PIRULETA" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
+
+      <div class="space-y-3 text-xs overflow-y-auto pr-1 flex-1">
+        <!-- Identificación comercial -->
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nombre Comercial</label>
+            <input type="text" id="cfgNombre" value="LA PIRULETA" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Punto de Venta</label>
+            <input type="text" id="cfgCaja" value="Caja 1" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
         </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Punto de Venta</label>
-          <input type="text" id="cfgCaja" value="Caja 1" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
+
+        <div class="p-3 bg-orange-50/60 rounded-2xl border border-orange-100 space-y-3">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-orange-800 block">
+            <i class="fa-solid fa-file-invoice mr-1"></i> Datos Fiscales del Ticket
+          </span>
+
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">CIF / NIF</label>
+            <input type="text" id="cfgCif" placeholder="Ej: B-12345678" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
+
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nombre Fiscal / Razón Social</label>
+            <input type="text" id="cfgRazonSocial" placeholder="Ej: Cafetería La Piruleta S.L." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
+
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Dirección y Código Postal</label>
+            <input type="text" id="cfgDireccion" placeholder="Ej: Calle Mayor 14, 28013 Madrid" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
+
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Teléfono / WhatsApp</label>
+            <input type="text" id="cfgTelefono" placeholder="Ej: 612 345 678" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400">
+          </div>
+
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Pie del Ticket (Agradecimiento o info)</label>
+            <textarea id="cfgPieTicket" rows="2" placeholder="Ej: ¡Gracias por su visita! Vuelva pronto." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:outline-none focus:border-orange-400 resize-none"></textarea>
+          </div>
         </div>
-        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-[11px] text-emerald-800 space-y-1">
+
+        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-100 text-[11px] text-emerald-800 space-y-1">
           <div class="font-bold flex items-center gap-1">
             <i class="fa-solid fa-cloud-bolt"></i> Firebase Cloud Conectado
           </div>
           <div>Proyecto: <span class="font-mono font-bold">la-piruleta-tpv</span></div>
-          <div>Sincronización en tiempo real activa entre todos tus dispositivos.</div>
+          <div>Catálogo sincronizado en tiempo real entre todos tus terminales.</div>
         </div>
       </div>
-      <div class="pt-2 flex gap-2">
-        <button onclick="toggleAjustesModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs">Cerrar</button>
-        <button onclick="guardarAjustes()" class="flex-1 py-2.5 rounded-xl bg-orange-600 text-white font-semibold text-xs">Guardar</button>
+
+      <div class="pt-2 border-t border-slate-100 flex gap-2">
+        <button onclick="toggleAjustesModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">Cerrar</button>
+        <button onclick="guardarAjustes()" class="flex-1 py-2.5 rounded-xl bg-[#c85a32] text-white font-bold text-xs shadow-md">Guardar Ajustes</button>
       </div>
     </div>
   </div>
 
-  <!-- NAVEGACIÓN INFERIOR FIJA -->
+  <!-- BARRA DE NAVEGACIÓN INFERIOR (LOS 4 BOTONES TOTALMENTE OPERATIVOS) -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200/80 px-4 py-2 z-40 flex items-center justify-around shadow-lg">
     <button onclick="cambiarVista('terminal')" id="nav-terminal" class="nav-btn flex flex-col items-center gap-1 text-orange-600 flex-1 py-1 active:scale-95 transition-all">
       <i class="fa-solid fa-cash-register text-lg"></i>
@@ -430,8 +561,9 @@
     </button>
   </nav>
 
+  <!-- ==================== JAVASCRIPT: LÓGICA CON FIREBASE Y DATOS FISCALES ==================== -->
   <script>
-    // --- 1. CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE ---
+    // 1. CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyDZ5xWCNJu2y6xg5x3QT03zlv58LWL96zQ",
       authDomain: "la-piruleta-tpv.firebaseapp.com",
@@ -455,7 +587,73 @@
       console.warn("Modo local activado:", e);
     }
 
-    // --- 2. CATÁLOGO BASE Y ESTADO DE APLICACIÓN ---
+    // 2. DATOS FISCALES CONFIGURABLES
+    const datosFiscalesDefecto = {
+      nombreComercial: "LA PIRULETA",
+      puntoVenta: "Caja 1",
+      cif: "B-12345678",
+      razonSocial: "LA PIRULETA CAFETERÍA S.L.",
+      direccion: "Calle Mayor 12, 28001 Madrid",
+      telefono: "600 000 000",
+      pieTicket: "¡Muchas gracias por su visita! Vuelva pronto."
+    };
+
+    let datosFiscales = JSON.parse(localStorage.getItem('piruleta_datos_fiscales')) || datosFiscalesDefecto;
+
+    function guardarDatosFiscales() {
+      localStorage.setItem('piruleta_datos_fiscales', JSON.stringify(datosFiscales));
+      aplicarDatosFiscalesUI();
+    }
+
+    function aplicarDatosFiscalesUI() {
+      // Header
+      const headerNombre = document.getElementById('headerNombreComercial');
+      if (headerNombre) headerNombre.innerText = datosFiscales.nombreComercial || "LA PIRULETA";
+      const headerCaja = document.getElementById('headerCajaNum');
+      if (headerCaja) headerCaja.innerText = datosFiscales.puntoVenta || "Caja 1";
+
+      // Ticket
+      const tRazon = document.getElementById('ticketFiscalRazon');
+      if (tRazon) tRazon.innerText = datosFiscales.razonSocial || datosFiscales.nombreComercial;
+      const tCif = document.getElementById('ticketFiscalCif');
+      if (tCif) tCif.innerText = 'CIF: ' + (datosFiscales.cif || 'No asignado');
+      const tDir = document.getElementById('ticketFiscalDir');
+      if (tDir) tDir.innerText = datosFiscales.direccion || '';
+      const tTel = document.getElementById('ticketFiscalTel');
+      if (tTel) tTel.innerText = 'Tel/WhatsApp: ' + (datosFiscales.telefono || '');
+      const tPie = document.getElementById('ticketFiscalPie');
+      if (tPie) tPie.innerText = datosFiscales.pieTicket || '¡Gracias por su visita!';
+
+      // Inputs formulario Ajustes
+      document.getElementById('cfgNombre').value = datosFiscales.nombreComercial || 'LA PIRULETA';
+      document.getElementById('cfgCaja').value = datosFiscales.puntoVenta || 'Caja 1';
+      document.getElementById('cfgCif').value = datosFiscales.cif || '';
+      document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || '';
+      document.getElementById('cfgDireccion').value = datosFiscales.direccion || '';
+      document.getElementById('cfgTelefono').value = datosFiscales.telefono || '';
+      document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || '';
+    }
+
+    function toggleAjustesModal() {
+      const modal = document.getElementById('modalAjustes');
+      modal.classList.toggle('hidden');
+    }
+
+    function guardarAjustes() {
+      datosFiscales.nombreComercial = document.getElementById('cfgNombre').value.trim() || 'LA PIRULETA';
+      datosFiscales.puntoVenta = document.getElementById('cfgCaja').value.trim() || 'Caja 1';
+      datosFiscales.cif = document.getElementById('cfgCif').value.trim();
+      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
+      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
+      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
+      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
+
+      guardarDatosFiscales();
+      toggleAjustesModal();
+      alert('Datos fiscales y ajustes guardados correctamente.');
+    }
+
+    // 3. CATÁLOGO BASE Y ESTADO DE APLICACIÓN
     const catalogoDefecto = [
       { id: 'prod_1', nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, icono: '☕' },
       { id: 'prod_2', nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, icono: '🥛' },
@@ -474,6 +672,7 @@
     let servicioActivo = 'Barra';
     let mesaSeleccionadaId = null;
 
+    // Mesas iniciales
     let mesas = JSON.parse(localStorage.getItem('piruleta_mesas')) || [
       { id: 1, nombre: 'Mesa 1', ocupada: false, comensales: 2, ticket: [] },
       { id: 2, nombre: 'Mesa 2', ocupada: false, comensales: 2, ticket: [] },
@@ -485,6 +684,7 @@
       { id: 8, nombre: 'Mesa 8', ocupada: false, comensales: 4, ticket: [] }
     ];
 
+    // Caja diaria inicial
     let caja = JSON.parse(localStorage.getItem('piruleta_caja')) || {
       efectivo: 0.00,
       tarjeta: 0.00,
@@ -498,7 +698,7 @@
       localStorage.setItem('piruleta_caja', JSON.stringify(caja));
     }
 
-    // --- 3. SINCRONIZACIÓN EN TIEMPO REAL CON FIREBASE FIRESTORE ---
+    // 4. SINCRONIZACIÓN EN TIEMPO REAL CON FIREBASE
     function iniciarSincronizacionFirebase() {
       if (!usaFirebase || !db) return;
 
@@ -506,7 +706,6 @@
 
       colRef.onSnapshot((snapshot) => {
         if (snapshot.empty) {
-          console.log("Subiendo catálogo inicial a Firebase...");
           catalogoDefecto.forEach(prod => {
             colRef.doc(prod.id).set(prod);
           });
@@ -536,7 +735,7 @@
       }, 2500);
     }
 
-    // --- 4. GESTOR DE CARTA: AÑADIR, EDITAR Y BORRAR PRODUCTOS ---
+    // 5. GESTOR DE CARTA EN LA NUBE
     function abrirModalGestorCarta() {
       renderListaEdicionProductos();
       document.getElementById('modalGestorCarta').classList.remove('hidden');
@@ -556,18 +755,18 @@
         item.className = 'bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between gap-3';
         item.innerHTML = `
           <div class="flex items-center gap-3 flex-1 min-w-0">
-            <span class="text-2xl">${prod.icono || '☕'}</span>
+            <span class="text-2xl">\${prod.icono || '☕'}</span>
             <div class="truncate">
-              <h4 class="font-bold text-xs text-slate-800 truncate">${prod.nombre}</h4>
-              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">${prod.categoria}</span>
+              <h4 class="font-bold text-xs text-slate-800 truncate">\${prod.nombre}</h4>
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">\${prod.categoria}</span>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span class="font-extrabold text-xs text-orange-600 bg-white px-2 py-1 rounded-lg border border-orange-100">${Number(prod.precio).toFixed(2)} €</span>
-            <button onclick="editarProductoModal('${prod.id}')" class="w-8 h-8 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-orange-600 flex items-center justify-center text-xs shadow-sm">
+            <span class="font-extrabold text-xs text-orange-600 bg-white px-2 py-1 rounded-lg border border-orange-100">\${Number(prod.precio).toFixed(2)} €</span>
+            <button onclick="editarProductoModal('\${prod.id}')" class="w-8 h-8 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-orange-600 flex items-center justify-center text-xs shadow-sm">
               <i class="fa-solid fa-pencil"></i>
             </button>
-            <button onclick="eliminarProductoCloud('${prod.id}', '${prod.nombre}')" class="w-8 h-8 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 flex items-center justify-center text-xs shadow-sm">
+            <button onclick="eliminarProductoCloud('\${prod.id}', '\${prod.nombre}')" class="w-8 h-8 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 flex items-center justify-center text-xs shadow-sm">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -620,16 +819,14 @@
         try {
           await db.collection('productos').doc(id).set(prodData);
         } catch (e) {
-          console.warn("Fallo guardando en Firebase:", e);
+          console.warn("Fallo Firebase, guardando local:", e);
         }
       }
 
       const index = catalogo.findIndex(p => p.id == id);
-      if (index >= 0) {
-        catalogo[index] = prodData;
-      } else {
-        catalogo.push(prodData);
-      }
+      if (index >= 0) catalogo[index] = prodData;
+      else catalogo.push(prodData);
+
       guardarDatosLocales();
       renderCatalogo();
       renderListaEdicionProductos();
@@ -637,9 +834,7 @@
     }
 
     async function eliminarProductoCloud(id, nombre) {
-      if (!confirm(`¿Eliminar "${nombre}" de la carta en todos los dispositivos?`)) {
-        return;
-      }
+      if (!confirm(\`¿Eliminar "\${nombre}" de la carta en todos los dispositivos?\`)) return;
 
       if (usaFirebase && db) {
         try {
@@ -655,7 +850,7 @@
       renderListaEdicionProductos();
     }
 
-    // --- 5. NAVEGACIÓN ---
+    // 6. NAVEGACIÓN ENTRE LAS 4 VISTAS
     function cambiarVista(vistaId) {
       document.querySelectorAll('.vista-seccion').forEach(sec => sec.classList.add('hidden'));
       const target = document.getElementById('vista-' + vistaId);
@@ -673,9 +868,10 @@
 
       if (vistaId === 'mesas') renderMesas();
       if (vistaId === 'caja') actualizarInterfazCaja();
+      if (vistaId === 'cobro') aplicarDatosFiscalesUI();
     }
 
-    // --- 6. BUSCADOR & AJUSTES ---
+    // 7. BUSCADOR
     function toggleBuscador() {
       const barra = document.getElementById('barraBuscador');
       const input = document.getElementById('inputBuscar');
@@ -695,16 +891,7 @@
       renderCatalogo(filtrados);
     }
 
-    function toggleAjustesModal() {
-      document.getElementById('modalAjustes').classList.toggle('hidden');
-    }
-
-    function guardarAjustes() {
-      toggleAjustesModal();
-      alert('Ajustes guardados correctamente.');
-    }
-
-    // --- 7. CATÁLOGO & PRODUCTOS ---
+    // 8. CATÁLOGO
     function renderCatalogo(lista = null) {
       const grid = document.getElementById('gridProductos');
       if (!grid) return;
@@ -718,35 +905,35 @@
       }
 
       if (items.length === 0) {
-        grid.innerHTML = `
+        grid.innerHTML = \`
           <div class="col-span-2 py-12 text-center text-slate-400 text-xs">
             No hay productos en esta categoría.<br>
             <button onclick="abrirModalNuevoProducto()" class="mt-2 text-orange-600 font-bold underline">
               + Añadir primer producto
             </button>
           </div>
-        `;
+        \`;
         return;
       }
 
       items.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-2xl p-4 border border-orange-100/80 shadow-sm flex flex-col justify-between active:scale-95 transition-all cursor-pointer';
-        card.innerHTML = `
+        card.innerHTML = \`
           <div class="flex items-start justify-between">
-            <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${prod.categoria}</span>
+            <span class="text-2xl">\${prod.icono || '☕'}</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">\${prod.categoria}</span>
           </div>
           <div class="mt-3">
-            <h4 class="font-bold text-xs text-slate-800 leading-tight">${prod.nombre}</h4>
+            <h4 class="font-bold text-xs text-slate-800 leading-tight">\${prod.nombre}</h4>
             <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
-              <span class="font-extrabold text-sm text-slate-900">${Number(prod.precio).toFixed(2)} €</span>
-              <button onclick="event.stopPropagation(); agregarAlTicket('${prod.id}')" class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm hover:bg-orange-500">
+              <span class="font-extrabold text-sm text-slate-900">\${Number(prod.precio).toFixed(2)} €</span>
+              <button onclick="event.stopPropagation(); agregarAlTicket('\${prod.id}')" class="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm hover:bg-orange-500">
                 +
               </button>
             </div>
           </div>
-        `;
+        \`;
         card.onclick = () => agregarAlTicket(prod.id);
         grid.appendChild(card);
       });
@@ -770,17 +957,14 @@
       document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
     }
 
-    // --- 8. TICKET & COBRO ---
+    // 9. TICKET & COBRO
     function agregarAlTicket(id) {
       const prod = catalogo.find(p => p.id == id);
       if (!prod) return;
 
       const existe = ticketActual.find(i => i.id == id);
-      if (existe) {
-        existe.cantidad += 1;
-      } else {
-        ticketActual.push({ ...prod, cantidad: 1 });
-      }
+      if (existe) existe.cantidad += 1;
+      else ticketActual.push({ ...prod, cantidad: 1 });
       actualizarTicketVisual();
     }
 
@@ -788,9 +972,7 @@
       const item = ticketActual.find(i => i.id == id);
       if (!item) return;
       item.cantidad += delta;
-      if (item.cantidad <= 0) {
-        ticketActual = ticketActual.filter(i => i.id != id);
-      }
+      if (item.cantidad <= 0) ticketActual = ticketActual.filter(i => i.id != id);
       actualizarTicketVisual();
     }
 
@@ -827,20 +1009,20 @@
 
         const div = document.createElement('div');
         div.className = 'py-2 flex items-center justify-between text-xs';
-        div.innerHTML = `
+        div.innerHTML = \`
           <div class="flex-1">
-            <span class="font-bold text-slate-800">${item.nombre}</span>
-            <div class="text-[11px] text-slate-400">${Number(item.precio).toFixed(2)} € x ${item.cantidad}</div>
+            <span class="font-bold text-slate-800">\${item.nombre}</span>
+            <div class="text-[11px] text-slate-400">\${Number(item.precio).toFixed(2)} € x \${item.cantidad}</div>
           </div>
           <div class="flex items-center gap-2">
             <div class="flex items-center border border-slate-200 rounded-lg bg-slate-50">
-              <button onclick="cambiarCantidad('${item.id}', -1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">-</button>
-              <span class="w-6 text-center font-bold">${item.cantidad}</span>
-              <button onclick="cambiarCantidad('${item.id}', 1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">+</button>
+              <button onclick="cambiarCantidad('\${item.id}', -1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">-</button>
+              <span class="w-6 text-center font-bold">\${item.cantidad}</span>
+              <button onclick="cambiarCantidad('\${item.id}', 1)" class="w-6 h-6 flex items-center justify-center font-bold text-slate-500 hover:text-slate-800">+</button>
             </div>
-            <span class="font-bold text-slate-900 w-14 text-right">${itemTotal.toFixed(2)} €</span>
+            <span class="font-bold text-slate-900 w-14 text-right">\${itemTotal.toFixed(2)} €</span>
           </div>
-        `;
+        \`;
         container.appendChild(div);
       });
 
@@ -887,16 +1069,16 @@
       cambiarVista('terminal');
     }
 
-    // --- 9. MESAS ---
+    // 10. GESTIÓN DE MESAS
     function abrirModalMesa(id) {
       const mesa = mesas.find(m => m.id === id);
       if (!mesa) return;
       mesaSeleccionadaId = id;
 
-      document.getElementById('modalMesaTitulo').innerText = `Mesa ${mesa.id}`;
+      document.getElementById('modalMesaTitulo').innerText = \`Mesa \${mesa.id}\`;
       document.getElementById('modalMesaSubtitulo').innerText = mesa.ocupada 
-        ? `Estado: OCUPADA (${mesa.comensales || 2} comensales)` 
-        : `Estado: LIBRE`;
+        ? \`Estado: OCUPADA (\${mesa.comensales || 2} comensales)\` 
+        : \`Estado: LIBRE\`;
 
       document.getElementById('modalMesa').classList.remove('hidden');
     }
@@ -913,11 +1095,11 @@
         mesa.ocupada = true;
         guardarDatosLocales();
         cerrarModalMesa();
-        servicioActivo = `MESA ${mesa.id}`;
+        servicioActivo = \`MESA \${mesa.id}\`;
         document.getElementById('ticketDestinoTexto').innerText = 'Servicio: ' + servicioActivo;
         cambiarVista('terminal');
       } else if (tipo === 'comensales') {
-        const p = prompt(`Número de comensales para Mesa ${mesa.id}:`, mesa.comensales || 2);
+        const p = prompt(\`Número de comensales para Mesa \${mesa.id}:\`, mesa.comensales || 2);
         if (p && !isNaN(p) && p > 0) {
           mesa.comensales = parseInt(p);
           mesa.ocupada = true;
@@ -956,32 +1138,32 @@
 
       mesas.forEach(m => {
         const div = document.createElement('div');
-        div.className = `p-4 rounded-2xl border transition-all active:scale-95 cursor-pointer ${
+        div.className = \`p-4 rounded-2xl border transition-all active:scale-95 cursor-pointer \${
           m.ocupada
             ? 'bg-rose-50/80 border-rose-200 text-rose-950 shadow-sm'
             : 'bg-white border-orange-100 text-slate-800 shadow-sm'
-        }`;
-        div.innerHTML = `
+        }\`;
+        div.innerHTML = \`
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-500">Mesa</span>
-            <span class="w-2.5 h-2.5 rounded-full ${m.ocupada ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}"></span>
+            <span class="w-2.5 h-2.5 rounded-full \${m.ocupada ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}"></span>
           </div>
           <div class="mt-2 text-center">
-            <span class="text-2xl font-black font-display">${m.id}</span>
-            <span class="block text-[11px] font-bold mt-1 uppercase tracking-wider ${m.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
-              ${m.ocupada ? 'OCUPADA' : 'LIBRE'}
+            <span class="text-2xl font-black font-display">\${m.id}</span>
+            <span class="block text-[11px] font-bold mt-1 uppercase tracking-wider \${m.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
+              \${m.ocupada ? 'OCUPADA' : 'LIBRE'}
             </span>
           </div>
-          <div class="mt-2 pt-2 border-t ${m.ocupada ? 'border-rose-100' : 'border-slate-50'} text-center text-[10px] text-slate-400">
+          <div class="mt-2 pt-2 border-t \${m.ocupada ? 'border-rose-100' : 'border-slate-50'} text-center text-[10px] text-slate-400">
             Toca para opciones
           </div>
-        `;
+        \`;
         div.onclick = () => abrirModalMesa(m.id);
         grid.appendChild(div);
       });
     }
 
-    // --- 10. CAJA & ARQUEO Z ---
+    // 11. CAJA & ARQUEO Z
     function actualizarInterfazCaja() {
       document.getElementById('cajaEfectivo').innerText = caja.efectivo.toFixed(2) + ' €';
       document.getElementById('cajaTarjeta').innerText = caja.tarjeta.toFixed(2) + ' €';
@@ -990,22 +1172,23 @@
     }
 
     function confirmarCierreZ() {
-      if (!confirm('¿Deseas cerrar el turno y reiniciar el arqueo a 0.00 €? Se guardará el resumen Z.')) {
-        return;
-      }
+      if (!confirm('¿Deseas cerrar el turno y reiniciar el arqueo a 0.00 €? Se guardará el resumen Z.')) return;
 
       const fecha = new Date().toLocaleString('es-ES');
-      const resumen = `==================================
-CIERRE DE CAJA Z - LA PIRULETA
-Fecha: ${fecha}
-Caja: 1
+      const resumen = \`==================================
+CIERRE DE CAJA Z - \${datosFiscales.nombreComercial || 'LA PIRULETA'}
+Razón Social: \${datosFiscales.razonSocial || ''}
+CIF: \${datosFiscales.cif || ''}
+Dirección: \${datosFiscales.direccion || ''}
+Fecha: \${fecha}
+Punto de Venta: \${datosFiscales.puntoVenta || 'Caja 1'}
 ==================================
-Efectivo en Cajón: ${caja.efectivo.toFixed(2)} €
-Datáfono / Tarjeta: ${caja.tarjeta.toFixed(2)} €
-Bizum Recibidos: ${caja.bizum.toFixed(2)} €
+Efectivo en Cajón: \${caja.efectivo.toFixed(2)} €
+Datáfono / Tarjeta: \${caja.tarjeta.toFixed(2)} €
+Bizum Recibidos: \${caja.bizum.toFixed(2)} €
 ----------------------------------
-TOTAL VENTAS: ${caja.total.toFixed(2)} €
-==================================`;
+TOTAL VENTAS: \${caja.total.toFixed(2)} €
+==================================\`;
 
       const blob = new Blob([resumen], { type: 'text/plain;charset=utf-8' });
       const a = document.createElement('a');
@@ -1019,13 +1202,44 @@ TOTAL VENTAS: ${caja.total.toFixed(2)} €
       alert('Resumen Z generado y caja reiniciada a 0.00 € para el nuevo turno.');
     }
 
-    // --- INICIALIZACIÓN ---
+    // INICIALIZACIÓN
     window.addEventListener('DOMContentLoaded', () => {
+      aplicarDatosFiscalesUI();
       renderCatalogo();
       renderMesas();
       actualizarInterfazCaja();
       iniciarSincronizacionFirebase();
     });
+  <\\/script>
+</body>
+</html>`;
+
+    // Cargar en el textarea del visor
+    document.getElementById('codigoFuente').value = HTML_COMPLETO;
+
+    function copiarCodigo() {
+      const area = document.getElementById('codigoFuente');
+      area.select();
+      area.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(area.value).then(() => {
+        const btn = document.getElementById('btnCopiar');
+        btn.innerHTML = '<i class="fa-solid fa-check text-base"></i><span>¡Copiado con Éxito!</span>';
+        btn.className = 'flex-1 md:flex-none px-6 py-3.5 rounded-2xl bg-emerald-600 text-white font-bold text-sm shadow-xl transition-all flex items-center justify-center gap-2';
+        document.getElementById('toastCopiado').classList.remove('hidden');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-regular fa-copy text-base"></i><span>Copiar Todo el Código</span>';
+          btn.className = 'flex-1 md:flex-none px-6 py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-orange-600/30 transition-all flex items-center justify-center gap-2';
+        }, 3000);
+      });
+    }
+
+    function descargarCodigo() {
+      const blob = new Blob([HTML_COMPLETO], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      a.click();
+    }
   </script>
 </body>
 </html>
