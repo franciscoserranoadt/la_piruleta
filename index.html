@@ -8,13 +8,14 @@
   <meta name="theme-color" content="#c85a32">
   <title>TPV LA PIRULETA</title>
   <link rel="manifest" href="./manifest.json">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <!-- Firebase App & Firestore SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -38,6 +39,7 @@
       }
     }
   </script>
+
   <style>
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     input, textarea, select { user-select: text; }
@@ -46,353 +48,257 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="h-screen w-screen overflow-hidden bg-[#f4ede4] flex flex-col text-slate-800 select-none">
+<body class="min-h-screen bg-[#fff8f1] flex flex-col text-slate-800 select-none pb-4">
 
-  <!-- CABECERA SUPERIOR FIJA ESTILO MOSTRADOR TÁCTIL -->
-  <header class="bg-white border-b border-orange-200/80 px-4 py-2 flex items-center justify-between shadow-sm shrink-0 z-30">
+  <!-- CABECERA PRINCIPAL TPV -->
+  <header class="bg-white/95 backdrop-blur border-b border-orange-100 px-4 py-2.5 sticky top-0 z-30 flex items-center justify-between shadow-xs">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-lg shadow-inner cursor-pointer" onclick="seleccionarServicio('barra')">
+      <div class="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center text-xl shadow-inner cursor-pointer" onclick="cambiarSeccion('tpv')">
         🍭
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="font-extrabold text-sm tracking-tight font-display text-slate-900" id="headerNombreComercial">LA PIRULETA</span>
+          <span class="font-extrabold text-base tracking-tight font-display text-slate-900" id="headerNombreComercial">LA PIRULETA</span>
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800">TERMINAL TÁCTIL</span>
-          <span class="text-xs text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded flex items-center gap-1">
-            <i class="fa-solid fa-user text-[10px] text-slate-400"></i> PACO (01 - General)
+          <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5 ml-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+            <span id="txtEstadoCloud">Cloud Conectado</span>
+            <span class="text-slate-300">•</span>
+            <span id="headerCajaNum">Caja 1</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-slate-400 font-semibold" id="headerTarifa">Tarifa Estándar</span>
           </span>
-        </div>
-        <div class="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-          <span id="txtEstadoCloud">Cloud Conectado</span>
-          <span class="text-slate-300">•</span>
-          <span id="headerCajaNum">Caja 1</span>
-          <span class="text-slate-300">•</span>
-          <span class="text-orange-700 font-semibold">Tarifa Estándar</span>
         </div>
       </div>
     </div>
 
-    <!-- ACCIONES DE CABECERA -->
+    <!-- Acciones Cabecera: Pendientes, Lupa, Editor Carta, Fiscales, Caja -->
     <div class="flex items-center gap-2">
-      <!-- BOTÓN VENTAS PENDIENTES CON CONTADOR -->
-      <button onclick="abrirModalPendientes()" id="btnPendientes" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer">
-        <i class="fa-solid fa-paperclip text-xs"></i>
+      <button onclick="abrirModalPendientes()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+        <i class="fa-solid fa-paperclip"></i>
         <span>Pendientes</span>
-        <span id="badgePendientesCount" class="w-4 h-4 rounded-full bg-white text-amber-700 text-[10px] font-black flex items-center justify-center">0</span>
+        <span id="badgeNumPendientes" class="w-4 h-4 rounded-full bg-white text-amber-800 text-[10px] flex items-center justify-center font-black">0</span>
       </button>
-
-      <button id="btnLupa" onclick="toggleBuscador()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-600 transition-all cursor-pointer" title="Buscar productos">
+      <button onclick="toggleBuscador()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition active:scale-95 cursor-pointer" title="Buscar producto">
         <i class="fa-solid fa-magnifying-glass text-xs"></i>
       </button>
-
-      <button onclick="abrirModalEditorCarta()" class="w-9 h-9 rounded-xl bg-orange-600 text-white hover:bg-orange-700 active:scale-95 flex items-center justify-center transition-all shadow-sm cursor-pointer" title="Editar carta, categorías e IVA">
+      <button onclick="abrirModalEditorCarta()" class="w-9 h-9 rounded-xl bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center shadow-xs transition active:scale-95 cursor-pointer" title="Editor de Carta e IVA en la nube">
         <i class="fa-solid fa-pen-to-square text-xs"></i>
       </button>
-
-      <button onclick="toggleAjustesModal()" class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 hover:bg-amber-200 active:scale-95 flex items-center justify-center transition-all cursor-pointer" title="Datos fiscales">
+      <button onclick="toggleAjustesModal()" class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 hover:bg-amber-200 flex items-center justify-center transition active:scale-95 cursor-pointer" title="Datos fiscales">
         <i class="fa-solid fa-sliders text-xs"></i>
       </button>
-
-      <button onclick="abrirModalCaja()" class="px-3 py-1.5 rounded-xl bg-slate-800 text-white hover:bg-slate-900 active:scale-95 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" title="Cierre Z">
-        <i class="fa-solid fa-vault text-xs text-amber-400"></i>
+      <button onclick="abrirModalCaja()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+        <i class="fa-solid fa-cash-register"></i>
         <span>Caja</span>
       </button>
     </div>
   </header>
 
-  <!-- BARRA DE BÚSQUEDA RÁPIDA DESPLEGABLE -->
-  <div id="barraBuscador" class="hidden bg-white border-b border-orange-200/80 px-4 py-2 shrink-0">
-    <div class="relative flex items-center max-w-xl mx-auto">
-      <i class="fa-solid fa-search absolute left-3.5 text-slate-400 text-xs"></i>
-      <input type="text" id="inputBuscar" oninput="filtrarProductos()" placeholder="Buscar café, pan, bollería..." class="w-full pl-9 pr-8 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs focus:outline-none focus:border-orange-500">
+  <!-- BARRA DE BÚSQUEDA RÁPIDA -->
+  <div id="barraBuscador" class="hidden bg-white border-b border-orange-100 px-4 py-2 transition-all">
+    <div class="relative flex items-center">
+      <i class="fa-solid fa-search absolute left-3 text-slate-400 text-xs"></i>
+      <input type="text" id="inputBuscar" oninput="filtrarProductos()" placeholder="Buscar café, pan, bollería..." class="w-full pl-8 pr-8 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs focus:outline-none focus:border-orange-400">
       <button onclick="toggleBuscador()" class="absolute right-2.5 text-slate-400 hover:text-slate-600 p-1">
         <i class="fa-solid fa-xmark text-xs"></i>
       </button>
     </div>
   </div>
 
-  <!-- TOAST DE NOTIFICACIÓN DE ARTÍCULO -->
-  <div id="toastArticuloAñadido" class="fixed top-14 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-xl z-50 hidden flex items-center gap-2 border border-slate-700">
-    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-    <span id="toastArticuloTexto">+1 Artículo añadido</span>
+  <!-- AVISO VISUAL DE MESA ACTIVA SI ESTÁ CARGADA -->
+  <div id="bannerMesaCargada" class="hidden bg-orange-600 text-white px-4 py-2 text-xs font-bold flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-chair"></i>
+      <span>Comanda asignada a: <span id="txtNombreMesaEnComanda" class="underline">Mesa 1</span></span>
+    </div>
+    <button onclick="desvincularMesaComanda()" class="px-2 py-0.5 bg-black/20 hover:bg-black/30 rounded text-[11px] font-semibold cursor-pointer">
+      Desvincular a Barra
+    </button>
   </div>
 
-  <!-- LAYOUT PRINCIPAL DIVIDIDO: IZQUIERDA (TICKET & TECLADO TÁCTIL) | DERECHA (CATEGORÍAS & PRODUCTOS) -->
-  <main class="flex-1 flex overflow-hidden p-2 gap-2">
-    
-    <!-- COLUMNA IZQUIERDA: TICKET CORRIENTE + BOTONES OPERATIVOS + TECLADO NUMÉRICO -->
-    <section class="w-[360px] md:w-[400px] bg-white rounded-2xl border border-orange-200/80 shadow-sm flex flex-col shrink-0 overflow-hidden">
-      
-      <!-- SUB-CABECERA DEL TICKET -->
-      <div class="px-4 py-2.5 bg-orange-50/50 border-b border-orange-100 flex items-center justify-between">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-black text-xs text-slate-900 tracking-wider uppercase font-display" id="txtTicketDestino">BARRA</span>
-            <span class="text-[10px] text-slate-400 font-mono font-bold" id="txtTicketCorrelativo">#T-001</span>
+  <!-- CONTENIDO PRINCIPAL: MOSTRADOR TÁCTIL (DIVIDIDO EN 2 COLUMNAS) -->
+  <main class="flex-1 p-3 grid grid-cols-12 gap-3 overflow-hidden">
+
+    <!-- COLUMNA IZQUIERDA: TICKET CONTABLE EN TIEMPO REAL & TECLADO FÍSICO -->
+    <div class="col-span-12 lg:col-span-4 bg-white rounded-2xl border border-orange-100/90 shadow-sm flex flex-col justify-between p-3.5">
+      <div>
+        <!-- Cabecera del Ticket -->
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-extrabold text-slate-900 uppercase tracking-wider" id="ticketServicioTitulo">BARRA #T-001</span>
+            <span class="block text-[11px] text-slate-400 font-medium" id="ticketClienteSub">Cliente General</span>
           </div>
-          <span class="text-[11px] text-slate-500 font-medium">Cliente General</span>
+          <button onclick="vaciarTicket()" class="px-2.5 py-1 rounded-lg text-rose-500 hover:bg-rose-50 border border-rose-200 text-[11px] font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-trash-can text-[10px]"></i> Limpiar
+          </button>
         </div>
-        <button onclick="vaciarTicket()" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 font-bold text-[11px] flex items-center gap-1 active:scale-95 transition-all">
-          <i class="fa-solid fa-trash-can text-[10px]"></i> Limpiar
-        </button>
-      </div>
 
-      <!-- CABECERAS DE COLUMNA DE ARTÍCULOS -->
-      <div class="grid grid-cols-12 px-4 py-1.5 bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-        <span class="col-span-6">Artículo</span>
-        <span class="col-span-2 text-center">Cant</span>
-        <span class="col-span-2 text-right">Precio</span>
-        <span class="col-span-2 text-right">Total</span>
-      </div>
-
-      <!-- LISTADO DE LÍNEAS DE TICKET -->
-      <div id="ticketItems" class="flex-1 overflow-y-auto px-4 py-1 divide-y divide-slate-100 no-scrollbar">
-        <div class="h-full flex flex-col items-center justify-center text-center p-6 text-slate-400 space-y-2">
-          <span class="text-3xl opacity-40">🧾</span>
-          <p class="text-xs font-semibold">Ticket vacío.<br>Toca los productos de la derecha para sumar.</p>
+        <!-- Encabezado de Columnas del Ticket -->
+        <div class="grid grid-cols-12 text-[10px] uppercase font-bold text-slate-400 py-1.5 border-b border-slate-100">
+          <span class="col-span-6">ARTÍCULO</span>
+          <span class="col-span-2 text-center">CANT</span>
+          <span class="col-span-2 text-right">PRECIO</span>
+          <span class="col-span-2 text-right">TOTAL</span>
         </div>
-      </div>
 
-      <!-- DESGLOSE TOTAL A PAGAR -->
-      <div class="px-4 py-2.5 bg-amber-50/60 border-t border-amber-200/60 flex items-center justify-between">
-        <div>
-          <span class="text-[10px] uppercase font-extrabold tracking-wider text-amber-900 block">Total a Pagar</span>
-          <span class="text-[11px] text-slate-500 font-semibold" id="txtDesgloseIVA">IVA inc. (0.00 €)</span>
-        </div>
-        <div class="text-right">
-          <span id="txtTotalPagar" class="text-2xl font-black font-display text-orange-600">0.00 €</span>
+        <!-- Lista de Productos en el Ticket -->
+        <div id="listaItemsTicket" class="divide-y divide-slate-50 overflow-y-auto max-h-[220px] min-h-[140px] pr-1">
+          <div class="text-center text-xs text-slate-300 py-12 flex flex-col items-center gap-2">
+            <i class="fa-solid fa-receipt text-2xl text-slate-200"></i>
+            <span>Ticket vacío.<br>Toca los productos de la derecha para sumar.</span>
+          </div>
         </div>
       </div>
 
-      <!-- TECLADO NUMÉRICO Y BOTONES OPERATIVOS ESTILO POS PROFESIONAL -->
-      <div class="p-2 bg-slate-50 border-t border-slate-200 grid grid-cols-4 gap-1.5 text-slate-800">
-        <!-- Fila 1 -->
-        <button onclick="tecladoNumero('7')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">7</button>
-        <button onclick="tecladoNumero('8')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">8</button>
-        <button onclick="tecladoNumero('9')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">9</button>
-        <button onclick="ejecutarCobro()" class="row-span-2 py-2 px-1 rounded-xl bg-[#c85a32] hover:bg-[#b04924] active:scale-95 text-white font-extrabold text-xs shadow-md shadow-orange-600/30 flex flex-col items-center justify-center gap-1">
-          <i class="fa-solid fa-cash-register text-base"></i>
-          <span>Finalizar Venta</span>
-          <span class="text-[9px] bg-black/20 px-1.5 py-0.5 rounded font-mono font-bold">F1</span>
+      <!-- Totales y Teclado Táctil de Cobro -->
+      <div class="pt-2 border-t border-slate-100 space-y-2">
+        <div class="bg-amber-50/50 p-2.5 rounded-xl border border-amber-100/80 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-bold text-amber-900 block uppercase tracking-wider">TOTAL A PAGAR</span>
+            <span class="text-[10px] text-slate-400 font-semibold" id="desgloseIvaTicket">IVA inc. (0.00 €)</span>
+          </div>
+          <span class="text-2xl font-black font-display text-orange-600" id="txtTotalPagar">0.00 €</span>
+        </div>
+
+        <!-- Teclado Numérico y Botonera Directa de Comanda -->
+        <div class="grid grid-cols-4 gap-1.5 text-slate-700 font-extrabold text-sm">
+          <button onclick="pulsarTeclaNum('7')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">7</button>
+          <button onclick="pulsarTeclaNum('8')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">8</button>
+          <button onclick="pulsarTeclaNum('9')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">9</button>
+          <button onclick="abrirModalCobroFinal()" class="col-span-1 row-span-2 py-2.5 bg-[#c85a32] hover:bg-[#b04a25] text-white rounded-xl shadow-md flex flex-col items-center justify-center gap-0.5 active:scale-95 transition cursor-pointer">
+            <i class="fa-solid fa-cash-register text-xs"></i>
+            <span class="text-[11px] leading-tight">Finalizar Venta</span>
+            <span class="text-[9px] opacity-75 font-mono">F1</span>
+          </button>
+
+          <button onclick="pulsarTeclaNum('4')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">4</button>
+          <button onclick="pulsarTeclaNum('5')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">5</button>
+          <button onclick="pulsarTeclaNum('6')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">6</button>
+
+          <button onclick="pulsarTeclaNum('1')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">1</button>
+          <button onclick="pulsarTeclaNum('2')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">2</button>
+          <button onclick="pulsarTeclaNum('3')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">3</button>
+          <button onclick="dejarTicketPendiente()" class="py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-xs text-xs font-bold flex items-center justify-center gap-1 active:scale-95 transition cursor-pointer" title="Aparcar ticket">
+            <i class="fa-solid fa-paperclip text-[10px]"></i>
+            <span class="text-[11px]">Dejar Pendiente</span>
+          </button>
+
+          <button onclick="pulsarTeclaNum('0')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">0</button>
+          <button onclick="pulsarTeclaNum(',')" class="py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/70 active:scale-95 transition">,</button>
+          <button onclick="pulsarTeclaNum('C')" class="py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl border border-rose-200 active:scale-95 transition">C</button>
+          <button onclick="abrirPlanoMesas()" class="py-2.5 bg-orange-50 hover:bg-orange-100 text-orange-800 rounded-xl border border-orange-200 text-xs font-bold flex items-center justify-center gap-1 active:scale-95 transition cursor-pointer">
+            <i class="fa-solid fa-chair text-[10px]"></i>
+            <span class="text-[11px]">Asignar a Mesa</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: CATEGORÍAS & BOTONES TÁCTILES DE PRODUCTOS -->
+    <div class="col-span-12 lg:col-span-8 flex flex-col gap-3">
+      <!-- Selector de Categorías Horizontal -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar" id="barraCategoriasMostrador">
+        <button onclick="abrirPlanoMesas()" class="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs shrink-0 active:scale-95 transition cursor-pointer">
+          <i class="fa-solid fa-chair"></i> Mesas
         </button>
-
-        <!-- Fila 2 -->
-        <button onclick="tecladoNumero('4')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">4</button>
-        <button onclick="tecladoNumero('5')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">5</button>
-        <button onclick="tecladoNumero('6')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">6</button>
-
-        <!-- Fila 3 -->
-        <button onclick="tecladoNumero('1')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">1</button>
-        <button onclick="tecladoNumero('2')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">2</button>
-        <button onclick="tecladoNumero('3')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">3</button>
-        <button onclick="aparcarVentaPendiente()" class="py-2 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold text-[11px] shadow-sm flex items-center justify-center gap-1" title="Aparcar comanda">
-          <i class="fa-solid fa-paperclip text-xs"></i>
-          <span>Dejar Pendiente</span>
-        </button>
-
-        <!-- Fila 4 -->
-        <button onclick="tecladoNumero('0')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">0</button>
-        <button onclick="tecladoNumero('.')" class="py-2.5 rounded-xl bg-white border border-slate-200 font-extrabold text-sm shadow-sm hover:bg-slate-100 active:scale-95">,</button>
-        <button onclick="tecladoBorrar()" class="py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 font-extrabold text-sm shadow-sm hover:bg-rose-100 active:scale-95">C</button>
-        <button onclick="abrirModalAsignarMesa()" class="py-2 rounded-xl bg-orange-100/80 hover:bg-orange-200 active:scale-95 text-orange-900 border border-orange-300 font-extrabold text-[11px] shadow-sm flex items-center justify-center gap-1.5" title="Asignar el ticket en curso a una mesa">
-          <i class="fa-solid fa-chair text-xs text-orange-700"></i>
-          <span>Asignar a Mesa</span>
-        </button>
-
-        <!-- Fila 5: BOTÓN PLANO MESAS -->
-        <button onclick="abrirModalMapaMesas()" class="col-span-4 py-2 rounded-xl bg-white hover:bg-orange-50 active:scale-95 text-orange-800 border border-orange-200 font-extrabold text-xs shadow-sm flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-chair text-orange-600"></i>
-          <span>Plano Mesas</span>
+        <button onclick="filtrarCategoria('todos', this)" class="btn-cat-tab px-4 py-2 rounded-xl bg-[#c85a32] text-white font-bold text-xs shadow-xs shrink-0 transition cursor-pointer">
+          ⭐ FAVORITOS / TODOS
         </button>
       </div>
-    </section>
 
-    <!-- COLUMNA DERECHA: BARRA DE CATEGORÍAS SUPERIOR + REJILLA DE PRODUCTOS TÁCTIL -->
-    <section class="flex-1 bg-white rounded-2xl border border-orange-200/80 shadow-sm flex flex-col overflow-hidden">
-      
-      <!-- BOTÓN ÚNICO "MESAS" Y CATEGORÍAS DE PRODUCTOS -->
-      <div class="p-2.5 border-b border-orange-100 bg-orange-50/30 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
-        <!-- BOTÓN ÚNICO MESAS -->
-        <button onclick="abrirModalMapaMesas()" class="px-4 py-2 rounded-xl bg-orange-600 text-white font-extrabold text-xs shadow-sm hover:bg-orange-700 active:scale-95 shrink-0 flex items-center gap-1.5">
-          <i class="fa-solid fa-chair text-xs"></i>
-          <span>Mesas</span>
-        </button>
-
-        <!-- BOTÓN FAVORITOS / TODOS -->
-        <button onclick="filtrarCategoria('todos', this)" id="btnCatTodos" class="btn-cat px-3.5 py-2 rounded-xl bg-orange-600 text-white font-bold text-xs shadow-sm shrink-0 flex items-center gap-1.5">
-          <i class="fa-solid fa-star text-amber-300 text-xs"></i>
-          <span>FAVORITOS / TODOS</span>
-        </button>
-
-        <!-- Pestañas dinámicas de categorías -->
-        <div id="pestañasCategorias" class="flex items-center gap-2 shrink-0"></div>
-      </div>
-
-      <!-- REJILLA DE PRODUCTOS TÁCTIL (GRID TIPO POS DE MOSTRADOR) -->
-      <div id="gridProductos" class="flex-1 overflow-y-auto p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 content-start no-scrollbar"></div>
-    </section>
+      <!-- Cuadrícula de Artículos Táctiles -->
+      <div id="gridArticulosMostrador" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 overflow-y-auto max-h-[calc(100vh-140px)] pr-1"></div>
+    </div>
   </main>
 
-  <!-- ============================================================== -->
-  <!-- MODAL 1: MAPA DE SALÓN Y MESAS ARRASTRABLES (100% PERSISTENTE) -->
-  <!-- ============================================================== -->
-  <div id="modalMapaMesas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-    <div class="bg-white rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl border border-orange-200 overflow-hidden">
-      <!-- Cabecera Plano -->
-      <div class="px-6 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-orange-50/50">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-orange-600 text-white flex items-center justify-center text-lg shadow-sm">
-            🪑
-          </div>
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-base font-display">Mapa de Mesas & Sala</h3>
-            <p class="text-xs text-slate-500 font-medium">Toca una mesa para gestionarla o arrástrala con el ratón/dedo</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="alternarModoMoverMesas()" id="btnModoMover" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all">
-            <i class="fa-solid fa-up-down-left-right text-xs"></i>
-            <span id="txtModoMover">Mover Mesas</span>
-          </button>
-          <button onclick="crearNuevaMesa()" class="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
-            <i class="fa-solid fa-plus text-xs"></i>
-            <span>Crear Mesa</span>
-          </button>
-          <button onclick="cerrarModalMapaMesas()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center active:scale-95">
-            <i class="fa-solid fa-xmark text-sm"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- LIENZO INTERACTIVO DEL PLANO DE MESAS -->
-      <div id="lienzoPlanoMesas" class="flex-1 bg-[#fffbf7] relative overflow-hidden p-4 border-inner" style="background-image: radial-gradient(#e5d7c8 1px, transparent 1px); background-size: 24px 24px;">
-        <!-- Se inyectan las mesas con coordenadas absolutas -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
-  <!-- MODAL 2: MENÚ DE OPCIONES DE MESA SELECCIONADA -->
-  <!-- ============================================================== -->
-  <div id="modalMesaOpciones" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-orange-100">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+  <!-- MODAL 1: SELECTOR DE 3 OPCIONES DE COBRO (EFECTIVO, TARJETA, BIZUM) -->
+  <div id="modalCobroOpciones" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-150">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div>
-          <h3 class="font-extrabold text-slate-900 text-base" id="modalMesaTitulo">Mesa 1</h3>
-          <span class="text-xs text-orange-600 font-bold" id="modalMesaSubtitulo">Estado actual: Libre</span>
+          <h3 class="font-black text-slate-900 text-base">Finalizar Venta</h3>
+          <p class="text-xs text-slate-400" id="subtituloModalCobro">Selecciona la forma de pago</p>
         </div>
-        <button onclick="cerrarModalMesa()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <!-- Selector Comensales -->
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-users text-orange-600 text-sm"></i>
-          <span class="text-xs font-bold text-slate-700">Comensales:</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="cambiarComensalesMesa(-1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 font-bold text-slate-600 hover:bg-slate-100">-</button>
-          <span id="txtComensalesModal" class="w-6 text-center font-extrabold text-sm text-slate-900">2</span>
-          <button onclick="cambiarComensalesMesa(1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 font-bold text-slate-600 hover:bg-slate-100">+</button>
-        </div>
-      </div>
-
-      <!-- Botones de Acción de Mesa -->
-      <div class="space-y-2 text-xs font-bold">
-        <button onclick="mesaAccionAñadirProducto()" class="w-full py-3 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-between active:scale-98 shadow-sm">
-          <span>➕ Añadir / Continuar Comanda</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-        <button onclick="mesaAccionVerTicket()" class="w-full py-3 px-4 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-between active:scale-98">
-          <span>🧾 Ver Ticket en Mostrador</span>
-          <span id="txtTotalMesaModal" class="text-orange-600 font-black">0.00 €</span>
-        </button>
-        <button onclick="mesaAccionCobrar()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-between active:scale-98 shadow-sm">
-          <span>💳 Cobrar Mesa</span>
-          <i class="fa-solid fa-cash-register"></i>
-        </button>
-        <button onclick="mesaAccionAnular()" class="w-full py-2.5 px-4 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 flex items-center justify-center gap-1.5 active:scale-98">
-          <i class="fa-solid fa-ban"></i>
-          <span>Anular / Liberar Mesa</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
-  <!-- MODAL 3: ASIGNAR EL TICKET EN CURSO A UNA MESA (NUEVA FUNCIÓN) -->
-  <!-- ============================================================== -->
-  <div id="modalAsignarMesa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl border border-orange-100">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-base">
-            🪑
-          </div>
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-sm">Asignar Ticket a Mesa</h3>
-            <p class="text-[11px] text-slate-500">Selecciona la mesa del salón a la que transferir esta comanda</p>
-          </div>
-        </div>
-        <button onclick="cerrarModalAsignarMesa()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-base"></i>
-        </button>
-      </div>
-
-      <div class="max-h-[300px] overflow-y-auto no-scrollbar grid grid-cols-2 gap-2.5 p-1" id="gridMesasParaAsignar">
-        <!-- Se inyectan las mesas disponibles -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
-  <!-- MODAL 4: VENTAS PENDIENTES (APARCADAS) -->
-  <!-- ============================================================== -->
-  <div id="modalPendientes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl border border-orange-100">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-paperclip text-amber-600"></i>
-          <h3 class="font-extrabold text-slate-900 text-sm">Ventas Dejadas Pendientes</h3>
-        </div>
-        <button onclick="cerrarModalPendientes()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-base"></i>
-        </button>
-      </div>
-      <div id="listaPendientes" class="space-y-2 max-h-[320px] overflow-y-auto no-scrollbar text-xs"></div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
-  <!-- MODAL 5: GESTOR DE CARTA EN LA NUBE CON MODIFICACIÓN TOTAL E IVA -->
-  <!-- ============================================================== -->
-  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl max-h-[90vh] flex flex-col border border-orange-100">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-orange-600"></i>
-          <h3 class="font-bold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
-        </div>
-        <button onclick="cerrarModalEditorCarta()" class="text-slate-400 hover:text-slate-600 p-1">
+        <button onclick="cerrarModalCobro()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <!-- Selector Subpestañas: Artículos vs Categorías -->
-      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
-        <button onclick="cambiarTabEditor('articulos', this)" class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600">📦 Artículos</button>
-        <button onclick="cambiarTabEditor('categorias', this)" class="btn-tab-editor py-1.5 rounded-lg text-slate-600">🏷️ Categorías</button>
+      <!-- Total Destacado -->
+      <div class="bg-amber-50/70 border border-amber-200/60 rounded-2xl p-4 text-center">
+        <span class="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">Importe a Cobrar</span>
+        <span class="text-3xl font-black text-slate-900 font-display block mt-1" id="txtTotalModalCobro">0.00 €</span>
+        <span class="text-[10px] text-slate-500 font-medium" id="txtArtsModalCobro">0 artículos</span>
       </div>
 
-      <!-- SUBPESTAÑA 1: GESTIÓN DE ARTÍCULOS CON TIPO DE IVA -->
+      <!-- Las 3 Opciones Solicitadas: Efectivo, Tarjeta, Bizum -->
+      <div class="grid grid-cols-1 gap-2.5 font-bold text-sm">
+        <button onclick="confirmarPagoMetodo('efectivo')" class="w-full py-3.5 px-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-xs active:scale-98 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-base shadow-xs">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </span>
+            <div class="text-left">
+              <span class="block leading-tight">Efectivo</span>
+              <span class="text-[11px] font-semibold text-emerald-600">Abre cajón y suma a efectivo</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-emerald-400"></i>
+        </button>
+
+        <button onclick="confirmarPagoMetodo('tarjeta')" class="w-full py-3.5 px-4 rounded-2xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 flex items-center justify-between shadow-xs active:scale-98 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center text-base shadow-xs">
+              <i class="fa-regular fa-credit-card"></i>
+            </span>
+            <div class="text-left">
+              <span class="block leading-tight">Tarjeta / Datáfono</span>
+              <span class="text-[11px] font-semibold text-blue-600">Registro en arqueo de datáfono</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-blue-400"></i>
+        </button>
+
+        <button onclick="confirmarPagoMetodo('bizum')" class="w-full py-3.5 px-4 rounded-2xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 flex items-center justify-between shadow-xs active:scale-98 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center text-base shadow-xs">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </span>
+            <div class="text-left">
+              <span class="block leading-tight">Bizum</span>
+              <span class="text-[11px] font-semibold text-sky-600">Pago móvil directo en cuenta</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-sky-400"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: GESTOR DE CARTA EN LA NUBE & SELECTOR DE IVA (BASE 5.4) -->
+  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-orange-600"></i>
+          <h3 class="font-extrabold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
+        </div>
+        <button onclick="cerrarModalEditorCarta()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
+        <button onclick="cambiarTabEditor('articulos', this)" class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-xs text-orange-600 cursor-pointer">📦 Artículos</button>
+        <button onclick="cambiarTabEditor('categorias', this)" class="btn-tab-editor py-1.5 rounded-lg text-slate-600 cursor-pointer">🏷️ Categorías</button>
+      </div>
+
       <div id="editorTabArticulos" class="space-y-3 flex-1 flex flex-col overflow-hidden">
         <div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-100 space-y-2 text-xs shrink-0">
           <div class="flex items-center justify-between">
-            <span class="font-extrabold text-orange-950 block" id="tituloFormArticulo">Añadir Nuevo Producto</span>
-            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar Edición</button>
+            <span class="font-bold text-orange-950 block" id="tituloFormArticulo">Añadir Nuevo Producto</span>
+            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[11px] text-rose-600 font-bold underline cursor-pointer">Cancelar</button>
           </div>
           <input type="hidden" id="editandoProdId" value="">
           <div class="grid grid-cols-2 gap-2">
@@ -400,1020 +306,151 @@
             <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs">
           </div>
           <div class="grid grid-cols-3 gap-2">
-            <select id="nuevoProdCat" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs"></select>
-            <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-center">
-            <!-- SELECTOR DE TIPO DE IVA (4%, 10%, 21%) -->
-            <select id="nuevoProdIVA" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700">
-              <option value="10" selected>IVA 10% (Hostelería)</option>
-              <option value="4">IVA 4% (Pan/Superreducido)</option>
-              <option value="21">IVA 21% (General/Alcohol)</option>
+            <select id="nuevoProdCat" class="px-2 py-1.5 rounded-xl border border-slate-200 bg-white text-xs col-span-1"></select>
+            <input type="text" id="nuevoProdIcono" placeholder="Emoji (🥤)" class="px-2 py-1.5 rounded-xl border border-slate-200 bg-white text-xs col-span-1 text-center">
+            <select id="nuevoProdIVA" class="px-2 py-1.5 rounded-xl border border-slate-200 bg-white text-xs col-span-1 font-bold text-slate-700">
+              <option value="10">IVA 10%</option>
+              <option value="4">IVA 4%</option>
+              <option value="21">IVA 21%</option>
             </select>
           </div>
-          <button id="btnGuardarProd" onclick="guardarNuevoProducto()" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm">
+          <button id="btnGuardarProd" onclick="guardarNuevoProducto()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-xs cursor-pointer">
             Guardar en la Nube
           </button>
         </div>
-        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1 no-scrollbar" id="listaEditorProductos"></div>
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
       </div>
 
-      <!-- SUBPESTAÑA 2: CATEGORÍAS -->
       <div id="editorTabCategorias" class="hidden space-y-3 flex-1 flex flex-col overflow-hidden">
         <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100 space-y-2 text-xs shrink-0">
           <div class="flex items-center justify-between">
-            <span class="font-extrabold text-amber-950 block" id="tituloFormCategoria">Nueva Categoría</span>
-            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar</button>
+            <span class="font-bold text-amber-950 block" id="tituloFormCategoria">Nueva Categoría</span>
+            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[11px] text-rose-600 font-bold underline cursor-pointer">Cancelar</button>
           </div>
           <input type="hidden" id="editandoCatId" value="">
           <div class="grid grid-cols-2 gap-2">
             <input type="text" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs">
-            <input type="text" id="nuevaCatIcono" placeholder="Emoji (ej. 🧃)" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-center">
+            <input type="text" id="nuevaCatIcono" placeholder="Emoji (ej. 🧃)" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs">
           </div>
-          <button id="btnGuardarCat" onclick="guardarCategoria()" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm">
+          <button id="btnGuardarCat" onclick="guardarCategoria()" class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-xs cursor-pointer">
             Guardar Categoría
           </button>
         </div>
-        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1 no-scrollbar" id="listaEditorCategorias"></div>
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorCategorias"></div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- MODAL 6: AJUSTES Y DATOS FISCALES -->
-  <!-- ============================================================== -->
-  <div id="modalAjustes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto border border-orange-100">
+  <!-- MODAL 3: MAPA DE SALA & MESAS ARRASTRABLES (BASE 5.4) -->
+  <div id="modalPlanoMesas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl w-full max-w-4xl p-5 space-y-3 shadow-2xl flex flex-col h-[88vh]">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-chair text-orange-600"></i>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Plano de Sala & Mesas</h3>
+            <p class="text-[11px] text-slate-400">Arrastra las mesas libremente o selecciónalas para comanda</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleModoMoverMesas()" id="btnModoMoverMesas" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer">
+            🖐️ Mover: OFF
+          </button>
+          <button onclick="crearNuevaMesaPrompt()" class="px-3 py-1.5 rounded-xl bg-orange-600 text-white text-xs font-bold shadow-xs transition hover:bg-orange-700 cursor-pointer">
+            + Crear Mesa
+          </button>
+          <button onclick="cerrarPlanoMesas()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 ml-1 cursor-pointer">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+      <div id="canvasPlanoMesas" class="flex-1 bg-stone-100/60 rounded-2xl border-2 border-dashed border-stone-200 relative overflow-hidden select-none"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: VENTAS PENDIENTES (APARCADAS) -->
+  <div id="modalPendientes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl">
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-orange-600"></i>
-          <h3 class="font-bold text-slate-900 text-sm">Configuración & Datos Fiscales</h3>
+          <i class="fa-solid fa-paperclip text-amber-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">Ventas Pendientes</h3>
         </div>
-        <button onclick="toggleAjustesModal()" class="text-slate-400 hover:text-slate-600 p-1">
+        <button onclick="cerrarModalPendientes()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
-      <div class="space-y-2.5 text-xs">
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Nombre Comercial</label>
-          <input type="text" id="cfgNombre" value="LA PIRULETA" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">CIF / NIF</label>
-          <input type="text" id="cfgCIF" placeholder="B-12345678" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Razón Social</label>
-          <input type="text" id="cfgRazonSocial" placeholder="Cafetería La Piruleta S.L." class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Dirección y C.P.</label>
-          <input type="text" id="cfgDireccion" placeholder="Calle Mayor 12, Madrid" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Teléfono</label>
-          <input type="text" id="cfgTelefono" placeholder="600 000 000" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Pie del Ticket</label>
-          <textarea id="cfgPieTicket" rows="2" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium"></textarea>
-        </div>
-        <div>
-          <label class="font-semibold text-slate-700 block mb-1">Número de Caja</label>
-          <input type="text" id="cfgCaja" value="Caja 1" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium">
-        </div>
-      </div>
-      <div class="pt-2 flex gap-2">
-        <button onclick="toggleAjustesModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs">Cerrar</button>
-        <button onclick="guardarAjustes()" class="flex-1 py-2.5 rounded-xl bg-orange-600 text-white font-semibold text-xs">Guardar</button>
-      </div>
+      <div id="listaPendientes" class="divide-y divide-slate-100 max-h-[300px] overflow-y-auto text-xs"></div>
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- MODAL 7: CAJA Y CIERRE Z -->
-  <!-- ============================================================== -->
-  <div id="modalCaja" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-orange-100">
+  <!-- MODAL 5: ARQUEO DE CAJA Y CIERRE Z -->
+  <div id="modalCajaArqueo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between pb-2 border-b border-slate-100">
         <div>
-          <h3 class="font-bold text-slate-900 text-sm">Arqueo y Cierre de Caja Z</h3>
-          <p class="text-xs text-slate-500">Cierre de turno diario</p>
+          <h3 class="font-black text-slate-900 text-sm">Arqueo de Turno</h3>
+          <p class="text-[11px] text-slate-400">Cierre Diario - Caja 1</p>
         </div>
-        <button onclick="cerrarModalCaja()" class="text-slate-400 hover:text-slate-600 p-1">
+        <button onclick="cerrarModalCaja()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
       <div class="grid grid-cols-2 gap-2 text-xs">
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-slate-500 block">Efectivo</span>
-          <span id="cajaEfectivo" class="text-base font-extrabold text-emerald-600 mt-1 block">0.00 €</span>
+        <div class="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-100">
+          <span class="text-[10px] text-emerald-800 font-bold block uppercase">Efectivo en Cajón</span>
+          <span id="cajaEfectivoTxt" class="text-lg font-black text-emerald-700 block mt-0.5">0.00 €</span>
         </div>
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-slate-500 block">Tarjeta</span>
-          <span id="cajaTarjeta" class="text-base font-extrabold text-blue-600 mt-1 block">0.00 €</span>
+        <div class="bg-blue-50/60 p-3 rounded-2xl border border-blue-100">
+          <span class="text-[10px] text-blue-800 font-bold block uppercase">Datáfono / Tarjeta</span>
+          <span id="cajaTarjetaTxt" class="text-lg font-black text-blue-700 block mt-0.5">0.00 €</span>
         </div>
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-slate-500 block">Bizum</span>
-          <span id="cajaBizum" class="text-base font-extrabold text-teal-600 mt-1 block">0.00 €</span>
+        <div class="bg-sky-50/60 p-3 rounded-2xl border border-sky-100">
+          <span class="text-[10px] text-sky-800 font-bold block uppercase">Bizum Recibidos</span>
+          <span id="cajaBizumTxt" class="text-lg font-black text-sky-700 block mt-0.5">0.00 €</span>
         </div>
-        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
-          <span class="text-amber-800 font-bold block">Total</span>
-          <span id="cajaTotal" class="text-base font-extrabold text-amber-900 mt-1 block">0.00 €</span>
+        <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-200">
+          <span class="text-[10px] text-amber-900 font-bold block uppercase">Total Ventas</span>
+          <span id="cajaTotalTxt" class="text-lg font-black text-amber-950 block mt-0.5">0.00 €</span>
         </div>
       </div>
-      <button onclick="confirmarCierreZ()" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-md">
-        Cerrar Turno y Descargar Resumen Z
+      <button onclick="confirmarCierreZ()" class="w-full py-3 bg-[#c85a32] hover:bg-[#b04a25] text-white rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 active:scale-98 transition cursor-pointer">
+        <i class="fa-solid fa-lock text-xs"></i>
+        <span>Cerrar Caja y Descargar Resumen Z</span>
       </button>
     </div>
   </div>
 
-  <!-- JAVASCRIPT: LÓGICA V5.4 100% OPERATIVA -->
-  <script>
-    // 1. FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyDZ5xWCNJu2y6xg5x3QT03zlv58LWL96zQ",
-      authDomain: "la-piruleta-tpv.firebaseapp.com",
-      projectId: "la-piruleta-tpv",
-      storageBucket: "la-piruleta-tpv.firebasestorage.app",
-      messagingSenderId: "84528722277",
-      appId: "1:84528722277:web:1dab40c7cf81fc92a0b18c"
-    };
-
-    let db = null;
-    try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.firestore();
-      document.getElementById('txtEstadoCloud').innerText = "Cloud Conectado";
-    } catch(e) {
-      console.warn("Modo local activo:", e);
-      document.getElementById('txtEstadoCloud').innerText = "Modo Local";
-    }
-
-    // Datos base
-    const categoriasBase = [
-      { id: 'pan', nombre: 'Pan', icono: '🥖' },
-      { id: 'bolleria', nombre: 'Bollería', icono: '🥐' },
-      { id: 'cafe', nombre: 'Café', icono: '☕' },
-      { id: 'tostadas', nombre: 'Tostadas', icono: '🥪' }
-    ];
-
-    const catalogoBase = [
-      { id: '1', nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, icono: '☕', iva: 10 },
-      { id: '2', nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, icono: '🥛', iva: 10 },
-      { id: '3', nombre: 'Cold Brew Nitro', categoria: 'cafe', precio: 3.40, icono: '🧊', iva: 10 },
-      { id: '4', nombre: 'Hogaza Masa Madre 1kg', categoria: 'pan', precio: 4.20, icono: '🥖', iva: 4 },
-      { id: '5', nombre: 'Barra Rústica Tradicional', categoria: 'pan', precio: 1.30, icono: '🥖', iva: 4 },
-      { id: '6', nombre: 'Croissant Mantequilla', categoria: 'bolleria', precio: 1.80, icono: '🥐', iva: 10 },
-      { id: '7', nombre: 'Napolitana Chocolate', categoria: 'bolleria', precio: 2.10, icono: '🍫', iva: 10 },
-      { id: '8', nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, icono: '🥪', iva: 10 }
-    ];
-
-    let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
-    let catalogo = JSON.parse(localStorage.getItem('piruleta_catalogo')) || catalogoBase;
-    let ticketActual = [];
-    let ventasPendientes = JSON.parse(localStorage.getItem('piruleta_pendientes')) || [];
-    let correlativoTicket = Number(localStorage.getItem('piruleta_correlativo')) || 1;
-    let servicioActivo = 'BARRA';
-    let mesaActivaSeleccionada = null;
-    let categoriaFiltroActiva = 'todos';
-    let modoMoverMesasActivo = false;
-
-    // Mesas iniciales con coordenadas para plano arrastrable
-    let mesas = JSON.parse(localStorage.getItem('piruleta_mesas_v5')) || [
-      { id: 1, nombre: 'Mesa 1', x: 40, y: 40, ocupada: false, pax: 2, ticket: [] },
-      { id: 2, nombre: 'Mesa 2', x: 180, y: 40, ocupada: false, pax: 2, ticket: [] },
-      { id: 3, nombre: 'Mesa 3', x: 320, y: 40, ocupada: false, pax: 4, ticket: [] },
-      { id: 4, nombre: 'Mesa 4', x: 460, y: 40, ocupada: false, pax: 4, ticket: [] },
-      { id: 5, nombre: 'Mesa 5', x: 40, y: 180, ocupada: false, pax: 2, ticket: [] },
-      { id: 6, nombre: 'Mesa 6', x: 180, y: 180, ocupada: false, pax: 4, ticket: [] },
-      { id: 7, nombre: 'Mesa 7', x: 320, y: 180, ocupada: false, pax: 6, ticket: [] },
-      { id: 8, nombre: 'Mesa 8', x: 460, y: 180, ocupada: false, pax: 4, ticket: [] }
-    ];
-
-    let caja = JSON.parse(localStorage.getItem('piruleta_caja')) || { efectivo: 0.0, tarjeta: 0.0, bizum: 0.0, total: 0.0 };
-    let datosFiscales = JSON.parse(localStorage.getItem('piruleta_datos_fiscales')) || {
-      nombre: "LA PIRULETA", cif: "", razonSocial: "", direccion: "", telefono: "",
-      pieTicket: "¡Muchas gracias por su visita! Vuelva pronto", caja: "Caja 1"
-    };
-
-    function guardarDatosLocales() {
-      localStorage.setItem('piruleta_catalogo', JSON.stringify(catalogo));
-      localStorage.setItem('piruleta_categorias', JSON.stringify(categorias));
-      localStorage.setItem('piruleta_mesas_v5', JSON.stringify(mesas));
-      localStorage.setItem('piruleta_pendientes', JSON.stringify(ventasPendientes));
-      localStorage.setItem('piruleta_caja', JSON.stringify(caja));
-      localStorage.setItem('piruleta_datos_fiscales', JSON.stringify(datosFiscales));
-      localStorage.setItem('piruleta_correlativo', correlativoTicket);
-    }
-
-    // SINCRONIZACIÓN FIREBASE FIRESTORE
-    if (db) {
-      db.collection("productos").onSnapshot((snapshot) => {
-        if (!snapshot.empty) {
-          const list = [];
-          snapshot.forEach(doc => {
-            const d = doc.data();
-            list.push({
-              id: doc.id,
-              docId: doc.id,
-              nombre: d.nombre,
-              precio: Number(d.precio) || 0,
-              categoria: d.categoria || 'cafe',
-              icono: d.icono || '☕',
-              iva: Number(d.iva) || 10
-            });
-          });
-          catalogo = list;
-          guardarDatosLocales();
-          renderCatalogo();
-          renderListaEditor();
-        } else {
-          catalogoBase.forEach(item => db.collection("productos").add(item));
-        }
-      });
-
-      db.collection("categorias").onSnapshot((snapshot) => {
-        if (!snapshot.empty) {
-          const catList = [];
-          snapshot.forEach(doc => {
-            const d = doc.data();
-            catList.push({ id: doc.id, docId: doc.id, nombre: d.nombre, icono: d.icono || '🏷️' });
-          });
-          categorias = catList;
-          guardarDatosLocales();
-          renderPestañasCategorias();
-          renderListaEditorCategorias();
-          actualizarSelectorCategoriasProducto();
-        }
-      });
-    }
-
-    // RENDERIZAR PRODUCTOS
-    function renderCatalogo(lista = catalogo) {
-      const grid = document.getElementById('gridProductos');
-      if (!grid) return;
-      grid.innerHTML = '';
-      lista.forEach(prod => {
-        const prodId = prod.id || prod.docId;
-        const card = document.createElement('div');
-        card.className = 'bg-white rounded-2xl p-3 border border-orange-100 hover:border-orange-300 shadow-sm flex flex-col justify-between active:scale-95 transition-all cursor-pointer min-h-[110px]';
-        card.innerHTML = `
-          <div class="flex items-start justify-between">
-            <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="text-xs font-black font-display text-slate-800 bg-orange-50 px-2 py-0.5 rounded-lg border border-orange-100">${Number(prod.precio || 0).toFixed(2)} €</span>
-          </div>
-          <div class="mt-2">
-            <h4 class="font-bold text-xs text-slate-900 leading-tight line-clamp-2">${prod.nombre}</h4>
-          </div>
-        `;
-        card.onclick = () => agregarAlTicket(prodId);
-        grid.appendChild(card);
-      });
-    }
-
-    // PESTAÑAS DE CATEGORÍA
-    function renderPestañasCategorias() {
-      const cont = document.getElementById('pestañasCategorias');
-      if (!cont) return;
-      cont.innerHTML = '';
-      categorias.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.onclick = () => filtrarCategoria(cat.id, btn);
-        btn.className = `btn-cat px-3 py-1.5 rounded-xl font-bold text-xs shrink-0 flex items-center gap-1.5 transition-all ${categoriaFiltroActiva === cat.id ? 'bg-orange-600 text-white shadow-sm' : 'bg-white text-slate-700 border border-orange-100 hover:bg-orange-50'}`;
-        btn.innerHTML = `<span>${cat.icono || '🏷️'}</span><span>${cat.nombre}</span>`;
-        cont.appendChild(btn);
-      });
-    }
-
-    function filtrarCategoria(catId, btn) {
-      categoriaFiltroActiva = catId;
-      document.querySelectorAll('.btn-cat').forEach(b => {
-        b.className = 'btn-cat px-3 py-1.5 rounded-xl bg-white text-slate-700 border border-orange-100 shrink-0 font-bold text-xs flex items-center gap-1.5';
-      });
-      if (btn) btn.className = 'btn-cat px-3.5 py-1.5 rounded-xl bg-orange-600 text-white font-bold text-xs shadow-sm shrink-0 flex items-center gap-1.5';
-      if (catId === 'todos') {
-        renderCatalogo(catalogo);
-      } else {
-        renderCatalogo(catalogo.filter(p => p.categoria === catId));
-      }
-    }
-
-    // TICKET Y OPERACIONES
-    function agregarAlTicket(id) {
-      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
-      if (!prod) return;
-      const existe = ticketActual.find(i => String(i.id) === String(id) || String(i.docId) === String(id));
-      if (existe) {
-        existe.cantidad += 1;
-      } else {
-        ticketActual.push({
-          id: prod.id || prod.docId,
-          docId: prod.docId || prod.id,
-          nombre: prod.nombre,
-          precio: Number(prod.precio) || 0,
-          categoria: prod.categoria,
-          icono: prod.icono || '☕',
-          iva: Number(prod.iva) || 10,
-          cantidad: 1
-        });
-      }
-
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ocupada = true;
-        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) {
-          mesas[idx].ocupada = true;
-          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
-        }
-      }
-
-      guardarDatosLocales();
-      actualizarTicketVisual();
-      mostrarToast('+1 ' + prod.nombre);
-    }
-
-    function cambiarCantidad(id, delta) {
-      const item = ticketActual.find(i => String(i.id) === String(id) || String(i.docId) === String(id));
-      if (!item) return;
-      item.cantidad += delta;
-      if (item.cantidad <= 0) {
-        ticketActual = ticketActual.filter(i => String(i.id) !== String(id) && String(i.docId) !== String(id));
-      }
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
-      }
-      guardarDatosLocales();
-      actualizarTicketVisual();
-    }
-
-    function vaciarTicket() {
-      ticketActual = [];
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ticket = [];
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) mesas[idx].ticket = [];
-      }
-      guardarDatosLocales();
-      actualizarTicketVisual();
-    }
-
-    function actualizarTicketVisual() {
-      const cont = document.getElementById('ticketItems');
-      const totalTxt = document.getElementById('txtTotalPagar');
-      const ivaTxt = document.getElementById('txtDesgloseIVA');
-
-      if (ticketActual.length === 0) {
-        cont.innerHTML = `
-          <div class="h-full flex flex-col items-center justify-center text-center p-6 text-slate-400 space-y-2">
-            <span class="text-3xl opacity-40">🧾</span>
-            <p class="text-xs font-semibold">Ticket vacío.<br>Toca los productos de la derecha para sumar.</p>
-          </div>
-        `;
-        totalTxt.innerText = '0.00 €';
-        ivaTxt.innerText = 'IVA inc. (0.00 €)';
-        return;
-      }
-
-      cont.innerHTML = '';
-      let total = 0;
-      let totalIva = 0;
-
-      ticketActual.forEach(item => {
-        const itemTotal = Number(item.precio || 0) * (Number(item.cantidad) || 1);
-        total += itemTotal;
-        const tipoIva = Number(item.iva) || 10;
-        const cuotaIva = itemTotal - (itemTotal / (1 + (tipoIva / 100)));
-        totalIva += cuotaIva;
-
-        const itemId = item.id || item.docId;
-        const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 py-2 items-center text-xs hover:bg-orange-50/40 rounded-xl px-1';
-        row.innerHTML = `
-          <div class="col-span-6 pr-1">
-            <span class="font-bold text-slate-800 block truncate">${item.nombre}</span>
-            <span class="text-[10px] text-slate-400">${Number(item.precio).toFixed(2)} € (IVA ${tipoIva}%)</span>
-          </div>
-          <div class="col-span-2 flex items-center justify-center gap-1 bg-slate-100 rounded-lg py-0.5 border border-slate-200">
-            <button onclick="cambiarCantidad('${itemId}', -1)" class="w-5 h-5 flex items-center justify-center font-black text-slate-500 hover:text-slate-900">-</button>
-            <span class="font-extrabold text-xs text-slate-800 w-4 text-center">${item.cantidad}</span>
-            <button onclick="cambiarCantidad('${itemId}', 1)" class="w-5 h-5 flex items-center justify-center font-black text-slate-500 hover:text-slate-900">+</button>
-          </div>
-          <span class="col-span-2 text-right font-medium text-slate-500 text-[11px]">${Number(item.precio).toFixed(2)} €</span>
-          <span class="col-span-2 text-right font-black text-slate-900 text-xs">${itemTotal.toFixed(2)} €</span>
-        `;
-        cont.appendChild(row);
-      });
-
-      totalTxt.innerText = total.toFixed(2) + ' €';
-      ivaTxt.innerText = 'IVA inc. (' + totalIva.toFixed(2) + ' €)';
-    }
-
-    // APARCAR VENTA (DEJAR PENDIENTE)
-    function aparcarVentaPendiente() {
-      if (ticketActual.length === 0) {
-        alert('El ticket está vacío. Añade productos antes de aparcar.');
-        return;
-      }
-      const fecha = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-      ventasPendientes.push({
-        id: Date.now(),
-        origen: servicioActivo,
-        ticket: JSON.parse(JSON.stringify(ticketActual)),
-        hora: fecha
-      });
-      vaciarTicket();
-      guardarDatosLocales();
-      actualizarBadgesPendientes();
-      mostrarToast('Comanda dejada pendiente');
-    }
-
-    function abrirModalPendientes() {
-      const modal = document.getElementById('modalPendientes');
-      const list = document.getElementById('listaPendientes');
-      modal.classList.remove('hidden');
-      if (ventasPendientes.length === 0) {
-        list.innerHTML = '<p class="text-slate-400 text-center py-6">No hay tickets aparcados en este momento.</p>';
-        return;
-      }
-      list.innerHTML = '';
-      ventasPendientes.forEach((p, idx) => {
-        const total = p.ticket.reduce((a, c) => a + (c.precio * c.cantidad), 0);
-        const div = document.createElement('div');
-        div.className = 'p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between';
-        div.innerHTML = `
-          <div>
-            <span class="font-extrabold text-slate-900 block">${p.origen} • ${p.hora}</span>
-            <span class="text-[11px] text-slate-500 font-semibold">${p.ticket.length} artículos • ${total.toFixed(2)} €</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="recuperarVentaPendiente(${idx})" class="px-3 py-1.5 rounded-xl bg-orange-600 text-white font-bold text-xs shadow-sm active:scale-95">Recuperar</button>
-            <button onclick="eliminarVentaPendiente(${idx})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center font-bold active:scale-95"><i class="fa-solid fa-trash-can text-xs"></i></button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function cerrarModalPendientes() { document.getElementById('modalPendientes').classList.add('hidden'); }
-    function recuperarVentaPendiente(idx) {
-      ticketActual = JSON.parse(JSON.stringify(ventasPendientes[idx].ticket));
-      servicioActivo = ventasPendientes[idx].origen;
-      document.getElementById('txtTicketDestino').innerText = servicioActivo;
-      ventasPendientes.splice(idx, 1);
-      guardarDatosLocales();
-      actualizarTicketVisual();
-      actualizarBadgesPendientes();
-      cerrarModalPendientes();
-    }
-    function eliminarVentaPendiente(idx) {
-      ventasPendientes.splice(idx, 1);
-      guardarDatosLocales();
-      actualizarBadgesPendientes();
-      abrirModalPendientes();
-    }
-    function actualizarBadgesPendientes() {
-      document.getElementById('badgePendientesCount').innerText = ventasPendientes.length;
-    }
-
-    // ==========================================
-    // ASIGNAR TICKET A MESA (NUEVA FUNCIÓN V5.3)
-    // ==========================================
-    function abrirModalAsignarMesa() {
-      if (ticketActual.length === 0) {
-        alert('No hay productos en el ticket para asignar. Añade artículos primero.');
-        return;
-      }
-      const grid = document.getElementById('gridMesasParaAsignar');
-      grid.innerHTML = '';
-      mesas.forEach(m => {
-        const btn = document.createElement('button');
-        btn.className = `p-3 rounded-2xl border text-left flex flex-col justify-between active:scale-95 transition-all ${m.ocupada ? 'bg-amber-50/80 border-amber-300 text-amber-950' : 'bg-slate-50 border-slate-200 text-slate-800 hover:border-orange-300'}`;
-        btn.innerHTML = `
-          <div class="flex items-center justify-between w-full">
-            <span class="font-black text-sm">${m.nombre}</span>
-            <span class="w-2.5 h-2.5 rounded-full ${m.ocupada ? 'bg-amber-500' : 'bg-emerald-500'}"></span>
-          </div>
-          <span class="text-[10px] font-bold mt-1 ${m.ocupada ? 'text-amber-700' : 'text-emerald-700'} uppercase">${m.ocupada ? 'Ocupada (Añadir)' : 'Libre (Asignar)'}</span>
-        `;
-        btn.onclick = () => confirmarAsignacionMesa(m.id);
-        grid.appendChild(btn);
-      });
-      document.getElementById('modalAsignarMesa').classList.remove('hidden');
-    }
-
-    function cerrarModalAsignarMesa() { document.getElementById('modalAsignarMesa').classList.add('hidden'); }
-
-    function confirmarAsignacionMesa(mesaId) {
-      const idx = mesas.findIndex(m => m.id === mesaId);
-      if (idx === -1) return;
-      // Añadir los artículos actuales al ticket existente de la mesa
-      ticketActual.forEach(item => {
-        const existe = (mesas[idx].ticket || []).find(i => String(i.id) === String(item.id) || String(i.docId) === String(item.docId));
-        if (existe) {
-          existe.cantidad += item.cantidad;
-        } else {
-          if (!mesas[idx].ticket) mesas[idx].ticket = [];
-          mesas[idx].ticket.push(JSON.parse(JSON.stringify(item)));
-        }
-      });
-      mesas[idx].ocupada = true;
-      const nombreMesa = mesas[idx].nombre;
-      vaciarTicket();
-      guardarDatosLocales();
-      cerrarModalAsignarMesa();
-      alert('¡Comanda asignada con éxito a ' + nombreMesa + '!');
-      renderPlanoMesas();
-    }
-
-    // ==========================================
-    // PLANO DE MESAS ARRASTRABLE
-    // ==========================================
-    function abrirModalMapaMesas() {
-      document.getElementById('modalMapaMesas').classList.remove('hidden');
-      renderPlanoMesas();
-    }
-    function cerrarModalMapaMesas() { document.getElementById('modalMapaMesas').classList.add('hidden'); }
-
-    function alternarModoMoverMesas() {
-      modoMoverMesasActivo = !modoMoverMesasActivo;
-      const btn = document.getElementById('btnModoMover');
-      const txt = document.getElementById('txtModoMover');
-      if (modoMoverMesasActivo) {
-        btn.className = 'px-3.5 py-2 rounded-xl bg-orange-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm';
-        txt.innerText = 'Bloquear Posición';
-      } else {
-        btn.className = 'px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-1.5';
-        txt.innerText = 'Mover Mesas';
-      }
-      renderPlanoMesas();
-    }
-
-    function crearNuevaMesa() {
-      const nuevoId = mesas.length > 0 ? Math.max(...mesas.map(m => m.id)) + 1 : 1;
-      mesas.push({
-        id: nuevoId,
-        nombre: 'Mesa ' + nuevoId,
-        x: 50,
-        y: 50,
-        ocupada: false,
-        pax: 2,
-        ticket: []
-      });
-      guardarDatosLocales();
-      renderPlanoMesas();
-    }
-
-    function renderPlanoMesas() {
-      const lienzo = document.getElementById('lienzoPlanoMesas');
-      if (!lienzo) return;
-      lienzo.innerHTML = '';
-
-      mesas.forEach(m => {
-        const totalMesa = (m.ticket || []).reduce((a, c) => a + (c.precio * c.cantidad), 0);
-        const card = document.createElement('div');
-        card.id = 'mesa-elem-' + m.id;
-        card.style.position = 'absolute';
-        card.style.left = (m.x || 40) + 'px';
-        card.style.top = (m.y || 40) + 'px';
-        card.className = `w-28 h-28 rounded-3xl p-3 flex flex-col justify-between cursor-pointer border-2 shadow-lg transition-transform active:scale-95 select-none ${m.ocupada ? 'bg-rose-50 border-rose-300 text-rose-950 shadow-rose-500/10' : 'bg-white border-orange-200 text-slate-800 shadow-orange-500/5'}`;
-        
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="w-2.5 h-2.5 rounded-full ${m.ocupada ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}"></span>
-            <span class="text-[10px] font-bold text-slate-400">${m.pax || 2}p</span>
-          </div>
-          <div class="text-center">
-            <span class="font-black text-sm font-display block">${m.nombre}</span>
-            <span class="text-[11px] font-extrabold ${m.ocupada ? 'text-rose-600' : 'text-emerald-600'}">${m.ocupada ? totalMesa.toFixed(2) + ' €' : 'Libre'}</span>
-          </div>
-          <span class="text-[9px] text-slate-400 text-center font-medium">${modoMoverMesasActivo ? 'Arrastrar' : 'Gestionar'}</span>
-        `;
-
-        // Click para gestionar si no se está arrastrando
-        card.onclick = (e) => {
-          if (card.dataset.arrastrado === "true") {
-            card.dataset.arrastrado = "false";
-            return;
-          }
-          abrirModalMesa(m.id);
-        };
-
-        // Eventos táctiles y ratón para mover mesas
-        let isDragging = false;
-        let startX, startY, origX, origY;
-
-        const onStart = (e) => {
-          if (!modoMoverMesasActivo) return;
-          isDragging = true;
-          card.dataset.arrastrado = "false";
-          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          startX = clientX;
-          startY = clientY;
-          origX = m.x || 40;
-          origY = m.y || 40;
-          card.style.zIndex = 50;
-        };
-
-        const onMove = (e) => {
-          if (!isDragging) return;
-          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          const deltaX = clientX - startX;
-          const deltaY = clientY - startY;
-          if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) card.dataset.arrastrado = "true";
-          m.x = Math.max(10, Math.min(lienzo.clientWidth - 120, origX + deltaX));
-          m.y = Math.max(10, Math.min(lienzo.clientHeight - 120, origY + deltaY));
-          card.style.left = m.x + 'px';
-          card.style.top = m.y + 'px';
-        };
-
-        const onEnd = () => {
-          if (!isDragging) return;
-          isDragging = false;
-          card.style.zIndex = 10;
-          guardarDatosLocales();
-        };
-
-        card.addEventListener('mousedown', onStart);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onEnd);
-        card.addEventListener('touchstart', onStart, { passive: true });
-        window.addEventListener('touchmove', onMove, { passive: true });
-        window.addEventListener('touchend', onEnd);
-
-        lienzo.appendChild(card);
-      });
-    }
-
-    // ACCIONES DE MESA INDIVIDUAL
-    function abrirModalMesa(id) {
-      const mesa = mesas.find(m => m.id === id);
-      if (!mesa) return;
-      mesaActivaSeleccionada = mesa;
-      document.getElementById('modalMesaTitulo').innerText = mesa.nombre;
-      document.getElementById('modalMesaSubtitulo').innerText = mesa.ocupada ? `OCUPADA (${mesa.pax || 2} Pax)` : `LIBRE (${mesa.pax || 2} Pax)`;
-      document.getElementById('txtComensalesModal').innerText = mesa.pax || 2;
-      const totalMesa = (mesa.ticket || []).reduce((a, c) => a + (c.precio * c.cantidad), 0);
-      document.getElementById('txtTotalMesaModal').innerText = totalMesa.toFixed(2) + ' €';
-      document.getElementById('modalMesaOpciones').classList.remove('hidden');
-    }
-    function cerrarModalMesa() { document.getElementById('modalMesaOpciones').classList.add('hidden'); }
-
-    function cambiarComensalesMesa(delta) {
-      if (!mesaActivaSeleccionada) return;
-      mesaActivaSeleccionada.pax = Math.max(1, (mesaActivaSeleccionada.pax || 2) + delta);
-      document.getElementById('txtComensalesModal').innerText = mesaActivaSeleccionada.pax;
-      guardarDatosLocales();
-      renderPlanoMesas();
-    }
-
-    function mesaAccionAñadirProducto() {
-      if (!mesaActivaSeleccionada) return;
-      mesaActivaSeleccionada.ocupada = true;
-      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
-      document.getElementById('txtTicketDestino').innerText = servicioActivo;
-      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
-      guardarDatosLocales();
-      actualizarTicketVisual();
-      cerrarModalMesa();
-      cerrarModalMapaMesas();
-    }
-
-    function mesaAccionVerTicket() {
-      if (!mesaActivaSeleccionada) return;
-      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
-      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
-      document.getElementById('txtTicketDestino').innerText = servicioActivo;
-      actualizarTicketVisual();
-      cerrarModalMesa();
-      cerrarModalMapaMesas();
-    }
-
-    function mesaAccionCobrar() {
-      if (!mesaActivaSeleccionada) return;
-      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
-      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
-      document.getElementById('txtTicketDestino').innerText = servicioActivo;
-      actualizarTicketVisual();
-      cerrarModalMesa();
-      cerrarModalMapaMesas();
-      ejecutarCobro();
-    }
-
-    function mesaAccionAnular() {
-      if (!mesaActivaSeleccionada) return;
-      if (!confirm('¿Deseas liberar ' + mesaActivaSeleccionada.nombre + ' y anular su cuenta?')) return;
-      mesaActivaSeleccionada.ocupada = false;
-      mesaActivaSeleccionada.ticket = [];
-      const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-      if (idx !== -1) { mesas[idx].ocupada = false; mesas[idx].ticket = []; }
-      guardarDatosLocales();
-      cerrarModalMesa();
-      renderPlanoMesas();
-    }
-
-    // FINALIZAR VENTA (COBRO F1)
-    function ejecutarCobro() {
-      if (ticketActual.length === 0) {
-        alert('No hay productos en el ticket para cobrar.');
-        return;
-      }
-      const total = ticketActual.reduce((a, c) => a + (c.precio * c.cantidad), 0);
-      caja.tarjeta += total;
-      caja.total += total;
-
-      if (mesaActivaSeleccionada) {
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) { mesas[idx].ocupada = false; mesas[idx].ticket = []; }
-        mesaActivaSeleccionada = null;
-      }
-
-      correlativoTicket += 1;
-      document.getElementById('txtTicketCorrelativo').innerText = '#T-' + String(correlativoTicket).padStart(3, '0');
-      servicioActivo = 'BARRA';
-      document.getElementById('txtTicketDestino').innerText = 'BARRA';
-
-      vaciarTicket();
-      guardarDatosLocales();
-      alert('¡Cobro de ' + total.toFixed(2) + ' € completado con éxito!');
-      renderPlanoMesas();
-    }
-
-    // TECLADO NUMÉRICO TÁCTIL
-    function tecladoNumero(num) { mostrarToast('Entrada: ' + num); }
-    function tecladoBorrar() { mostrarToast('Borrado'); }
-
-    // GESTOR DE CARTA EN LA NUBE (EDICIÓN TOTAL Y TIPOS DE IVA)
-    function abrirModalEditorCarta() {
-      document.getElementById('modalEditorCarta').classList.remove('hidden');
-      renderListaEditor();
-      renderListaEditorCategorias();
-      actualizarSelectorCategoriasProducto();
-    }
-    function cerrarModalEditorCarta() {
-      document.getElementById('modalEditorCarta').classList.add('hidden');
-      cancelarEdicionProducto();
-      cancelarEdicionCategoria();
-    }
-
-    function cambiarTabEditor(tab, btn) {
-      document.querySelectorAll('.btn-tab-editor').forEach(b => {
-        b.className = 'btn-tab-editor py-1.5 rounded-lg text-slate-600 font-bold';
-      });
-      btn.className = 'btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600 font-bold';
-      if (tab === 'articulos') {
-        document.getElementById('editorTabArticulos').classList.remove('hidden');
-        document.getElementById('editorTabCategorias').classList.add('hidden');
-      } else {
-        document.getElementById('editorTabArticulos').classList.add('hidden');
-        document.getElementById('editorTabCategorias').classList.remove('hidden');
-      }
-    }
-
-    function actualizarSelectorCategoriasProducto() {
-      const sel = document.getElementById('nuevoProdCat');
-      if (!sel) return;
-      sel.innerHTML = '';
-      categorias.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.innerText = (c.icono || '🏷️') + ' ' + c.nombre;
-        sel.appendChild(opt);
-      });
-    }
-
-    function renderListaEditor() {
-      const list = document.getElementById('listaEditorProductos');
-      if (!list) return;
-      list.innerHTML = '';
-      catalogo.forEach(p => {
-        const prodId = p.id || p.docId;
-        const tipoIva = Number(p.iva) || 10;
-        const div = document.createElement('div');
-        div.className = 'py-2 flex items-center justify-between';
-        div.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-base">${p.icono || '☕'}</span>
-            <div>
-              <span class="font-bold text-slate-800 block leading-tight">${p.nombre}</span>
-              <span class="text-[10px] text-slate-400 font-medium">${Number(p.precio).toFixed(2)} € • ${p.categoria} • <b class="text-orange-700">IVA ${tipoIva}%</b></span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="cargarProductoParaEditar('${prodId}')" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-pen text-[10px]"></i></button>
-            <button onclick="eliminarProducto('${prodId}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center font-bold"><i class="fa-solid fa-trash text-[10px]"></i></button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function cargarProductoParaEditar(id) {
-      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
-      if (!prod) return;
-      document.getElementById('editandoProdId').value = prod.id || prod.docId;
-      document.getElementById('nuevoProdNombre').value = prod.nombre;
-      document.getElementById('nuevoProdPrecio').value = prod.precio;
-      document.getElementById('nuevoProdCat').value = prod.categoria;
-      document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
-      document.getElementById('nuevoProdIVA').value = prod.iva || 10;
-
-      document.getElementById('tituloFormArticulo').innerText = "Editar: " + prod.nombre;
-      document.getElementById('btnGuardarProd').innerText = "Actualizar en la Nube";
-      document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
-    }
-
-    function cancelarEdicionProducto() {
-      document.getElementById('editandoProdId').value = "";
-      document.getElementById('nuevoProdNombre').value = "";
-      document.getElementById('nuevoProdPrecio').value = "";
-      document.getElementById('nuevoProdIcono').value = "";
-      document.getElementById('nuevoProdIVA').value = "10";
-      document.getElementById('tituloFormArticulo').innerText = "Añadir Nuevo Producto";
-      document.getElementById('btnGuardarProd').innerText = "Guardar en la Nube";
-      document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
-    }
-
-    function guardarNuevoProducto() {
-      const editId = document.getElementById('editandoProdId').value;
-      const nom = document.getElementById('nuevoProdNombre').value.trim();
-      const pre = parseFloat(document.getElementById('nuevoProdPrecio').value);
-      const cat = document.getElementById('nuevoProdCat').value;
-      const ico = document.getElementById('nuevoProdIcono').value.trim() || '☕';
-      const iva = Number(document.getElementById('nuevoProdIVA').value) || 10;
-
-      if (!nom || isNaN(pre)) {
-        alert('Por favor introduce un nombre y un precio válido.');
-        return;
-      }
-
-      const prodData = { nombre: nom, precio: pre, categoria: cat, icono: ico, iva: iva };
-
-      if (editId) {
-        if (db) {
-          db.collection("productos").doc(editId).update(prodData);
-        } else {
-          const idx = catalogo.findIndex(p => String(p.id) === String(editId) || String(p.docId) === String(editId));
-          if (idx !== -1) catalogo[idx] = { ...catalogo[idx], ...prodData };
-        }
-      } else {
-        if (db) {
-          db.collection("productos").add(prodData);
-        } else {
-          catalogo.push({ id: Date.now(), ...prodData });
-        }
-      }
-
-      guardarDatosLocales();
-      cancelarEdicionProducto();
-      renderCatalogo();
-      renderListaEditor();
-    }
-
-    function eliminarProducto(id) {
-      if (!confirm('¿Eliminar este producto de la carta?')) return;
-      if (db) {
-        db.collection("productos").doc(id).delete();
-      } else {
-        catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
-      }
-      guardarDatosLocales();
-      renderCatalogo();
-      renderListaEditor();
-    }
-
-    // CATEGORÍAS
-    function renderListaEditorCategorias() {
-      const list = document.getElementById('listaEditorCategorias');
-      if (!list) return;
-      list.innerHTML = '';
-      categorias.forEach(c => {
-        const catId = c.id || c.docId;
-        const div = document.createElement('div');
-        div.className = 'py-2 flex items-center justify-between';
-        div.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-base">${c.icono || '🏷️'}</span>
-            <span class="font-bold text-slate-800">${c.nombre}</span>
-          </div>
-          <button onclick="eliminarCategoria('${catId}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center font-bold"><i class="fa-solid fa-trash text-[10px]"></i></button>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function guardarCategoria() {
-      const nom = document.getElementById('nuevaCatNombre').value.trim();
-      const ico = document.getElementById('nuevaCatIcono').value.trim() || '🏷️';
-      if (!nom) { alert('Nombre de categoría obligatorio.'); return; }
-      const catData = { nombre: nom, icono: ico };
-      if (db) {
-        db.collection("categorias").add(catData);
-      } else {
-        categorias.push({ id: nom.toLowerCase().replace(/s+/g, '_'), ...catData });
-      }
-      document.getElementById('nuevaCatNombre').value = '';
-      document.getElementById('nuevaCatIcono').value = '';
-      guardarDatosLocales();
-      renderPestañasCategorias();
-      renderListaEditorCategorias();
-      actualizarSelectorCategoriasProducto();
-    }
-
-    function eliminarCategoria(id) {
-      if (!confirm('¿Eliminar esta categoría?')) return;
-      if (db) db.collection("categorias").doc(id).delete();
-      else categorias = categorias.filter(c => String(c.id) !== String(id) && String(c.docId) !== String(id));
-      guardarDatosLocales();
-      renderPestañasCategorias();
-      renderListaEditorCategorias();
-    }
-
-    // AJUSTES FISCALES
-    function toggleAjustesModal() {
-      const m = document.getElementById('modalAjustes');
-      m.classList.toggle('hidden');
-      if (!m.classList.contains('hidden')) {
-        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
-        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
-        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
-        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
-        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
-        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
-        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
-      }
-    }
-
-    function guardarAjustes() {
-      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
-      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
-      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
-      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
-      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
-      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
-      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
-      guardarDatosLocales();
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
-      toggleAjustesModal();
-      alert('¡Datos fiscales guardados!');
-    }
-
-    // CAJA Z
-    function abrirModalCaja() {
-      document.getElementById('cajaEfectivo').innerText = caja.efectivo.toFixed(2) + ' €';
-      document.getElementById('cajaTarjeta').innerText = caja.tarjeta.toFixed(2) + ' €';
-      document.getElementById('cajaBizum').innerText = caja.bizum.toFixed(2) + ' €';
-      document.getElementById('cajaTotal').innerText = caja.total.toFixed(2) + ' €';
-      document.getElementById('modalCaja').classList.remove('hidden');
-    }
-    function cerrarModalCaja() { document.getElementById('modalCaja').classList.add('hidden'); }
-
-    function confirmarCierreZ() {
-      if (!confirm('¿Cerrar el turno y reiniciar caja a 0.00 €?')) return;
-      const resumen = "CIERRE DE CAJA Z - LA PIRULETA\nFecha: " + new Date().toLocaleString('es-ES') + "\nTotal: " + caja.total.toFixed(2) + " €";
-      const blob = new Blob([resumen], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Cierre_Z_' + new Date().toISOString().slice(0,10) + '.txt';
-      a.click();
-      caja = { efectivo: 0.0, tarjeta: 0.0, bizum: 0.0, total: 0.0 };
-      guardarDatosLocales();
-      cerrarModalCaja();
-      alert('Resumen Z descargado y caja reseteada a 0.00 €.');
-    }
-
-    // BUSCADOR RÁPIDO
-    function toggleBuscador() {
-      const b = document.getElementById('barraBuscador');
-      const inp = document.getElementById('inputBuscar');
-      b.classList.toggle('hidden');
-      if (!b.classList.contains('hidden')) inp.focus();
-      else { inp.value = ''; renderCatalogo(catalogo); }
-    }
-    function filtrarProductos() {
-      const q = document.getElementById('inputBuscar').value.toLowerCase();
-      renderCatalogo(catalogo.filter(p => p.nombre.toLowerCase().includes(q)));
-    }
-
-    function mostrarToast(txt) {
-      const toast = document.getElementById('toastArticuloAñadido');
-      document.getElementById('toastArticuloTexto').innerText = txt;
-      toast.classList.remove('hidden');
-      clearTimeout(window._t);
-      window._t = setTimeout(() => toast.classList.add('hidden'), 1200);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      renderCatalogo();
-      renderPestañasCategorias();
-      actualizarBadgesPendientes();
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre || "LA PIRULETA";
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja || "Caja 1";
-    });
-  </script>
-</body>
-</html>
+  <!-- MODAL 6: AJUSTES & DATOS FISCALES -->
+  <div id="modalAjustes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 class="font-extrabold text-slate-900 text-sm">Datos Fiscales y Ticket</h3>
+        <button onclick="toggleAjustesModal()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Nombre Comercial</label>
+          <input type="text" id="cfgNombre" value="LA PIRULETA" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">CIF / NIF</label>
+          <input type="text" id="cfgCIF" placeholder="B-12345678" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Nombre Fiscal / Razón Social</label>
+          <input type="text" id="cfgRazonSocial" placeholder="Cafetería La Piruleta S.L." class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Dirección y Código Postal</label>
+          <input type="text" id="cfgDireccion" placeholder="Calle Mayor 12, 28001 Madrid" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Teléfono / WhatsApp</label>
+          <input type="text" id="cfgTelefono" placeholder="600 000 000" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Pie del Ticket (Agradecimiento)</label>
+          <textarea id="cfgPieTicket" rows="2" placeholder="¡Muchas gracias por su visita! Vuelva pronto" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
