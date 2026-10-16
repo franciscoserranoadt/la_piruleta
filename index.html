@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
@@ -10,10 +9,10 @@
 <title>TPV LA PIRULETA v5.2</title>
 <link href="./manifest.json" rel="manifest"/>
 <!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <!-- Firebase App & Firestore SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -24,7 +23,8 @@
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif']
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
           },
           colors: {
             brand: {
@@ -153,7 +153,7 @@
 <span class="font-bold text-xs uppercase tracking-wider text-amber-950">TOTAL A PAGAR</span>
 <div class="text-right">
 <span class="text-2xl font-black font-display text-orange-600 block leading-none" id="txtTotalGrande">0.00 €</span>
-<span class="text-[10px] text-slate-500" id="txtDesgloseIva">IVA 10% inc. (0.00 €)</span>
+<span class="text-[10px] text-slate-500 font-mono" id="txtDesgloseIva">IVA inc. (0.00 €)</span>
 </div>
 </div>
 <!-- Teclado Numérico Físico Táctil y Botonera de Acción -->
@@ -343,6 +343,9 @@
 <div class="p-4 rounded-2xl bg-orange-50 border border-orange-100 text-center">
 <span class="text-xs text-orange-950 font-bold block mb-1">TOTAL A COBRAR</span>
 <span class="text-3xl font-black font-display text-orange-600" id="txtModalCobroTotal">0.00 €</span>
+<div class="text-[11px] text-slate-600 font-mono mt-1 pt-1 border-t border-orange-200/60" id="txtModalCobroIvaDetalle">
+<!-- Desglose de impuestos dinámicos -->
+</div>
 </div>
 <!-- Métodos de Pago -->
 <div class="space-y-2">
@@ -457,7 +460,7 @@
 </div>
 <!-- ==================== MODAL DE EDICIÓN DE CARTA (FIREBASE) ==================== -->
 <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalEditorCarta">
-<div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl max-h-[88vh] flex flex-col">
+<div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3.5 shadow-2xl max-h-[90vh] flex flex-col">
 <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
 <div class="flex items-center gap-2">
 <i class="fa-solid fa-pen-to-square text-orange-600"></i>
@@ -468,26 +471,32 @@
 </button>
 </div>
 <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
-<button class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600" onclick="cambiarTabEditor('articulos', this)">📦 Artículos</button>
-<button class="btn-tab-editor py-1.5 rounded-lg text-slate-600" onclick="cambiarTabEditor('categorias', this)">🏷️ Categorías</button>
+<button class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600" id="tabBtnArticulos" onclick="cambiarTabEditor('articulos', this)">📦 Artículos</button>
+<button class="btn-tab-editor py-1.5 rounded-lg text-slate-600" id="tabBtnCategorias" onclick="cambiarTabEditor('categorias', this)">🏷️ Categorías</button>
 </div>
 <!-- Tab Artículos -->
 <div class="space-y-3 flex-1 flex flex-col overflow-hidden" id="editorTabArticulos">
-<div class="bg-orange-50/60 p-3 rounded-2xl border border-orange-100 space-y-2 text-xs shrink-0">
+<div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-200/80 space-y-2 text-xs shrink-0">
 <div class="flex items-center justify-between">
-<span class="font-bold text-orange-950 block" id="tituloFormArticulo">Añadir Nuevo Producto</span>
-<button class="hidden text-[11px] text-rose-600 font-bold underline" id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()">Cancelar</button>
+<span class="font-bold text-orange-950 block text-xs" id="tituloFormArticulo">Añadir Nuevo Producto</span>
+<button class="hidden text-[11px] text-rose-600 font-bold hover:underline" id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()">✕ Cancelar</button>
 </div>
 <input id="editandoProdId" type="hidden" value=""/>
-<div class="grid grid-cols-2 gap-2">
-<input class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" type="text"/>
-<input class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" step="0.05" type="number"/>
+<div class="grid grid-cols-12 gap-2">
+<input class="col-span-7 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" type="text"/>
+<input class="col-span-5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500 font-mono" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" step="0.05" type="number"/>
 </div>
-<div class="grid grid-cols-2 gap-2">
-<select class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevoProdCat"></select>
-<input class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" type="text"/>
+<div class="grid grid-cols-12 gap-2">
+<select class="col-span-4 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500" id="nuevoProdCat"></select>
+<!-- Selector Tipo IVA -->
+<select class="col-span-5 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:border-orange-500" id="nuevoProdIva" title="Tipo de IVA">
+<option value="10">IVA 10% (General Hostelería)</option>
+<option value="4">IVA 4% (Superreducido: Pan/Leche)</option>
+<option value="21">IVA 21% (Bebidas/Alcohol)</option>
+</select>
+<input class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-center focus:outline-none focus:border-orange-500" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" type="text"/>
 </div>
-<button class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm" id="btnGuardarProd" onclick="guardarNuevoProducto()">
+<button class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98" id="btnGuardarProd" onclick="guardarNuevoProducto()">
             Guardar en la Nube
           </button>
 </div>
@@ -495,17 +504,17 @@
 </div>
 <!-- Tab Categorías -->
 <div class="hidden space-y-3 flex-1 flex flex-col overflow-hidden" id="editorTabCategorias">
-<div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-100 space-y-2 text-xs shrink-0">
+<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-200/80 space-y-2 text-xs shrink-0">
 <div class="flex items-center justify-between">
-<span class="font-bold text-amber-950 block" id="tituloFormCategoria">Nueva Categoría</span>
-<button class="hidden text-[11px] text-rose-600 font-bold underline" id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()">Cancelar</button>
+<span class="font-bold text-amber-950 block text-xs" id="tituloFormCategoria">Nueva Categoría</span>
+<button class="hidden text-[11px] text-rose-600 font-bold hover:underline" id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()">✕ Cancelar</button>
 </div>
 <input id="editandoCatId" type="hidden" value=""/>
-<div class="grid grid-cols-2 gap-2">
-<input class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" type="text"/>
-<input class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs" id="nuevaCatIcono" placeholder="Emoji (ej. 🧃)" type="text"/>
+<div class="grid grid-cols-12 gap-2">
+<input class="col-span-9 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-amber-500" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos Naturales)" type="text"/>
+<input class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-center focus:outline-none focus:border-amber-500" id="nuevaCatIcono" placeholder="Emoji 🧃" type="text"/>
 </div>
-<button class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm" id="btnGuardarCat" onclick="guardarCategoria()">
+<button class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98" id="btnGuardarCat" onclick="guardarCategoria()">
             Guardar Categoría
           </button>
 </div>
@@ -544,20 +553,27 @@
       { id: 'tostadas', nombre: 'TOSTADAS', icono: '🥪' }
     ];
 
-    // Catálogo base de seguridad
+    // Catálogo base con IVA por producto
     const catalogoBase = [
-      { id: 1, nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, icono: '☕' },
-      { id: 2, nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, icono: '🥛' },
-      { id: 3, nombre: 'Cold Brew Nitro', categoria: 'cafe', precio: 3.40, icono: '🧊' },
-      { id: 4, nombre: 'Hogaza Masa Madre 1kg', categoria: 'pan', precio: 4.20, icono: '🥖' },
-      { id: 5, nombre: 'Barra Rústica Tradicional', categoria: 'pan', precio: 1.30, icono: '🥖' },
-      { id: 6, nombre: 'Croissant Mantequilla', categoria: 'bolleria', precio: 1.80, icono: '🥐' },
-      { id: 7, nombre: 'Napolitana Chocolate', categoria: 'bolleria', precio: 2.10, icono: '🍫' },
-      { id: 8, nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, icono: '🥪' }
+      { id: 1, nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, icono: '☕', iva: 10 },
+      { id: 2, nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, icono: '🥛', iva: 10 },
+      { id: 3, nombre: 'Cold Brew Nitro', categoria: 'cafe', precio: 3.40, icono: '🧊', iva: 10 },
+      { id: 4, nombre: 'Hogaza Masa Madre 1kg', categoria: 'pan', precio: 4.20, icono: '🥖', iva: 4 },
+      { id: 5, nombre: 'Barra Rústica Tradicional', categoria: 'pan', precio: 1.30, icono: '🥖', iva: 4 },
+      { id: 6, nombre: 'Croissant Mantequilla', categoria: 'bolleria', precio: 1.80, icono: '🥐', iva: 10 },
+      { id: 7, nombre: 'Napolitana Chocolate', categoria: 'bolleria', precio: 2.10, icono: '🍫', iva: 10 },
+      { id: 8, nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, icono: '🥪', iva: 10 }
     ];
 
     let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
     let catalogo = JSON.parse(localStorage.getItem('piruleta_catalogo')) || catalogoBase;
+    
+    // Normalizar IVAs en el catálogo cargado si faltasen
+    catalogo = catalogo.map(p => ({
+      ...p,
+      iva: Number(p.iva) || (p.categoria === 'pan' ? 4 : 10)
+    }));
+
     let ticketActual = [];
     let metodoPagoActivo = 'tarjeta';
     let servicioActivo = 'BARRA';
@@ -621,7 +637,8 @@
               nombre: data.nombre, 
               precio: Number(data.precio) || 0, 
               categoria: data.categoria || 'cafe', 
-              icono: data.icono || '☕'
+              icono: data.icono || '☕',
+              iva: Number(data.iva) || (data.categoria === 'pan' ? 4 : 10)
             });
           });
           catalogo = list;
@@ -638,6 +655,11 @@
             const d = doc.data();
             catList.push({ id: doc.id, docId: doc.id, nombre: d.nombre, icono: d.icono || '🏷️' });
           });
+          // Si no incluye 'favoritos', preservarla en primer lugar
+          const tieneFav = catList.some(c => c.id === 'favoritos');
+          if (!tieneFav) {
+            catList.unshift({ id: 'favoritos', nombre: '★ FAVORITOS / TODOS', icono: '⭐' });
+          }
           categorias = catList;
           guardarDatosLocales();
           renderPestañasCategorias();
@@ -719,7 +741,7 @@
         card.innerHTML = `
           <div class="flex items-start justify-between">
             <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="px-2 py-0.5 rounded-lg bg-orange-50 text-orange-800 font-extrabold text-[11px] border border-orange-200/60">
+            <span class="px-2 py-0.5 rounded-lg bg-orange-50 text-orange-800 font-extrabold text-[11px] border border-orange-200/60 font-mono">
               ${Number(prod.precio || 0).toFixed(2)} €
             </span>
           </div>
@@ -751,7 +773,29 @@
       renderCatalogo(filtrados);
     }
 
-    // TICKET & COBRO
+    // TICKET & COBRO CON CÁLCULO DE IVA EXACTO Y DESGLOSADO
+    function calcularTotalesEIVA(items) {
+      let total = 0;
+      let totalIva = 0;
+      const desgloses = { 4: 0, 10: 0, 21: 0 };
+
+      items.forEach(item => {
+        const itemTotal = Number(item.precio || 0) * (Number(item.cantidad) || 1);
+        const tipoIva = Number(item.iva) || 10;
+        total += itemTotal;
+
+        // Base imponible = Total / (1 + IVA/100)
+        const base = itemTotal / (1 + (tipoIva / 100));
+        const cuota = itemTotal - base;
+
+        if (!desgloses[tipoIva]) desgloses[tipoIva] = 0;
+        desgloses[tipoIva] += cuota;
+        totalIva += cuota;
+      });
+
+      return { total, totalIva, desgloses };
+    }
+
     function agregarAlTicket(id) {
       const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
       if (!prod) return;
@@ -764,6 +808,7 @@
           docId: prod.docId || prod.id,
           nombre: prod.nombre,
           precio: Number(prod.precio) || 0,
+          iva: Number(prod.iva) || 10,
           cantidad: 1
         });
       }
@@ -826,26 +871,26 @@
           </div>
         `;
         totalGrande.innerText = '0.00 €';
-        desgloseIva.innerText = 'IVA 10% inc. (0.00 €)';
+        desgloseIva.innerText = 'IVA inc. (0.00 €)';
         return;
       }
 
       cont.innerHTML = '';
-      let subtotal = 0;
       ticketActual.forEach(item => {
         const itemTotal = item.precio * item.cantidad;
-        subtotal += itemTotal;
         const itemId = item.id || item.docId;
+        const itemIva = Number(item.iva) || 10;
 
         const row = document.createElement('div');
         row.className = 'grid grid-cols-12 items-center py-2 px-1 text-xs hover:bg-slate-50 transition-colors';
         row.innerHTML = `
           <div class="col-span-6 font-bold text-slate-800 leading-tight pr-1">
             <span>${item.nombre}</span>
+            <span class="text-[9px] text-slate-400 font-mono ml-1 font-semibold">(${itemIva}%)</span>
           </div>
           <div class="col-span-2 flex items-center justify-center gap-1">
             <button onclick="cambiarCantidad('${itemId}', -1)" class="w-5 h-5 rounded bg-slate-100 text-slate-600 font-bold hover:bg-slate-200">-</button>
-            <span class="font-extrabold text-xs w-4 text-center">${item.cantidad}</span>
+            <span class="font-extrabold text-xs w-4 text-center font-mono">${item.cantidad}</span>
             <button onclick="cambiarCantidad('${itemId}', 1)" class="w-5 h-5 rounded bg-slate-100 text-slate-600 font-bold hover:bg-slate-200">+</button>
           </div>
           <div class="col-span-2 text-right text-slate-500 font-mono text-[11px]">
@@ -858,14 +903,22 @@
         cont.appendChild(row);
       });
 
-      const iva = subtotal * 0.10;
-      totalGrande.innerText = subtotal.toFixed(2) + ' €';
-      desgloseIva.innerText = `IVA 10% inc. (${iva.toFixed(2)} €)`;
+      const calc = calcularTotalesEIVA(ticketActual);
+      totalGrande.innerText = calc.total.toFixed(2) + ' €';
+
+      const partesDesglose = [];
+      if (calc.desgloses[4] > 0) partesDesglose.push(`4%: ${calc.desgloses[4].toFixed(2)}€`);
+      if (calc.desgloses[10] > 0) partesDesglose.push(`10%: ${calc.desgloses[10].toFixed(2)}€`);
+      if (calc.desgloses[21] > 0) partesDesglose.push(`21%: ${calc.desgloses[21].toFixed(2)}€`);
+
+      desgloseIva.innerText = partesDesglose.length > 0 
+        ? `IVA inc. [${partesDesglose.join(' | ')}] = ${calc.totalIva.toFixed(2)} €`
+        : `IVA inc. (${calc.totalIva.toFixed(2)} €)`;
     }
 
     function pulsarTecladoNum(val) {
       if (val === 'C') {
-        // Cancelar o reiniciar si procede
+        mostrarFeedback('Teclado limpiado');
         return;
       }
       mostrarFeedback(`Marcado ${val}`);
@@ -911,7 +964,7 @@
                 <span class="font-extrabold text-xs text-slate-900">${v.referencia}</span>
                 <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-bold">${v.fecha}</span>
               </div>
-              <span class="text-xs text-orange-600 font-black mt-0.5 block">${v.total.toFixed(2)} € (${v.ticket.length} arts.)</span>
+              <span class="text-xs text-orange-600 font-black mt-0.5 block font-mono">${v.total.toFixed(2)} € (${v.ticket.length} arts.)</span>
             </div>
             <div class="flex items-center gap-1.5">
               <button onclick="reanudarVentaPendiente(${v.id})" class="px-3 py-1.5 rounded-xl bg-orange-600 text-white font-bold text-xs hover:bg-orange-700 active:scale-95 shadow-sm">
@@ -958,7 +1011,7 @@
       if (b) b.innerText = ventasPendientes.length;
     }
 
-    // ==================== PLANO DE MESAS INTERACTIVO Y ARRASTRABLE (100% VISIBLE Y CORREGIDO) ====================
+    // ==================== PLANO DE MESAS INTERACTIVO Y ARRASTRABLE ====================
     function renderPlanoMesas() {
       const contenedor = document.getElementById('areaMesasContenedor');
       const badge = document.getElementById('badgeContadorMesas');
@@ -967,7 +1020,6 @@
       contenedor.innerHTML = '';
       if (badge) badge.innerText = `${mesas.length} mesas`;
 
-      // Si no hay mesas, mostrar aviso con botón
       if (mesas.length === 0) {
         contenedor.innerHTML = `
           <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 py-16 space-y-3">
@@ -981,10 +1033,8 @@
         return;
       }
 
-      // Asegurar que cada mesa tenga coordenadas visibles dentro del plano
       mesas.forEach((mesa, index) => {
         if (typeof mesa.x !== 'number' || typeof mesa.y !== 'number' || isNaN(mesa.x) || isNaN(mesa.y)) {
-          // Asignar posición inicial en cuadrícula limpia
           const col = index % 4;
           const fila = Math.floor(index / 4);
           mesa.x = 30 + (col * 140);
@@ -1012,7 +1062,7 @@
           </div>
           <div class="text-center my-auto">
             <span class="font-black text-sm block leading-tight font-display">${mesa.nombre}</span>
-            <span class="text-[10px] font-bold ${mesa.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
+            <span class="text-[10px] font-bold font-mono ${mesa.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
               ${mesa.ocupada ? totalMesa.toFixed(2) + ' €' : 'Libre'}
             </span>
           </div>
@@ -1021,7 +1071,6 @@
           </div>
         `;
 
-        // Eventos de interacción: Drag si modo mover está activo, o Abrir modal si no
         configurarArrastreMesa(card, mesa);
         contenedor.appendChild(card);
       });
@@ -1052,7 +1101,6 @@
 
       const pax = parseInt(prompt('Número de comensales (pax):', '4'), 10) || 2;
       
-      // Calcular posición centrada y visible
       const contenedor = document.getElementById('lienzoPlano');
       const ancho = contenedor ? contenedor.clientWidth : 400;
       const alto = contenedor ? contenedor.clientHeight : 400;
@@ -1073,14 +1121,13 @@
       mostrarFeedback(`¡${nuevaMesa.nombre} creada con éxito!`);
     }
 
-    // SOPORTE DE ARRASTRE TÁCTIL Y RATÓN (DRAG & DROP PERSISTENTE)
+    // SOPORTE DE ARRASTRE TÁCTIL Y RATÓN
     function configurarArrastreMesa(elemento, mesa) {
       let isDragging = false;
       let startX, startY, initialLeft, initialTop;
 
       function onStart(e) {
         if (!modoMoverMesasActivo) {
-          // Si no está en modo mover, un toque/click abre el menú de la mesa
           abrirModalMesa(mesa.id);
           return;
         }
@@ -1174,7 +1221,6 @@
       servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
       document.getElementById('ticketServicioLabel').innerText = servicioActivo;
 
-      // Cargar la cuenta de la mesa en el ticket de trabajo
       ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
       guardarDatosLocales();
       actualizarTicketVisual();
@@ -1220,9 +1266,22 @@
         alert('No hay productos en el ticket para cobrar.');
         return;
       }
-      const total = ticketActual.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
-      document.getElementById('txtModalCobroTotal').innerText = total.toFixed(2) + ' €';
+      const calc = calcularTotalesEIVA(ticketActual);
+      document.getElementById('txtModalCobroTotal').innerText = calc.total.toFixed(2) + ' €';
       document.getElementById('txtCobroDestino').innerText = 'Servicio: ' + servicioActivo;
+      
+      const partes = [];
+      if (calc.desgloses[4] > 0) partes.push(`IVA 4%: ${calc.desgloses[4].toFixed(2)}€`);
+      if (calc.desgloses[10] > 0) partes.push(`IVA 10%: ${calc.desgloses[10].toFixed(2)}€`);
+      if (calc.desgloses[21] > 0) partes.push(`IVA 21%: ${calc.desgloses[21].toFixed(2)}€`);
+      
+      const txtDetalle = document.getElementById('txtModalCobroIvaDetalle');
+      if (txtDetalle) {
+        txtDetalle.innerHTML = partes.length > 0 
+          ? `Desglose IVA inc.: <span class="font-bold text-orange-900">${partes.join(' &bull; ')}</span> (Total IVA: ${calc.totalIva.toFixed(2)} €)`
+          : `IVA incluido: ${calc.totalIva.toFixed(2)} €`;
+      }
+
       document.getElementById('modalCobro').classList.remove('hidden');
     }
 
@@ -1245,7 +1304,6 @@
       else if (metodoPagoActivo === 'bizum') caja.bizum += total;
       caja.total += total;
 
-      // Si se cobraba una mesa, liberarla automáticamente
       if (mesaActivaSeleccionada) {
         const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
         if (idx !== -1) {
@@ -1325,7 +1383,7 @@
       mostrarFeedback('¡Ajustes fiscales guardados!');
     }
 
-    // ==================== EDITOR CARTA Y CATEGORÍAS ====================
+    // ==================== EDITOR CARTA Y CATEGORÍAS (CON MODIFICAR + ELIMINAR + IVA) ====================
     function abrirModalEditorCarta() {
       document.getElementById('modalEditorCarta').classList.remove('hidden');
       renderListaEditor();
@@ -1334,6 +1392,8 @@
     }
 
     function cerrarModalEditorCarta() {
+      cancelarEdicionProducto();
+      cancelarEdicionCategoria();
       document.getElementById('modalEditorCarta').classList.add('hidden');
     }
 
@@ -1354,6 +1414,7 @@
     function actualizarSelectorCategoriasProducto() {
       const s = document.getElementById('nuevoProdCat');
       if (!s) return;
+      const valorSeleccionado = s.value;
       s.innerHTML = '';
       categorias.filter(c => c.id !== 'favoritos' && c.id !== 'todos').forEach(c => {
         const o = document.createElement('option');
@@ -1361,103 +1422,298 @@
         o.innerText = `${c.icono || '🏷️'} ${c.nombre}`;
         s.appendChild(o);
       });
+      if (valorSeleccionado) {
+        s.value = valorSeleccionado;
+      }
     }
 
+    // RENDER LISTA ARTÍCULOS CON BOTONES DE EDITAR Y ELIMINAR
     function renderListaEditor() {
       const c = document.getElementById('listaEditorProductos');
       if (!c) return;
       c.innerHTML = '';
+      
+      if (catalogo.length === 0) {
+        c.innerHTML = '<div class="py-6 text-center text-slate-400">No hay productos en la carta.</div>';
+        return;
+      }
+
       catalogo.forEach(prod => {
         const prodId = prod.id || prod.docId;
+        const ivaProd = Number(prod.iva) || (prod.categoria === 'pan' ? 4 : 10);
         const d = document.createElement('div');
-        d.className = 'py-2 flex items-center justify-between';
+        d.className = 'py-2 px-1 flex items-center justify-between hover:bg-orange-50/50 rounded-xl transition-colors cursor-pointer group';
         d.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span>${prod.icono || '☕'}</span>
-            <div>
-              <span class="font-bold text-slate-800 block">${prod.nombre}</span>
-              <span class="text-[10px] text-slate-400 font-mono">${Number(prod.precio).toFixed(2)} €</span>
+          <div class="flex items-center gap-2.5 flex-1 min-w-0" onclick="cargarProductoParaEditar('${prodId}')">
+            <span class="text-xl shrink-0">${prod.icono || '☕'}</span>
+            <div class="truncate">
+              <span class="font-bold text-slate-800 block truncate">${prod.nombre}</span>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-[11px] text-orange-700 font-bold font-mono">${Number(prod.precio).toFixed(2)} €</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded font-extrabold font-mono ${ivaProd === 4 ? 'bg-emerald-100 text-emerald-800' : (ivaProd === 21 ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800')}">
+                  IVA ${ivaProd}%
+                </span>
+                <span class="text-[10px] text-slate-400 capitalize">&bull; ${prod.categoria}</span>
+              </div>
             </div>
           </div>
-          <button onclick="eliminarProducto('${prodId}')" class="text-rose-500 hover:text-rose-700 p-1">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
+          <div class="flex items-center gap-1 shrink-0 ml-2">
+            <button onclick="cargarProductoParaEditar('${prodId}')" title="Modificar Producto" class="w-7 h-7 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-800 flex items-center justify-center transition-all active:scale-95">
+              <i class="fa-solid fa-pen text-xs"></i>
+            </button>
+            <button onclick="eliminarProducto('${prodId}')" title="Eliminar Producto" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all active:scale-95">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
         `;
         c.appendChild(d);
       });
     }
 
+    function cargarProductoParaEditar(id) {
+      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
+      if (!prod) return;
+
+      document.getElementById('editandoProdId').value = prod.id || prod.docId;
+      document.getElementById('nuevoProdNombre').value = prod.nombre || '';
+      document.getElementById('nuevoProdPrecio').value = Number(prod.precio || 0);
+      document.getElementById('nuevoProdCat').value = prod.categoria || 'cafe';
+      document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
+      document.getElementById('nuevoProdIva').value = String(prod.iva || 10);
+
+      document.getElementById('tituloFormArticulo').innerText = `Modificando: ${prod.nombre}`;
+      document.getElementById('btnGuardarProd').innerText = '💾 Guardar Cambios en Producto';
+      document.getElementById('btnGuardarProd').className = 'w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
+      document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
+
+      document.getElementById('nuevoProdNombre').focus();
+    }
+
+    function cancelarEdicionProducto() {
+      document.getElementById('editandoProdId').value = '';
+      document.getElementById('nuevoProdNombre').value = '';
+      document.getElementById('nuevoProdPrecio').value = '';
+      document.getElementById('nuevoProdIcono').value = '';
+      document.getElementById('nuevoProdIva').value = '10';
+
+      document.getElementById('tituloFormArticulo').innerText = 'Añadir Nuevo Producto';
+      document.getElementById('btnGuardarProd').innerText = 'Guardar en la Nube';
+      document.getElementById('btnGuardarProd').className = 'w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
+      document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
+    }
+
     function guardarNuevoProducto() {
+      const editId = document.getElementById('editandoProdId').value;
       const nombre = document.getElementById('nuevoProdNombre').value.trim();
       const precio = parseFloat(document.getElementById('nuevoProdPrecio').value);
       const cat = document.getElementById('nuevoProdCat').value;
       const icono = document.getElementById('nuevoProdIcono').value.trim() || '☕';
+      const iva = parseInt(document.getElementById('nuevoProdIva').value, 10) || 10;
 
-      if (!nombre || isNaN(precio)) {
-        alert('Introduce nombre y precio válido.');
+      if (!nombre || isNaN(precio) || precio < 0) {
+        alert('Por favor introduce un nombre válido y un precio correcto.');
         return;
       }
 
-      const nuevo = { nombre, precio, categoria: cat, icono };
-      if (db) {
-        db.collection("productos").add(nuevo).then(() => {
-          mostrarFeedback('Producto guardado en Firebase');
-        });
+      const datosProducto = { nombre, precio, categoria: cat, icono, iva };
+
+      if (editId) {
+        // Modo MODIFICAR existente
+        if (db) {
+          db.collection("productos").doc(editId).set(datosProducto, { merge: true }).then(() => {
+            mostrarFeedback(`¡${nombre} modificado en Firebase!`);
+          }).catch(err => {
+            console.warn("Error modificando en Firestore:", err);
+          });
+        }
+        const index = catalogo.findIndex(p => String(p.id) === String(editId) || String(p.docId) === String(editId));
+        if (index !== -1) {
+          catalogo[index] = { ...catalogo[index], ...datosProducto };
+        }
+        mostrarFeedback(`¡${nombre} actualizado!`);
       } else {
-        catalogo.push({ id: Date.now(), ...nuevo });
-        guardarDatosLocales();
-        renderCatalogo();
-        renderListaEditor();
+        // Modo CREAR nuevo
+        if (db) {
+          db.collection("productos").add(datosProducto).then(() => {
+            mostrarFeedback('Producto creado y guardado en la Nube');
+          }).catch(err => {
+            console.warn("Error guardando en Firestore:", err);
+          });
+        } else {
+          catalogo.push({ id: Date.now(), ...datosProducto });
+          mostrarFeedback('Producto añadido localmente');
+        }
       }
 
-      document.getElementById('nuevoProdNombre').value = '';
-      document.getElementById('nuevoProdPrecio').value = '';
+      guardarDatosLocales();
+      renderCatalogo();
+      renderListaEditor();
+      actualizarTicketVisual();
+      cancelarEdicionProducto();
     }
 
     function eliminarProducto(id) {
-      if (!confirm('¿Eliminar producto?')) return;
+      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
+      const nombre = prod ? prod.nombre : 'este producto';
+      if (!confirm(`¿Estás seguro de que deseas eliminar definitivamente "${nombre}" de la carta?`)) return;
+
       if (db) {
-        db.collection("productos").doc(id).delete();
-      } else {
-        catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
-        guardarDatosLocales();
-        renderCatalogo();
-        renderListaEditor();
+        db.collection("productos").doc(String(id)).delete().then(() => {
+          mostrarFeedback(`"${nombre}" eliminado de Firebase`);
+        }).catch(err => {
+          console.warn("Error borrando en Firestore:", err);
+        });
+      }
+
+      catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
+      guardarDatosLocales();
+      renderCatalogo();
+      renderListaEditor();
+      mostrarFeedback(`Producto "${nombre}" eliminado`);
+      if (document.getElementById('editandoProdId').value === String(id)) {
+        cancelarEdicionProducto();
       }
     }
 
+    // RENDER LISTA CATEGORÍAS CON MODIFICAR Y ELIMINAR
     function renderListaEditorCategorias() {
       const c = document.getElementById('listaEditorCategorias');
       if (!c) return;
       c.innerHTML = '';
+      
       categorias.forEach(cat => {
+        const catId = cat.id || cat.docId;
+        const esProtegida = (cat.id === 'favoritos' || cat.id === 'todos');
         const d = document.createElement('div');
-        d.className = 'py-2 flex items-center justify-between';
+        d.className = 'py-2 px-1 flex items-center justify-between hover:bg-amber-50/50 rounded-xl transition-colors cursor-pointer group';
         d.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span>${cat.icono || '🏷️'}</span>
-            <span class="font-bold text-slate-800">${cat.nombre}</span>
+          <div class="flex items-center gap-2 flex-1 min-w-0" ${!esProtegida ? `onclick="cargarCategoriaParaEditar('${catId}')"` : ''}>
+            <span class="text-xl shrink-0">${cat.icono || '🏷️'}</span>
+            <div class="truncate">
+              <span class="font-bold text-slate-800 block truncate">${cat.nombre}</span>
+              ${esProtegida ? '<span class="text-[9px] text-amber-700 font-bold bg-amber-100 px-1.5 py-0.2 rounded">Sistema</span>' : ''}
+            </div>
           </div>
+          ${!esProtegida ? `
+            <div class="flex items-center gap-1 shrink-0 ml-2">
+              <button onclick="cargarCategoriaParaEditar('${catId}')" title="Modificar Categoría" class="w-7 h-7 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 flex items-center justify-center transition-all active:scale-95">
+                <i class="fa-solid fa-pen text-xs"></i>
+              </button>
+              <button onclick="eliminarCategoria('${catId}')" title="Eliminar Categoría" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all active:scale-95">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+          ` : '<span class="text-[10px] text-slate-400 font-semibold italic pr-1">Fija</span>'}
         `;
         c.appendChild(d);
       });
     }
 
+    function cargarCategoriaParaEditar(id) {
+      const cat = categorias.find(c => String(c.id) === String(id) || String(c.docId) === String(id));
+      if (!cat) return;
+
+      document.getElementById('editandoCatId').value = cat.id || cat.docId;
+      document.getElementById('nuevaCatNombre').value = cat.nombre || '';
+      document.getElementById('nuevaCatIcono').value = cat.icono || '🏷️';
+
+      document.getElementById('tituloFormCategoria').innerText = `Modificando: ${cat.nombre}`;
+      document.getElementById('btnGuardarCat').innerText = '💾 Guardar Cambios en Categoría';
+      document.getElementById('btnGuardarCat').className = 'w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
+      document.getElementById('btnCancelarEdicionCat').classList.remove('hidden');
+
+      document.getElementById('nuevaCatNombre').focus();
+    }
+
+    function cancelarEdicionCategoria() {
+      document.getElementById('editandoCatId').value = '';
+      document.getElementById('nuevaCatNombre').value = '';
+      document.getElementById('nuevaCatIcono').value = '';
+
+      document.getElementById('tituloFormCategoria').innerText = 'Nueva Categoría';
+      document.getElementById('btnGuardarCat').innerText = 'Guardar Categoría';
+      document.getElementById('btnGuardarCat').className = 'w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
+      document.getElementById('btnCancelarEdicionCat').classList.add('hidden');
+    }
+
     function guardarCategoria() {
+      const editId = document.getElementById('editandoCatId').value;
       const nombre = document.getElementById('nuevaCatNombre').value.trim();
       const icono = document.getElementById('nuevaCatIcono').value.trim() || '🏷️';
-      if (!nombre) return;
-
-      const nueva = { nombre, icono };
-      if (db) {
-        db.collection("categorias").add(nueva);
-      } else {
-        categorias.push({ id: nombre.toLowerCase().replace(/\s+/g, '_'), ...nueva });
-        guardarDatosLocales();
-        renderPestañasCategorias();
-        renderListaEditorCategorias();
+      if (!nombre) {
+        alert('Por favor introduce un nombre para la categoría.');
+        return;
       }
-      document.getElementById('nuevaCatNombre').value = '';
+
+      if (editId) {
+        // MODIFICAR categoría existente
+        if (db) {
+          db.collection("categorias").doc(editId).set({ nombre, icono }, { merge: true }).then(() => {
+            mostrarFeedback(`¡Categoría ${nombre} actualizada en Firebase!`);
+          }).catch(err => {
+            console.warn("Error actualizando categoría Firestore:", err);
+          });
+        }
+        const idx = categorias.findIndex(c => String(c.id) === String(editId) || String(c.docId) === String(editId));
+        if (idx !== -1) {
+          categorias[idx].nombre = nombre;
+          categorias[idx].icono = icono;
+        }
+        mostrarFeedback(`¡Categoría "${nombre}" modificada!`);
+      } else {
+        // CREAR nueva categoría
+        const nuevoId = nombre.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        const nueva = { nombre, icono };
+        if (db) {
+          db.collection("categorias").add(nueva).then(() => {
+            mostrarFeedback('Categoría creada en Firestore');
+          });
+        } else {
+          categorias.push({ id: nuevoId || 'cat_' + Date.now(), ...nueva });
+          mostrarFeedback('Categoría creada');
+        }
+      }
+
+      guardarDatosLocales();
+      renderPestañasCategorias();
+      renderListaEditorCategorias();
+      actualizarSelectorCategoriasProducto();
+      cancelarEdicionCategoria();
+    }
+
+    function eliminarCategoria(id) {
+      if (id === 'favoritos' || id === 'todos') {
+        alert('Esta categoría es parte del sistema y no se puede eliminar.');
+        return;
+      }
+      const cat = categorias.find(c => String(c.id) === String(id) || String(c.docId) === String(id));
+      const nombre = cat ? cat.nombre : 'esta categoría';
+      
+      const hayProductosAsociados = catalogo.some(p => p.categoria === id || (cat && p.categoria === cat.id));
+      let avisoExtra = '';
+      if (hayProductosAsociados) {
+        avisoExtra = '\n\nATENCIÓN: Existen artículos vinculados a esta categoría.';
+      }
+
+      if (!confirm(`¿Estás seguro de que deseas eliminar la categoría "${nombre}"?${avisoExtra}`)) return;
+
+      if (db) {
+        db.collection("categorias").doc(String(id)).delete().then(() => {
+          mostrarFeedback(`Categoría "${nombre}" eliminada de Firebase`);
+        }).catch(err => {
+          console.warn("Error al borrar categoría Firestore:", err);
+        });
+      }
+
+      categorias = categorias.filter(c => String(c.id) !== String(id) && String(c.docId) !== String(id));
+      guardarDatosLocales();
+      renderPestañasCategorias();
+      renderListaEditorCategorias();
+      actualizarSelectorCategoriasProducto();
+      mostrarFeedback(`Categoría "${nombre}" eliminada`);
+      if (document.getElementById('editandoCatId').value === String(id)) {
+        cancelarEdicionCategoria();
+      }
     }
 
     // INICIALIZACIÓN
@@ -1555,5 +1811,5 @@
     mostrarFeedback(`Ticket de ${totalFormateado} asignado a ${mesaNombre}`);
     alert(`¡Ticket de ${totalFormateado} asignado a ${mesaNombre} con éxito!`);
   }
-</script></body>
-</html>
+</script>
+</body></html>
