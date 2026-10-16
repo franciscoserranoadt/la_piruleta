@@ -1,530 +1,655 @@
 <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#c85a32">
+  <title>TPV LA PIRULETA</title>
+  <link rel="manifest" href="./manifest.json">
 
-<html lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="#c85a32" name="theme-color"/>
-<title>TPV LA PIRULETA v5.2</title>
-<link href="./manifest.json" rel="manifest"/>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<!-- Firebase App & Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase App & Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"><\/script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"><\/script>
+
+  <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
+            display: ['"Space Grotesk"', 'sans-serif']
           },
           colors: {
-            brand: {
-              DEFAULT: '#c85a32',
-              dark: '#a84520',
-              light: '#fff8f1'
-            }
+            brand: { DEFAULT: '#c85a32', dark: '#a84520', light: '#fff8f1' }
           }
         }
       }
     }
-  </script>
-<style>
+  <\/script>
+
+  <style>
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     input, textarea, select { user-select: text; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff8f1; color: #2c1a14; overflow-x: hidden; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff8f1; color: #2c1a14; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .mesa-arrastrable { touch-action: none; user-select: none; }
-    #lienzoPlano {
-      background-size: 24px 24px;
-      background-image: radial-gradient(circle, #e2d9ce 1.5px, transparent 1.5px);
+
+    /* Estilos de Impresión Térmica de Ticket */
+    @media print {
+      body * { visibility: hidden; }
+      #ticketImprimible, #ticketImprimible * { visibility: visible; }
+      #ticketImprimible {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        margin: 0;
+        padding: 4mm;
+        font-size: 11px;
+        color: #000;
+        background: #fff;
+      }
     }
   </style>
 </head>
-<body class="min-h-screen bg-[#fff8f1] flex flex-col text-slate-800 select-none">
-<!-- CABECERA PRINCIPAL TÁCTIL -->
-<header class="bg-white border-b border-orange-100 px-4 py-2.5 sticky top-0 z-40 flex items-center justify-between shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center text-xl shadow-inner cursor-pointer" onclick="volverATerminal()">
+<body class="min-h-screen bg-[#fff8f1] flex flex-col text-slate-800 select-none overflow-x-hidden">
+
+  <!-- CABECERA SUPERIOR FIJA -->
+  <header class="bg-white/95 backdrop-blur border-b border-orange-100 px-4 py-2.5 sticky top-0 z-30 flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl shadow-inner cursor-pointer" onclick="volverAlMostrador()">
         🍭
       </div>
-<div>
-<div class="flex items-center gap-2">
-<span class="font-extrabold text-base tracking-tight font-display text-slate-900" id="headerNombreComercial">LA PIRULETA</span>
-<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800">Terminal Táctil</span>
-<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 flex items-center gap-1">
-<i class="fa-solid fa-user text-[9px]"></i> PACO (01 - General)
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-base tracking-tight font-display text-slate-900" id="headerNombreComercial">LA PIRULETA</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800">Terminal Táctil</span>
+          <span class="text-xs text-slate-500 font-medium hidden sm:inline">&bull; <i class="fa-solid fa-user text-[11px]"></i> PACO (01 - General)</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+          <span id="txtEstadoCloud">Cloud Conectado</span>
+          <span class="text-slate-300">&bull;</span>
+          <span id="headerCajaNum">Caja 1</span>
+          <span class="text-slate-300">&bull;</span>
+          <span class="text-orange-600 font-semibold">Tarifa Estándar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones Cabecera -->
+    <div class="flex items-center gap-2">
+      <!-- Botón Pendientes -->
+      <button onclick="abrirModalPendientes()" class="px-3 py-1.5 rounded-full bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-amber-600 active:scale-95 transition-all">
+        <i class="fa-solid fa-paperclip"></i>
+        <span>Pendientes</span>
+        <span id="badgeContadorPendientes" class="w-5 h-5 rounded-full bg-white text-amber-700 text-[10px] font-black flex items-center justify-center">0</span>
+      </button>
+
+      <button id="btnLupa" onclick="toggleBuscador()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-600 transition-all cursor-pointer" title="Buscar productos">
+        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+      </button>
+
+      <button onclick="abrirModalEditorCarta()" class="w-9 h-9 rounded-full bg-orange-600 text-white hover:bg-orange-700 active:scale-95 flex items-center justify-center transition-all shadow-sm cursor-pointer" title="Gestor de carta en la nube (Artículos, IVA y Categorías)">
+        <i class="fa-solid fa-pen-to-square text-xs"></i>
+      </button>
+
+      <button id="btnAjustes" onclick="toggleAjustesModal()" class="w-9 h-9 rounded-full bg-amber-100/70 hover:bg-amber-100 active:scale-95 flex items-center justify-center text-amber-800 transition-all cursor-pointer" title="Datos fiscales del ticket y terminal">
+        <i class="fa-solid fa-sliders text-xs"></i>
+      </button>
+
+      <button onclick="abrirModalCaja()" class="px-3 py-1.5 rounded-full bg-slate-800 text-white hover:bg-slate-900 active:scale-95 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm" title="Arqueo de turno y Cierre Z">
+        <i class="fa-solid fa-cash-register"></i>
+        <span class="hidden sm:inline">Caja</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BARRA DE BÚSQUEDA DESPLEGABLE -->
+  <div id="barraBuscador" class="hidden bg-white border-b border-orange-100 px-4 py-2 transition-all">
+    <div class="relative flex items-center max-w-xl mx-auto">
+      <i class="fa-solid fa-search absolute left-3.5 text-slate-400 text-xs"></i>
+      <input type="text" id="inputBuscar" oninput="filtrarProductos()" placeholder="Buscar café, pan, bollería..." class="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-100 border border-slate-200 text-sm focus:outline-none focus:border-orange-400">
+      <button onclick="toggleBuscador()" class="absolute right-2.5 text-slate-400 hover:text-slate-600 p-1">
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST FEEDBACK ARTÍCULO AÑADIDO -->
+  <div id="toastArticuloAñadido" class="fixed top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-bold shadow-xl z-50 hidden flex items-center gap-2 border border-slate-700 transition-all">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+    <span id="toastArticuloTexto">+1 Añadido al ticket</span>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL: DISTRIBUCIÓN TÁCTIL COMERCIAL 2 COLUMNAS -->
+  <main class="flex-1 p-3 grid grid-cols-1 lg:grid-cols-12 gap-3 max-w-[1700px] w-full mx-auto">
+
+    <!-- COLUMNA IZQUIERDA (5 COLUMNAS): TICKET EN CURSO + TOTAL + TECLADO FÍSICO / ASIGNAR A MESA -->
+    <section class="lg:col-span-5 bg-white rounded-2xl border border-orange-100/90 shadow-sm flex flex-col justify-between overflow-hidden">
+      <!-- Encabezado de Mesa / Mostrador -->
+      <div class="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-sm text-slate-900 tracking-tight" id="lblServicioActivo">BARRA</span>
+            <span class="text-xs text-slate-400 font-mono" id="lblNumTicket">#T-001</span>
+          </div>
+          <span class="text-[11px] text-slate-500 font-medium" id="lblCliente">Cliente General</span>
+        </div>
+        <button onclick="limpiarTicket()" class="text-xs font-bold text-rose-500 hover:text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200/60 flex items-center gap-1 active:scale-95 transition-all">
+          <i class="fa-solid fa-trash-can text-[11px]"></i> Limpiar
+        </button>
+      </div>
+
+      <!-- Cabecera columnas del ticket -->
+      <div class="grid grid-cols-12 px-3 py-1.5 bg-slate-100/70 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+        <span class="col-span-6">Artículo</span>
+        <span class="col-span-2 text-center">Cant</span>
+        <span class="col-span-2 text-right">Precio</span>
+        <span class="col-span-2 text-right">Total</span>
+      </div>
+
+      <!-- Lista de Ítems en el Ticket -->
+      <div id="ticketContainer" class="flex-1 p-3 overflow-y-auto min-h-[220px] max-h-[380px] divide-y divide-slate-100">
+        <div class="h-full flex flex-col items-center justify-center text-slate-400 py-12 text-center">
+          <i class="fa-solid fa-receipt text-3xl mb-2 text-orange-200"></i>
+          <p class="text-xs font-bold text-slate-500">Ticket vacío</p>
+          <p class="text-[11px] text-slate-400">Toca los productos de la derecha para sumar.</p>
+        </div>
+      </div>
+
+      <!-- Bloque Inferior: TOTAL A PAGAR + TECLADO NUMÉRICO TÁCTIL Y ACCIONES -->
+      <div class="p-3 border-t border-orange-100 bg-orange-50/20 space-y-3">
+        <!-- Display Total a Pagar -->
+        <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-black uppercase tracking-wider text-slate-600 block">Total a Pagar</span>
+            <span class="text-[10px] text-slate-400 font-medium" id="txtDetalleIVA">IVA inc. (0.00 €)</span>
+          </div>
+          <div class="text-right">
+            <span id="txtGranTotal" class="font-black text-2xl sm:text-3xl font-display text-orange-600">0.00 €</span>
+          </div>
+        </div>
+
+        <!-- Teclado Numérico Comercial + Botones de Acción (Finalizar, Dejar Pendiente, Asignar a Mesa, Plano Mesas) -->
+        <div class="grid grid-cols-4 gap-2">
+          <!-- Teclas Numéricas -->
+          <button onclick="tecladoNumero('7')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">7</button>
+          <button onclick="tecladoNumero('8')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">8</button>
+          <button onclick="tecladoNumero('9')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">9</button>
+          <button onclick="abrirModalCobroConTicket()" class="py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-extrabold text-xs flex flex-col items-center justify-center gap-0.5 shadow-md shadow-orange-600/30 active:scale-95 transition-all">
+            <span class="flex items-center gap-1"><i class="fa-solid fa-cash-register text-[10px]"></i> Finalizar Venta</span>
+            <span class="text-[9px] opacity-75 font-mono">F1</span>
+          </button>
+
+          <button onclick="tecladoNumero('4')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">4</button>
+          <button onclick="tecladoNumero('5')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">5</button>
+          <button onclick="tecladoNumero('6')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">6</button>
+          <button onclick="dejarPendiente()" class="py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-all">
+            <i class="fa-solid fa-paperclip text-[10px]"></i> Dejar Pendiente
+          </button>
+
+          <button onclick="tecladoNumero('1')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">1</button>
+          <button onclick="tecladoNumero('2')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">2</button>
+          <button onclick="tecladoNumero('3')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">3</button>
+          <!-- BOTÓN ASIGNAR A MESA -->
+          <button onclick="iniciarAsignarAMesa()" class="py-3 bg-orange-100 hover:bg-orange-200 text-orange-900 border border-orange-300/80 rounded-xl font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all" title="Asignar el ticket en curso directamente a una mesa del salón">
+            <i class="fa-solid fa-chair text-[11px] text-orange-700"></i> Asignar a Mesa
+          </button>
+
+          <button onclick="tecladoNumero('0')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">0</button>
+          <button onclick="tecladoNumero(',')" class="py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-extrabold text-sm text-slate-800 shadow-sm active:scale-95">,</button>
+          <button onclick="tecladoBorrar()" class="py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl font-extrabold text-sm shadow-sm active:scale-95">C</button>
+          <button onclick="abrirModalPlanoMesas()" class="py-3 bg-white hover:bg-slate-50 border border-orange-200 text-orange-800 rounded-xl font-bold text-xs flex items-center justify-center gap-1 shadow-sm active:scale-95">
+            <i class="fa-solid fa-chair text-[10px]"></i> Plano Mesas
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA (7 COLUMNAS): BOTÓN DE MESAS + CATEGORÍAS + CATÁLOGO DE PRODUCTOS -->
+    <section class="lg:col-span-7 space-y-3 flex flex-col">
+      <!-- Barra de Filtros: Botón Mesas + Categorías -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold" id="contenedorCategorias">
+        <!-- Botón Único Mesas -->
+        <button onclick="abrirModalPlanoMesas()" class="px-4 py-2.5 rounded-xl bg-orange-600 text-white font-extrabold shadow-sm flex items-center gap-1.5 shrink-0 hover:bg-orange-700 active:scale-95 transition-all">
+          <i class="fa-solid fa-chair"></i>
+          <span>Mesas</span>
+        </button>
+
+        <!-- Botón Favoritos / Todos -->
+        <button onclick="filtrarPorCategoria('todos', this)" class="btn-cat px-4 py-2.5 rounded-xl bg-orange-600 text-white font-extrabold shadow-sm shrink-0">
+          ★ FAVORITOS / TODOS
+        </button>
+
+        <!-- Categorías dinámicas -->
+        <div id="listaTabsCategorias" class="flex items-center gap-2"></div>
+      </div>
+
+      <!-- Rejilla de Productos Táctiles -->
+      <div id="gridProductos" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 flex-1 auto-rows-max overflow-y-auto pb-6">
+        <!-- Se renderiza dinámicamente -->
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE COBRO (F1) CON PREVISUALIZACIÓN COMPLETA DEL TICKET              -->
+  <!-- ========================================================================= -->
+  <div id="modalCobroTicket" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] border border-orange-100 animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Cabecera Modal Cobro -->
+      <div class="px-5 py-3.5 bg-orange-50/70 border-b border-orange-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-receipt"></i>
           </span>
-</div>
-<div class="flex items-center gap-2 text-xs text-slate-500 font-medium mt-0.5">
-<span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-<span id="txtEstadoCloud">Cloud Conectado</span>
-<span class="text-slate-300">•</span>
-<span id="headerCajaNum">Caja 1</span>
-<span class="text-slate-300">•</span>
-<span class="text-orange-700 font-semibold" id="txtHeaderTarifa">Tarifa Estándar</span>
-</div>
-</div>
-</div>
-<!-- BOTONES DE ACCIÓN SUPERIOR -->
-<div class="flex items-center gap-2">
-<!-- Botón Dejar Pendiente / Pendientes con Contador -->
-<button class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" id="btnPendientesHeader" onclick="abrirModalPendientes()">
-<i class="fa-solid fa-paperclip"></i>
-<span>Pendientes</span>
-<span class="px-1.5 py-0.2 rounded-full bg-white text-amber-800 text-[10px] font-black" id="badgeNumPendientes">0</span>
-</button>
-<!-- Botón Buscar / Lupa -->
-<button class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-600 transition-all cursor-pointer" onclick="toggleBuscador()" title="Buscar productos">
-<i class="fa-solid fa-magnifying-glass text-sm"></i>
-</button>
-<!-- Botón Editor de Carta Nube (Lápiz) -->
-<button class="w-9 h-9 rounded-xl bg-orange-600 text-white hover:bg-orange-700 active:scale-95 flex items-center justify-center transition-all shadow-sm cursor-pointer" onclick="abrirModalEditorCarta()" title="Editar carta y categorías">
-<i class="fa-solid fa-pen-to-square text-sm"></i>
-</button>
-<!-- Botón Ajustes Fiscales (Sliders) -->
-<button class="w-9 h-9 rounded-xl bg-amber-100 text-amber-900 hover:bg-amber-200 active:scale-95 flex items-center justify-center transition-all cursor-pointer" onclick="toggleAjustesModal()" title="Datos fiscales y caja">
-<i class="fa-solid fa-sliders text-sm"></i>
-</button>
-<!-- Botón Cierre de Caja Z -->
-<button class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" onclick="abrirModalCaja()" title="Arqueo de turno">
-<i class="fa-solid fa-vault"></i>
-<span>Caja</span>
-</button>
-</div>
-</header>
-<!-- BARRA DE BÚSQUEDA RÁPIDA -->
-<div class="hidden bg-white border-b border-orange-100 px-4 py-2 transition-all" id="barraBuscador">
-<div class="relative flex items-center max-w-xl mx-auto">
-<i class="fa-solid fa-search absolute left-3.5 text-slate-400 text-xs"></i>
-<input class="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs focus:outline-none focus:border-orange-500" id="inputBuscar" oninput="filtrarProductos()" placeholder="Buscar café, pan, bollería, bebidas..." type="text"/>
-<button class="absolute right-2.5 text-slate-400 hover:text-slate-600 p-1" onclick="toggleBuscador()">
-<i class="fa-solid fa-xmark text-xs"></i>
-</button>
-</div>
-</div>
-<!-- TOAST FEEDBACK VISUAL RÁPIDO -->
-<div class="fixed top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white px-4 py-2 rounded-full text-xs font-bold shadow-2xl z-50 hidden flex items-center gap-2 border border-slate-700 transition-all" id="toastFeedback">
-<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-<span id="toastFeedbackTexto">Artículo añadido</span>
-</div>
-<!-- CONTENEDOR PRINCIPAL: DISTRIBUCIÓN DE MOSTRADOR TÁCTIL (TICKET A LA IZQUIERDA, CATÁLOGO O PLANO A LA DERECHA) -->
-<main class="flex-1 flex flex-col lg:flex-row p-3 gap-3 overflow-hidden max-w-full">
-<!-- ==================== COLUMNA IZQUIERDA: TICKET TÁCTIL ==================== -->
-<div class="w-full lg:w-[410px] flex flex-col bg-white rounded-2xl border border-orange-200/70 shadow-sm shrink-0 overflow-hidden">
-<!-- Cabecera del Ticket -->
-<div class="px-4 py-3 bg-orange-50/50 border-b border-orange-100 flex items-center justify-between">
-<div>
-<div class="flex items-center gap-2">
-<span class="font-extrabold text-xs text-orange-950 uppercase tracking-wide" id="ticketServicioLabel">BARRA</span>
-<span class="text-[11px] text-slate-400 font-mono" id="ticketNumeroLabel">#T-001</span>
-</div>
-<span class="text-[11px] text-slate-500" id="ticketClienteLabel">Cliente General</span>
-</div>
-<button class="px-2.5 py-1 rounded-lg text-rose-600 hover:bg-rose-50 font-bold text-xs flex items-center gap-1 border border-rose-200/60 active:scale-95 transition-all" onclick="vaciarTicket()">
-<i class="fa-solid fa-trash-can text-[11px]"></i> Limpiar
+          <div>
+            <h3 class="font-black text-slate-900 text-sm">Confirmar Venta y Cobro</h3>
+            <span class="text-[11px] text-slate-500 font-medium">Revisa el ticket antes de cobrar al cliente</span>
+          </div>
+        </div>
+        <button onclick="cerrarModalCobro()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-white flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
-</div>
-<!-- Cabecera de Columnas del Ticket -->
-<div class="grid grid-cols-12 px-4 py-2 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-<span class="col-span-6">ARTÍCULO</span>
-<span class="col-span-2 text-center">CANT</span>
-<span class="col-span-2 text-right">PRECIO</span>
-<span class="col-span-2 text-right">TOTAL</span>
-</div>
-<!-- Lista de Ítems en Curso (Scroll vertical) -->
-<div class="flex-1 overflow-y-auto divide-y divide-slate-100 p-2 min-h-[180px] max-h-[300px] lg:max-h-none" id="ticketItems">
-<div class="h-full flex flex-col items-center justify-center text-center text-slate-400 py-10 space-y-2">
-<i class="fa-regular fa-receipt text-3xl text-orange-200"></i>
-<p class="text-xs font-medium">Ticket vacío.<br/>Toca los productos de la derecha para sumar.</p>
-</div>
-</div>
-<!-- Total a Pagar Grande (Estilo TPV Mostrador) -->
-<div class="p-3 bg-amber-50/60 border-t border-amber-200/80 flex items-center justify-between">
-<span class="font-bold text-xs uppercase tracking-wider text-amber-950">TOTAL A PAGAR</span>
-<div class="text-right">
-<span class="text-2xl font-black font-display text-orange-600 block leading-none" id="txtTotalGrande">0.00 €</span>
-<span class="text-[10px] text-slate-500 font-mono" id="txtDesgloseIva">IVA inc. (0.00 €)</span>
-</div>
-</div>
-<!-- Teclado Numérico Físico Táctil y Botonera de Acción -->
-<div class="p-2.5 bg-slate-100/90 border-t border-slate-200 grid grid-cols-12 gap-1.5">
-<!-- Teclado numérico 3x4 (7 columnas) -->
-<div class="col-span-7 grid grid-cols-3 gap-1.5 text-sm font-bold">
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('7')">7</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('8')">8</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('9')">9</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('4')">4</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('5')">5</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('6')">6</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('1')">1</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('2')">2</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('3')">3</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum('0')">0</button>
-<button class="py-2.5 rounded-xl bg-white text-slate-800 shadow-sm border border-slate-200 active:bg-orange-100 active:scale-95 font-display font-extrabold" onclick="pulsarTecladoNum(',')">,</button>
-<button class="py-2.5 rounded-xl bg-rose-50 text-rose-600 shadow-sm border border-rose-200 active:bg-rose-100 active:scale-95 font-bold" onclick="pulsarTecladoNum('C')">C</button>
-</div>
-<!-- Botones de Cobro y Aparcar (5 columnas) -->
-<div class="col-span-5 flex flex-col gap-1.5">
-<!-- Finalizar Venta (F1) -->
-<button class="flex-1 py-3 px-2 rounded-xl bg-[#c85a32] hover:bg-[#b04924] active:scale-98 text-white font-extrabold text-xs shadow-md shadow-orange-600/20 flex flex-col items-center justify-center gap-1 transition-all" onclick="abrirModalCobro()">
-<div class="flex items-center gap-1.5">
-<i class="fa-solid fa-cash-register text-sm"></i>
-<span>Finalizar Venta</span>
-</div>
-<span class="text-[9px] px-1.5 py-0.2 bg-black/20 rounded font-mono">F1</span>
-</button>
-<!-- Dejar Pendiente (Aparcar) -->
-<button class="py-2.5 px-2 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-98 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all" onclick="aparcarVentaActual()" title="Aparcar ticket para cobrar más tarde">
-<i class="fa-solid fa-paperclip text-xs"></i>
-<span>Dejar Pendiente</span>
-</button><button class="py-2 px-2 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-950 border border-orange-300 font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 active:scale-98 transition-all" onclick="iniciarAsignacionMesa()" title="Asignar ticket actual a una mesa del plano"><i class="fa-solid fa-chair text-orange-700 text-xs"></i><span>Asignar a Mesa</span></button>
-<!-- Acceso rápido a Mesas -->
-<button class="py-2 px-2 rounded-xl bg-white text-orange-800 border border-orange-200 hover:bg-orange-50 active:scale-98 font-bold text-[11px] flex items-center justify-center gap-1 transition-all" onclick="alternarVistaMesas()">
-<i class="fa-solid fa-chair text-orange-600"></i>
-<span>Plano Mesas</span>
-</button>
-</div>
-</div>
-</div>
-<!-- ==================== COLUMNA DERECHA: CATÁLOGO DE PRODUCTOS O PLANO INTERACTIVO ==================== -->
-<div class="flex-1 flex flex-col bg-white rounded-2xl border border-orange-200/70 shadow-sm p-4 overflow-hidden relative min-h-[500px]">
-<!-- SECCIÓN A: CATÁLOGO TÁCTIL (POR DEFECTO) -->
-<div class="flex-1 flex flex-col space-y-3" id="contenedorCatalogo">
-<!-- Barra de Categorías con Botón Único de 'Mesas' -->
-<div class="flex items-center justify-between gap-2 pb-1 border-b border-slate-100 shrink-0">
-<!-- Botón único y prominente '🪑 Mesas' -->
-<button class="px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs shadow-sm flex items-center gap-2 active:scale-95 transition-all shrink-0" id="btnMesasHeaderCatalogo" onclick="alternarVistaMesas()">
-<i class="fa-solid fa-chair text-sm"></i>
-<span>Mesas</span>
-</button>
-<!-- Pestañas horizontales de Categorías -->
-<div class="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 py-1" id="pestañasCategorias">
-<!-- Se generan dinámicamente -->
-</div>
-</div>
-<!-- Rejilla Táctil de Productos -->
-<div class="flex-1 overflow-y-auto pr-1">
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 pb-4" id="gridProductos">
-<!-- Se genera dinámicamente -->
-</div>
-</div>
-</div>
-<!-- SECCIÓN B: PLANO DE SALA Y MESAS INTERACTIVO Y ARRASTRABLE (100% CORREGIDO) -->
-<div class="hidden flex-1 flex flex-col space-y-3" id="contenedorPlanoMesas"><div class="hidden bg-amber-500 text-white px-4 py-2.5 rounded-2xl shadow-md flex items-center justify-between shrink-0 animate-pulse" id="bannerAsignarMesa"><div class="flex items-center gap-2"><i class="fa-solid fa-chair text-base"></i><span class="font-extrabold text-xs sm:text-sm" id="txtBannerAsignarMesa">Selecciona una mesa para asignar el ticket</span></div><button class="px-2.5 py-1 bg-white/20 hover:bg-white/30 text-white rounded-lg text-xs font-bold transition-all" onclick="cancelarAsignacionMesa()">Cancelar</button></div>
-<!-- Barra de Control del Plano -->
-<div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
-<div class="flex items-center gap-3">
-<button class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 active:scale-95 flex items-center gap-1.5 shadow-sm" onclick="alternarVistaMesas()">
-<i class="fa-solid fa-arrow-left text-xs"></i>
-<span>Volver a Carta</span>
-</button>
-<div>
-<h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-<span>Plano Interactivo de Sala &amp; Mesas</span>
-<span class="px-2 py-0.5 rounded-full text-[10px] bg-orange-200 text-orange-950 font-black" id="badgeContadorMesas">0 mesas</span>
-</h3>
-<p class="text-[11px] text-slate-500">Toca para gestionar comanda, o activa "Mover" para colocarlas donde quieras</p>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<!-- Interruptor Modo Mover -->
-<button class="px-3.5 py-2 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs flex items-center gap-1.5 active:scale-95 transition-all border border-slate-300" id="btnModoMover" onclick="toggleModoMoverMesas()">
-<i class="fa-solid fa-arrows-up-down-left-right text-xs"></i>
-<span id="txtModoMover">Mover Mesas: OFF</span>
-</button>
-<!-- Botón Crear Nueva Mesa -->
-<button class="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" onclick="crearNuevaMesaPrompt()">
-<i class="fa-solid fa-plus text-xs"></i>
-<span>+ Crear Mesa</span>
-</button>
-</div>
-</div>
-<!-- Área del Lienzo de Mesas (Con rejilla táctil y posición libre) -->
-<div class="flex-1 rounded-2xl border-2 border-dashed border-orange-200 bg-[#fffdfa] relative overflow-hidden min-h-[420px] p-4" id="lienzoPlano">
-<!-- Las mesas se renderizan aquí con position: absolute y soporte de drag & drop -->
-<div class="w-full h-full relative" id="areaMesasContenedor"></div>
-</div>
-</div>
-</div>
-</main>
-<!-- ==================== MODAL DE GESTIÓN DE MESA SELECCIONADA ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalMesaOpciones">
-<div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100">
-<div>
-<h3 class="font-black text-slate-900 text-base" id="modalMesaTitulo">Mesa 1</h3>
-<span class="text-xs text-orange-600 font-semibold" id="modalMesaSubtitulo">Estado actual: Libre</span>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="cerrarModalMesa()">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<!-- Selector de Comensales (Pax) -->
-<div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<i class="fa-solid fa-users text-orange-600 text-sm"></i>
-<span class="text-xs font-bold text-slate-700">Comensales:</span>
-</div>
-<div class="flex items-center gap-2">
-<button class="w-8 h-8 rounded-lg bg-white border border-slate-200 font-bold text-slate-600 hover:bg-slate-100 text-sm" onclick="cambiarComensalesMesa(-1)">-</button>
-<span class="w-6 text-center font-black text-sm text-slate-900" id="txtComensalesModal">2</span>
-<button class="w-8 h-8 rounded-lg bg-white border border-slate-200 font-bold text-slate-600 hover:bg-slate-100 text-sm" onclick="cambiarComensalesMesa(1)">+</button>
-</div>
-</div>
-<!-- Botones de Acción de Mesa -->
-<div class="space-y-2 text-xs font-bold">
-<button class="w-full py-3.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-between active:scale-98 shadow-sm" onclick="mesaAccionAñadirProducto()">
-<span>➕ Cargar en Mostrador para Añadir Productos</span>
-<i class="fa-solid fa-arrow-right"></i>
-</button>
-<button class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-between active:scale-98 shadow-sm" onclick="mesaAccionCobrarDirecto()">
-<span>💳 Cobrar Mesa</span>
-<span class="font-black text-sm" id="txtTotalMesaModal">0.00 €</span>
-</button>
-<div class="grid grid-cols-2 gap-2 pt-1">
-<button class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold flex items-center justify-center gap-1 active:scale-98" onclick="mesaAccionLiberar()">
-<i class="fa-solid fa-rotate-left"></i>
-<span>Liberar Mesa</span>
-</button>
-<button class="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold flex items-center justify-center gap-1 active:scale-98" onclick="mesaAccionEliminar()">
-<i class="fa-solid fa-trash"></i>
-<span>Eliminar</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- ==================== MODAL DE VENTAS PENDIENTES (APARCADAS) ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalPendientes">
-<div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl flex flex-col max-h-[85vh]">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
-<div class="flex items-center gap-2">
-<i class="fa-solid fa-paperclip text-amber-500 text-lg"></i>
-<h3 class="font-black text-slate-900 text-base">Ventas Dejadas Pendientes</h3>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="cerrarModalPendientes()">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<p class="text-xs text-slate-500 shrink-0">Selecciona cualquier ticket aparcado para retomarlo y cobrarlo en el mostrador.</p>
-<div class="flex-1 overflow-y-auto divide-y divide-slate-100 pr-1 space-y-2" id="listaVentasPendientes">
-<!-- Se genera dinámicamente -->
-</div>
-<div class="pt-2 border-t border-slate-100 shrink-0 flex justify-end">
-<button class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200" onclick="cerrarModalPendientes()">
-          Cerrar
+      </div>
+
+      <!-- Cuerpo: 2 Columnas (Ticket fiel a la izquierda / Pago a la derecha) -->
+      <div class="grid grid-cols-1 md:grid-cols-12 flex-1 overflow-y-auto divide-y md:divide-y-0 md:divide-x divide-slate-100">
+        
+        <!-- COLUMNA IZQUIERDA: PREVISUALIZACIÓN REAL DEL TICKET (TÉRMICO) -->
+        <div class="md:col-span-6 p-5 bg-amber-50/20 flex flex-col justify-between space-y-3">
+          <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm font-mono text-xs text-slate-800 space-y-3">
+            
+            <!-- Encabezado Ticket -->
+            <div class="text-center border-b border-dashed border-slate-300 pb-2.5">
+              <span class="text-lg font-black block tracking-tight font-display" id="tkNegocio">LA PIRULETA</span>
+              <span class="text-[10px] text-slate-500 block" id="tkRazonSocial">Cafetería & Panadería Artesanal</span>
+              <span class="text-[10px] text-slate-500 block" id="tkCIF">CIF: B-12345678</span>
+              <span class="text-[10px] text-slate-500 block" id="tkDireccion">C/ Mayor 12 - Madrid</span>
+              <span class="text-[10px] text-slate-500 block" id="tkTelefono">Tel: 600 000 000</span>
+              <div class="flex justify-between text-[10px] text-slate-400 pt-1.5 mt-1 border-t border-slate-100">
+                <span id="tkFechaHora">16/10/2026 18:30</span>
+                <span id="tkNumero">TICKET #T-001</span>
+              </div>
+            </div>
+
+            <!-- Desglose de Artículos del Ticket -->
+            <div id="tkListaArticulos" class="divide-y divide-slate-100 max-h-[180px] overflow-y-auto pr-1 text-[11px]">
+              <!-- Se rellena dinámicamente -->
+            </div>
+
+            <!-- Totales e Impuestos Desglosados -->
+            <div class="border-t border-dashed border-slate-300 pt-2 space-y-1 text-[11px]">
+              <div class="flex justify-between text-slate-600">
+                <span>Base Imponible</span>
+                <span id="tkBaseImponible">0.00 €</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span id="tkLabelIVA">Impuestos (IVA)</span>
+                <span id="tkCuotaIVA">0.00 €</span>
+              </div>
+              <div class="flex justify-between font-black text-sm text-slate-900 pt-1.5 border-t border-slate-200">
+                <span>TOTAL FACTURA</span>
+                <span id="tkTotalPagar" class="text-orange-600 text-base font-display">0.00 €</span>
+              </div>
+            </div>
+
+            <!-- Pie de Agradecimiento -->
+            <div class="text-center text-[10px] text-slate-400 border-t border-dashed border-slate-300 pt-2" id="tkPieAgradecimiento">
+              ¡Muchas gracias por su visita! Vuelva pronto 🍭
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: MEDIOS DE PAGO Y CONFIRMACIÓN -->
+        <div class="md:col-span-6 p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">1. Seleccionar Medio de Pago</span>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="seleccionarMedioPago('efectivo', this)" class="btn-pago py-3 px-2 rounded-2xl border-2 border-orange-500 bg-orange-50/60 font-bold text-xs text-orange-700 flex flex-col items-center gap-1 shadow-sm active:scale-95">
+                <i class="fa-solid fa-money-bill-wave text-emerald-600 text-lg"></i>
+                <span>Efectivo</span>
+              </button>
+              <button onclick="seleccionarMedioPago('tarjeta', this)" class="btn-pago py-3 px-2 rounded-2xl border border-slate-200 bg-white font-semibold text-xs text-slate-700 flex flex-col items-center gap-1 shadow-sm active:scale-95">
+                <i class="fa-regular fa-credit-card text-blue-600 text-lg"></i>
+                <span>Datáfono</span>
+              </button>
+              <button onclick="seleccionarMedioPago('bizum', this)" class="btn-pago py-3 px-2 rounded-2xl border border-slate-200 bg-white font-semibold text-xs text-slate-700 flex flex-col items-center gap-1 shadow-sm active:scale-95">
+                <i class="fa-solid fa-mobile-screen-button text-teal-600 text-lg"></i>
+                <span>Bizum</span>
+              </button>
+            </div>
+
+            <!-- Calculadora de Cambio Rápido para Efectivo -->
+            <div id="bloqueCalculoCambio" class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-2">
+              <span class="text-[11px] font-bold text-slate-600 block">Efectivo entregado por cliente:</span>
+              <div class="grid grid-cols-4 gap-1.5 text-xs font-bold">
+                <button onclick="fijarEntrega(5)" class="py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-100">5 €</button>
+                <button onclick="fijarEntrega(10)" class="py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-100">10 €</button>
+                <button onclick="fijarEntrega(20)" class="py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-100">20 €</button>
+                <button onclick="fijarEntrega(50)" class="py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-100">50 €</button>
+              </div>
+              <div class="flex items-center justify-between pt-1 text-xs">
+                <span class="text-slate-500 font-medium">Cambio a devolver:</span>
+                <span id="txtCambioDevolver" class="font-black text-sm text-emerald-600">0.00 €</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTÓN PRINCIPAL: CONFIRMAR Y COBRAR -->
+          <button onclick="ejecutarCobroYDesplegarOpciones()" class="w-full py-4 rounded-2xl bg-orange-600 hover:bg-orange-700 active:scale-98 text-white font-black text-base shadow-xl shadow-orange-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <i class="fa-solid fa-check text-lg"></i>
+            <span>Confirmar y Cobrar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SELECTOR POST-COBRO: ENVIAR A WHATSAPP, IMPRIMIR O FINALIZAR        -->
+  <!-- ========================================================================= -->
+  <div id="modalSelectorPostVenta" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md p-6 space-y-5 shadow-2xl border border-orange-100 text-center animate-in zoom-in-95 duration-150">
+      
+      <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <div>
+        <h3 class="font-black text-xl text-slate-900 font-display">¡Cobro Completado con Éxito!</h3>
+        <p class="text-xs text-slate-500 mt-1">El ticket se ha registrado en caja. ¿Qué deseas hacer con el comprobante?</p>
+      </div>
+
+      <!-- 3 OPCIONES: WHATSAPP, IMPRIMIR Y FINALIZAR -->
+      <div class="space-y-2.5 pt-2">
+        <!-- 1. Enviar a WhatsApp -->
+        <button onclick="postVentaWhatsApp()" class="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-md shadow-emerald-600/25 active:scale-98 transition-all">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+          <span>Enviar a WhatsApp</span>
         </button>
-</div>
-</div>
-</div>
-<!-- ==================== MODAL DE COBRO FINAL (F1) ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalCobro">
-<div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100">
-<div>
-<h3 class="font-extrabold text-slate-900 text-base">Completar Cobro</h3>
-<span class="text-xs text-slate-500" id="txtCobroDestino">Servicio: BARRA</span>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="cerrarModalCobro()">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<!-- Resumen Importe -->
-<div class="p-4 rounded-2xl bg-orange-50 border border-orange-100 text-center">
-<span class="text-xs text-orange-950 font-bold block mb-1">TOTAL A COBRAR</span>
-<span class="text-3xl font-black font-display text-orange-600" id="txtModalCobroTotal">0.00 €</span>
-<div class="text-[11px] text-slate-600 font-mono mt-1 pt-1 border-t border-orange-200/60" id="txtModalCobroIvaDetalle">
-<!-- Desglose de impuestos dinámicos -->
-</div>
-</div>
-<!-- Métodos de Pago -->
-<div class="space-y-2">
-<span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Método de Pago</span>
-<div class="grid grid-cols-3 gap-2">
-<button class="btn-metodo py-3 px-2 rounded-xl border border-slate-200 bg-white font-semibold text-xs text-center shadow-sm flex flex-col items-center gap-1.5" onclick="seleccionarMetodo('efectivo', this)">
-<i class="fa-solid fa-money-bill-wave text-emerald-600 text-base"></i>
-<span>Efectivo</span>
-</button>
-<button class="btn-metodo py-3 px-2 rounded-xl border-2 border-orange-500 bg-orange-50/50 font-bold text-xs text-center shadow-sm flex flex-col items-center gap-1.5 text-orange-600" onclick="seleccionarMetodo('tarjeta', this)">
-<i class="fa-regular fa-credit-card text-orange-600 text-base"></i>
-<span>Datáfono</span>
-</button>
-<button class="btn-metodo py-3 px-2 rounded-xl border border-slate-200 bg-white font-semibold text-xs text-center shadow-sm flex flex-col items-center gap-1.5" onclick="seleccionarMetodo('bizum', this)">
-<i class="fa-solid fa-mobile-screen-button text-sky-600 text-base"></i>
-<span>Bizum</span>
-</button>
-</div>
-</div>
-<button class="w-full py-4 rounded-2xl bg-[#c85a32] hover:bg-[#b04924] active:scale-98 text-white font-black text-sm shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2" onclick="ejecutarCobroConfirmado()">
-<i class="fa-solid fa-check text-base"></i>
-<span>Confirmar y Cobrar</span>
-</button>
-</div>
-</div>
-<!-- ==================== MODAL DE CAJA Y ARQUEO Z ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalCaja">
-<div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100">
-<div class="flex items-center gap-2">
-<i class="fa-solid fa-vault text-orange-600 text-lg"></i>
-<div>
-<h3 class="font-extrabold text-slate-900 text-base">Arqueo de Turno (Cierre Z)</h3>
-<span class="text-xs text-slate-500" id="subtituloCajaTurno">Cierre Diario - Caja 1</span>
-</div>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="cerrarModalCaja()">
-<i class="fa-solid fa-xmark text-lg"></i>
-</button>
-</div>
-<div class="grid grid-cols-2 gap-3 text-xs">
-<div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-<span class="text-[11px] text-slate-500 font-medium block">Efectivo en Cajón</span>
-<span class="text-lg font-black text-emerald-600 block mt-1" id="cajaEfectivo">0.00 €</span>
-</div>
-<div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-<span class="text-[11px] text-slate-500 font-medium block">Datáfono / Tarjeta</span>
-<span class="text-lg font-black text-blue-600 block mt-1" id="cajaTarjeta">0.00 €</span>
-</div>
-<div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-<span class="text-[11px] text-slate-500 font-medium block">Bizum Recibidos</span>
-<span class="text-lg font-black text-teal-600 block mt-1" id="cajaBizum">0.00 €</span>
-</div>
-<div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
-<span class="text-[11px] text-amber-900 font-medium block">Total Ventas</span>
-<span class="text-lg font-black text-amber-950 block mt-1" id="cajaTotal">0.00 €</span>
-</div>
-</div>
-<button class="w-full py-3.5 rounded-xl bg-[#c85a32] hover:bg-[#b04924] active:scale-98 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2" onclick="confirmarCierreZ()">
-<i class="fa-solid fa-lock text-xs"></i>
-<span>Cerrar Caja y Descargar Resumen Z</span>
-</button>
-</div>
-</div>
-<!-- ==================== MODAL DE AJUSTES & DATOS FISCALES ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalAjustes">
-<div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3.5 shadow-2xl max-h-[90vh] overflow-y-auto">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100">
-<div class="flex items-center gap-2">
-<i class="fa-solid fa-sliders text-orange-600"></i>
-<h3 class="font-extrabold text-slate-900 text-sm">Configuración y Datos Fiscales</h3>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="toggleAjustesModal()">
-<i class="fa-solid fa-xmark text-sm"></i>
-</button>
-</div>
-<div class="space-y-2 text-xs">
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Nombre Comercial</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgNombre" type="text" value="LA PIRULETA"/>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">CIF / NIF</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgCIF" placeholder="B-12345678" type="text"/>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Nombre Fiscal / Razón Social</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgRazonSocial" placeholder="Cafetería La Piruleta S.L." type="text"/>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Dirección y Código Postal</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgDireccion" placeholder="Calle Mayor 12, Madrid" type="text"/>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Teléfono / WhatsApp</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgTelefono" placeholder="600 000 000" type="text"/>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Pie del Ticket</label>
-<textarea class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgPieTicket" rows="2"></textarea>
-</div>
-<div>
-<label class="font-semibold text-slate-700 block mb-0.5">Punto de Venta / Caja</label>
-<input class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="cfgCaja" type="text" value="Caja 1"/>
-</div>
-</div>
-<div class="pt-2 flex gap-2">
-<button class="flex-1 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs" onclick="toggleAjustesModal()">Cerrar</button>
-<button class="flex-1 py-2 rounded-xl bg-orange-600 text-white font-bold text-xs" onclick="guardarAjustes()">Guardar</button>
-</div>
-</div>
-</div>
-<!-- ==================== MODAL DE EDICIÓN DE CARTA (FIREBASE) ==================== -->
-<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="modalEditorCarta">
-<div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3.5 shadow-2xl max-h-[90vh] flex flex-col">
-<div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
-<div class="flex items-center gap-2">
-<i class="fa-solid fa-pen-to-square text-orange-600"></i>
-<h3 class="font-extrabold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
-</div>
-<button class="text-slate-400 hover:text-slate-600 p-1" onclick="cerrarModalEditorCarta()">
-<i class="fa-solid fa-xmark text-sm"></i>
-</button>
-</div>
-<div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
-<button class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600" id="tabBtnArticulos" onclick="cambiarTabEditor('articulos', this)">📦 Artículos</button>
-<button class="btn-tab-editor py-1.5 rounded-lg text-slate-600" id="tabBtnCategorias" onclick="cambiarTabEditor('categorias', this)">🏷️ Categorías</button>
-</div>
-<!-- Tab Artículos -->
-<div class="space-y-3 flex-1 flex flex-col overflow-hidden" id="editorTabArticulos">
-<div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-200/80 space-y-2 text-xs shrink-0">
-<div class="flex items-center justify-between">
-<span class="font-bold text-orange-950 block text-xs" id="tituloFormArticulo">Añadir Nuevo Producto</span>
-<button class="hidden text-[11px] text-rose-600 font-bold hover:underline" id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()">✕ Cancelar</button>
-</div>
-<input id="editandoProdId" type="hidden" value=""/>
-<div class="grid grid-cols-12 gap-2">
-<input class="col-span-7 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" type="text"/>
-<input class="col-span-5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500 font-mono" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" step="0.05" type="number"/>
-</div>
-<div class="grid grid-cols-12 gap-2">
-<select class="col-span-4 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-orange-500" id="nuevoProdCat"></select>
-<!-- Selector Tipo IVA -->
-<select class="col-span-5 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:border-orange-500" id="nuevoProdIva" title="Tipo de IVA">
-<option value="10">IVA 10% (General Hostelería)</option>
-<option value="4">IVA 4% (Superreducido: Pan/Leche)</option>
-<option value="21">IVA 21% (Bebidas/Alcohol)</option>
-</select>
-<input class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-center focus:outline-none focus:border-orange-500" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" type="text"/>
-</div>
-<button class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98" id="btnGuardarProd" onclick="guardarNuevoProducto()">
+
+        <!-- 2. Imprimir -->
+        <button onclick="postVentaImprimir()" class="w-full py-3.5 px-4 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-md active:scale-98 transition-all">
+          <i class="fa-solid fa-print text-base"></i>
+          <span>Imprimir Ticket</span>
+        </button>
+
+        <!-- 3. Finalizar -->
+        <button onclick="postVentaFinalizar()" class="w-full py-3 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>Finalizar y Nuevo Ticket</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL ASIGNAR A MESA (CUANDO SE PULSA "ASIGNAR A MESA" EN EL MOSTRADOR)   -->
+  <!-- ========================================================================= -->
+  <div id="modalAsignarAMesa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl border border-orange-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-chair"></i>
+          </span>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Asignar Ticket a Mesa</h3>
+            <span class="text-[11px] text-orange-600 font-semibold" id="txtAsignarTotalInfo">Total: 0.00 €</span>
+          </div>
+        </div>
+        <button onclick="cerrarModalAsignarAMesa()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500">Toca la mesa a la que quieres transferir esta comanda:</p>
+      
+      <div class="grid grid-cols-3 gap-2.5 max-h-[320px] overflow-y-auto p-1" id="gridMesasParaAsignar">
+        <!-- Se genera dinámicamente con las mesas existentes -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL PLANO DE MESAS ARRASTRABLE (DRAG & DROP)                            -->
+  <!-- ========================================================================= -->
+  <div id="modalPlanoMesas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-3xl w-full max-w-4xl p-4 sm:p-5 space-y-3 shadow-2xl flex flex-col h-[90vh]">
+      <!-- Cabecera del Plano -->
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🪑</span>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Mapa de Sala & Terrazas</h3>
+            <span class="text-[11px] text-slate-500 font-medium">Toca una mesa para comanda o activa mover para ordenarlas</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnModoMover" onclick="toggleModoMover()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 flex items-center gap-1 active:scale-95 transition-all">
+            <i class="fa-solid fa-arrows-up-down-left-right"></i>
+            <span id="txtModoMover">Mover: OFF</span>
+          </button>
+          <button onclick="crearNuevaMesa()" class="px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all">
+            <i class="fa-solid fa-plus"></i> Crear Mesa
+          </button>
+          <button onclick="cerrarModalPlanoMesas()" class="text-slate-400 hover:text-slate-600 p-1">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lienzo del Plano Interactivo donde viven las mesas -->
+      <div id="lienzoPlanoMesas" class="flex-1 bg-[#fff8f1] rounded-2xl border-2 border-dashed border-orange-200 relative overflow-hidden select-none">
+        <!-- Mesas absolutas con coordenadas (x,y) -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL GESTOR DE CARTA EN LA NUBE (ARTÍCULOS + TIPOS DE IVA + CATEGORÍAS) -->
+  <!-- ========================================================================= -->
+  <div id="modalEditorCarta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl max-h-[90vh] flex flex-col border border-orange-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-orange-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">Gestor de Carta en la Nube</h3>
+        </div>
+        <button onclick="cerrarModalEditorCarta()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Selector Subpestañas: Artículos vs Categorías -->
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold text-center shrink-0">
+        <button onclick="cambiarTabEditor('articulos', this)" class="btn-tab-editor py-1.5 rounded-lg bg-white shadow-sm text-orange-600">📦 Artículos & IVA</button>
+        <button onclick="cambiarTabEditor('categorias', this)" class="btn-tab-editor py-1.5 rounded-lg text-slate-600">🏷️ Categorías</button>
+      </div>
+
+      <!-- SUBPESTAÑA 1: ARTÍCULOS CON SELECCIÓN DE IVA -->
+      <div id="editorTabArticulos" class="space-y-3 flex-1 flex flex-col overflow-hidden">
+        <!-- Formulario Crear/Editar Artículo -->
+        <div class="bg-orange-50/60 p-3 rounded-2xl border border-orange-100 space-y-2 text-xs shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-orange-950 block" id="tituloFormArticulo">Añadir Nuevo Producto</span>
+            <button id="btnCancelarEdicionProd" onclick="cancelarEdicionProducto()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar edición</button>
+          </div>
+          <input type="hidden" id="editandoProdId" value="">
+          
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="nuevoProdNombre" placeholder="Nombre (ej. Batido)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+            <input type="number" step="0.05" id="nuevoProdPrecio" placeholder="Precio € (ej. 2.50)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <select id="nuevoProdCat" class="px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs col-span-1"></select>
+            <input type="text" id="nuevoProdIcono" placeholder="Emoji (ej. 🥤)" class="px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs col-span-1">
+            <!-- Selector Tipo de IVA -->
+            <select id="nuevoProdIVA" class="px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs col-span-1 font-bold text-slate-700">
+              <option value="10">IVA 10% (Hostelería)</option>
+              <option value="4">IVA 4% (Pan/Básico)</option>
+              <option value="21">IVA 21% (Alcohol/General)</option>
+            </select>
+          </div>
+
+          <button id="btnGuardarProd" onclick="guardarProductoEnNube()" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm active:scale-95 transition-all">
             Guardar en la Nube
           </button>
-</div>
-<div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
-</div>
-<!-- Tab Categorías -->
-<div class="hidden space-y-3 flex-1 flex flex-col overflow-hidden" id="editorTabCategorias">
-<div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-200/80 space-y-2 text-xs shrink-0">
-<div class="flex items-center justify-between">
-<span class="font-bold text-amber-950 block text-xs" id="tituloFormCategoria">Nueva Categoría</span>
-<button class="hidden text-[11px] text-rose-600 font-bold hover:underline" id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()">✕ Cancelar</button>
-</div>
-<input id="editandoCatId" type="hidden" value=""/>
-<div class="grid grid-cols-12 gap-2">
-<input class="col-span-9 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs focus:outline-none focus:border-amber-500" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos Naturales)" type="text"/>
-<input class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-center focus:outline-none focus:border-amber-500" id="nuevaCatIcono" placeholder="Emoji 🧃" type="text"/>
-</div>
-<button class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98" id="btnGuardarCat" onclick="guardarCategoria()">
+        </div>
+
+        <!-- Lista de Productos con botón de Modificar y Eliminar -->
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorProductos"></div>
+      </div>
+
+      <!-- SUBPESTAÑA 2: CATEGORÍAS -->
+      <div id="editorTabCategorias" class="hidden space-y-3 flex-1 flex flex-col overflow-hidden">
+        <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-100 space-y-2 text-xs shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-950 block" id="tituloFormCat">Nueva Categoría</span>
+            <button id="btnCancelarEdicionCat" onclick="cancelarEdicionCategoria()" class="hidden text-[11px] text-rose-600 font-bold underline">Cancelar</button>
+          </div>
+          <input type="hidden" id="editandoCatId" value="">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="nuevaCatNombre" placeholder="Nombre (ej. Zumos)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+            <input type="text" id="nuevaCatIcono" placeholder="Emoji (ej. 🧃)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs">
+          </div>
+          <button id="btnGuardarCat" onclick="guardarCategoriaEnNube()" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm">
             Guardar Categoría
           </button>
-</div>
-<div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorCategorias"></div>
-</div>
-</div>
-</div>
-<!-- JAVASCRIPT: LÓGICA COMPLETA DE TPV, MESAS ARRASTRABLES Y PERSISTENCIA -->
-<script>
-    // 1. CONFIGURACIÓN FIREBASE FIRESTORE
+        </div>
+        <div class="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs pr-1" id="listaEditorCategorias"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE PENDIENTES (APARCAR Y REANUDAR TICKETS)                           -->
+  <!-- ========================================================================= -->
+  <div id="modalPendientes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3 shadow-2xl border border-orange-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-paperclip text-amber-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">Tickets Pendientes / Aparcados</h3>
+        </div>
+        <button onclick="cerrarModalPendientes()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <div id="listaTicketsPendientes" class="divide-y divide-slate-100 max-h-[300px] overflow-y-auto text-xs"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE AJUSTES & DATOS FISCALES                                         -->
+  <!-- ========================================================================= -->
+  <div id="modalAjustes" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto border border-orange-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-orange-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">Datos Fiscales del Ticket</h3>
+        </div>
+        <button onclick="toggleAjustesModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Nombre Comercial</label>
+          <input type="text" id="cfgNombre" value="LA PIRULETA" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">CIF / NIF</label>
+          <input type="text" id="cfgCIF" placeholder="B-12345678" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Nombre Fiscal / Razón Social</label>
+          <input type="text" id="cfgRazonSocial" placeholder="Cafetería La Piruleta S.L." class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Dirección y CP</label>
+          <input type="text" id="cfgDireccion" placeholder="Calle Mayor 12, 28001 Madrid" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Teléfono / WhatsApp</label>
+          <input type="text" id="cfgTelefono" placeholder="600 000 000" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+        </div>
+        <div>
+          <label class="font-semibold text-slate-700 block mb-0.5">Pie del Ticket (Agradecimiento)</label>
+          <textarea id="cfgPieTicket" rows="2" class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="pt-2 flex gap-2">
+        <button onclick="toggleAjustesModal()" class="flex-1 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">Cerrar</button>
+        <button onclick="guardarAjustes()" class="flex-1 py-2 rounded-xl bg-orange-600 text-white font-bold text-xs">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE CAJA & ARQUEO Z                                                  -->
+  <!-- ========================================================================= -->
+  <div id="modalCaja" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-orange-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-vault text-orange-600"></i>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Arqueo de Turno</h3>
+            <span class="text-[10px] text-slate-400">Caja 1 &bull; LA PIRULETA</span>
+          </div>
+        </div>
+        <button onclick="cerrarModalCaja()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="text-[10px] text-slate-400 block font-medium">Efectivo</span>
+          <span id="cjEfectivo" class="text-base font-black text-emerald-600 block mt-0.5">0.00 €</span>
+        </div>
+        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="text-[10px] text-slate-400 block font-medium">Datáfono</span>
+          <span id="cjTarjeta" class="text-base font-black text-blue-600 block mt-0.5">0.00 €</span>
+        </div>
+        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="text-[10px] text-slate-400 block font-medium">Bizum</span>
+          <span id="cjBizum" class="text-base font-black text-teal-600 block mt-0.5">0.00 €</span>
+        </div>
+        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+          <span class="text-[10px] text-amber-800 block font-medium">Total Ventas</span>
+          <span id="cjTotal" class="text-base font-black text-amber-950 block mt-0.5">0.00 €</span>
+        </div>
+      </div>
+      <button onclick="confirmarCierreZ()" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-lock"></i>
+        <span>Cerrar Caja y Descargar Resumen Z</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ELEMENTO IMPRIMIBLE OCULTO (PLANTILLA TÉRMICA 80MM) -->
+  <div id="ticketImprimible" class="hidden"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: LÓGICA COMPLETA DE V5.5                                      -->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. FIREBASE CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyDZ5xWCNJu2y6xg5x3QT03zlv58LWL96zQ",
       authDomain: "la-piruleta-tpv.firebaseapp.com",
@@ -539,112 +664,96 @@
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
       document.getElementById('txtEstadoCloud').innerText = "Cloud Conectado";
-    } catch(err) {
-      console.warn("Modo local activo:", err);
+    } catch(e) {
+      console.warn("Modo local activo:", e);
       document.getElementById('txtEstadoCloud').innerText = "Modo Local";
     }
 
-    // Categorías base
+    // Datos base
     const categoriasBase = [
-      { id: 'favoritos', nombre: '★ FAVORITOS / TODOS', icono: '⭐' },
-      { id: 'pan', nombre: 'PAN', icono: '🥖' },
-      { id: 'bolleria', nombre: 'BOLLERÍA', icono: '🥐' },
-      { id: 'cafe', nombre: 'CAFÉ', icono: '☕' },
-      { id: 'tostadas', nombre: 'TOSTADAS', icono: '🥪' }
+      { id: 'cafe', nombre: 'Café', icono: '☕' },
+      { id: 'pan', nombre: 'Pan', icono: '🥖' },
+      { id: 'bolleria', nombre: 'Bollería', icono: '🥐' },
+      { id: 'tostadas', nombre: 'Tostadas', icono: '🥪' }
     ];
 
-    // Catálogo base con IVA por producto
     const catalogoBase = [
-      { id: 1, nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, icono: '☕', iva: 10 },
-      { id: 2, nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, icono: '🥛', iva: 10 },
-      { id: 3, nombre: 'Cold Brew Nitro', categoria: 'cafe', precio: 3.40, icono: '🧊', iva: 10 },
-      { id: 4, nombre: 'Hogaza Masa Madre 1kg', categoria: 'pan', precio: 4.20, icono: '🥖', iva: 4 },
-      { id: 5, nombre: 'Barra Rústica Tradicional', categoria: 'pan', precio: 1.30, icono: '🥖', iva: 4 },
-      { id: 6, nombre: 'Croissant Mantequilla', categoria: 'bolleria', precio: 1.80, icono: '🥐', iva: 10 },
-      { id: 7, nombre: 'Napolitana Chocolate', categoria: 'bolleria', precio: 2.10, icono: '🍫', iva: 10 },
-      { id: 8, nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, icono: '🥪', iva: 10 }
+      { id: 1, nombre: 'Flat White Doble', categoria: 'cafe', precio: 2.80, iva: 10, icono: '☕' },
+      { id: 2, nombre: 'Cappuccino Avena', categoria: 'cafe', precio: 2.90, iva: 10, icono: '🥛' },
+      { id: 3, nombre: 'Cold Brew Nitro', categoria: 'cafe', precio: 3.40, iva: 10, icono: '🧊' },
+      { id: 4, nombre: 'Hogaza Masa Madre 1kg', categoria: 'pan', precio: 4.20, iva: 4, icono: '🥖' },
+      { id: 5, nombre: 'Barra Rústica Tradicional', categoria: 'pan', precio: 1.30, iva: 4, icono: '🥖' },
+      { id: 6, nombre: 'Croissant Mantequilla', categoria: 'bolleria', precio: 1.80, iva: 10, icono: '🥐' },
+      { id: 7, nombre: 'Napolitana Chocolate', categoria: 'bolleria', precio: 2.10, iva: 10, icono: '🍫' },
+      { id: 8, nombre: 'Tostada Tomate y Aceite', categoria: 'tostadas', precio: 2.50, iva: 10, icono: '🥪' }
     ];
 
     let categorias = JSON.parse(localStorage.getItem('piruleta_categorias')) || categoriasBase;
     let catalogo = JSON.parse(localStorage.getItem('piruleta_catalogo')) || catalogoBase;
-    
-    // Normalizar IVAs en el catálogo cargado si faltasen
-    catalogo = catalogo.map(p => ({
-      ...p,
-      iva: Number(p.iva) || (p.categoria === 'pan' ? 4 : 10)
-    }));
-
     let ticketActual = [];
-    let metodoPagoActivo = 'tarjeta';
-    let servicioActivo = 'BARRA';
-    let categoriaFiltroActiva = 'favoritos';
+    let ticketsPendientes = JSON.parse(localStorage.getItem('piruleta_pendientes')) || [];
+    let correlativoTicket = Number(localStorage.getItem('piruleta_num_ticket')) || 1;
+    let medioPagoActivo = 'efectivo';
+    let categoriaFiltroActiva = 'todos';
     let mesaActivaSeleccionada = null;
-    let modoMoverMesasActivo = false;
+    let modoMoverMesas = false;
 
-    // Ventas aparcadas (Dejar Pendiente)
-    let ventasPendientes = JSON.parse(localStorage.getItem('piruleta_ventas_pendientes')) || [];
-
-    // Mesas iniciales con coordenadas relativas porcentuales para el plano interactivo
-    let mesasGuardadas = JSON.parse(localStorage.getItem('piruleta_mesas_v5'));
-    let mesas = mesasGuardadas || [
-      { id: 1, nombre: 'Mesa 1', ocupada: false, pax: 2, ticket: [], x: 40, y: 40 },
-      { id: 2, nombre: 'Mesa 2', ocupada: false, pax: 2, ticket: [], x: 180, y: 40 },
-      { id: 3, nombre: 'Mesa 3', ocupada: false, pax: 4, ticket: [], x: 320, y: 40 },
-      { id: 4, nombre: 'Mesa 4', ocupada: false, pax: 4, ticket: [], x: 40, y: 180 },
-      { id: 5, nombre: 'Mesa 5', ocupada: false, pax: 2, ticket: [], x: 180, y: 180 },
-      { id: 6, nombre: 'Mesa 6', ocupada: false, pax: 4, ticket: [], x: 320, y: 180 }
+    // Mesas en formato plano
+    let mesas = JSON.parse(localStorage.getItem('piruleta_mesas_v5')) || [
+      { id: 1, nombre: 'Mesa 1', x: 40, y: 40, ocupada: false, pax: 2, ticket: [] },
+      { id: 2, nombre: 'Mesa 2', x: 180, y: 40, ocupada: false, pax: 2, ticket: [] },
+      { id: 3, nombre: 'Mesa 3', x: 320, y: 40, ocupada: false, pax: 4, ticket: [] },
+      { id: 4, nombre: 'Mesa 4', x: 40, y: 170, ocupada: false, pax: 4, ticket: [] },
+      { id: 5, nombre: 'Mesa 5', x: 180, y: 170, ocupada: false, pax: 2, ticket: [] },
+      { id: 6, nombre: 'Mesa 6', x: 320, y: 170, ocupada: false, pax: 4, ticket: [] }
     ];
 
-    // Caja diaria
-    let caja = JSON.parse(localStorage.getItem('piruleta_caja')) || {
-      efectivo: 0.00,
-      tarjeta: 0.00,
-      bizum: 0.00,
-      total: 0.00
-    };
-
-    // Datos Fiscales editables
-    let datosFiscales = JSON.parse(localStorage.getItem('piruleta_datos_fiscales')) || {
+    let caja = JSON.parse(localStorage.getItem('piruleta_caja')) || { efectivo: 0, tarjeta: 0, bizum: 0, total: 0 };
+    let datosFiscales = JSON.parse(localStorage.getItem('piruleta_fiscales')) || {
       nombre: "LA PIRULETA",
-      cif: "",
-      razonSocial: "",
-      direccion: "",
-      telefono: "",
-      pieTicket: "¡Muchas gracias por su visita! Vuelva pronto",
+      cif: "B-12345678",
+      razonSocial: "Cafetería La Piruleta S.L.",
+      direccion: "Calle Mayor 12, 28001 Madrid",
+      telefono: "600 000 000",
+      pieTicket: "¡Muchas gracias por su visita! Vuelva pronto 🍭",
       caja: "Caja 1"
     };
 
-    function guardarDatosLocales() {
+    let ultimoTicketCobrado = null; // Guardado temporal para el modal post-venta
+
+    function guardarTodo() {
+      localStorage.setItem('piruleta_categorias', JSON.stringify(categorias));
+      localStorage.setItem('piruleta_catalogo', JSON.stringify(catalogo));
+      localStorage.setItem('piruleta_pendientes', JSON.stringify(ticketsPendientes));
       localStorage.setItem('piruleta_mesas_v5', JSON.stringify(mesas));
       localStorage.setItem('piruleta_caja', JSON.stringify(caja));
-      localStorage.setItem('piruleta_catalogo', JSON.stringify(catalogo));
-      localStorage.setItem('piruleta_categorias', JSON.stringify(categorias));
-      localStorage.setItem('piruleta_datos_fiscales', JSON.stringify(datosFiscales));
-      localStorage.setItem('piruleta_ventas_pendientes', JSON.stringify(ventasPendientes));
-      actualizarBadgePendientes();
+      localStorage.setItem('piruleta_fiscales', JSON.stringify(datosFiscales));
+      localStorage.setItem('piruleta_num_ticket', correlativoTicket);
     }
 
-    // SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
+    // SINCRONIZACIÓN FIREBASE FIRESTORE EN TIEMPO REAL
     if (db) {
       db.collection("productos").onSnapshot((snapshot) => {
         if (!snapshot.empty) {
           const list = [];
           snapshot.forEach(doc => {
-            const data = doc.data();
-            list.push({ 
-              id: doc.id, 
-              docId: doc.id, 
-              nombre: data.nombre, 
-              precio: Number(data.precio) || 0, 
-              categoria: data.categoria || 'cafe', 
-              icono: data.icono || '☕',
-              iva: Number(data.iva) || (data.categoria === 'pan' ? 4 : 10)
+            const d = doc.data();
+            list.push({
+              id: doc.id,
+              docId: doc.id,
+              nombre: d.nombre,
+              precio: Number(d.precio) || 0,
+              iva: Number(d.iva) || 10,
+              categoria: d.categoria || 'cafe',
+              icono: d.icono || '☕'
             });
           });
           catalogo = list;
-          guardarDatosLocales();
+          guardarTodo();
           renderCatalogo();
-          renderListaEditor();
+          renderListaEditorProductos();
+        } else {
+          catalogoBase.forEach(item => db.collection("productos").add(item));
         }
       });
 
@@ -655,147 +764,69 @@
             const d = doc.data();
             catList.push({ id: doc.id, docId: doc.id, nombre: d.nombre, icono: d.icono || '🏷️' });
           });
-          // Si no incluye 'favoritos', preservarla en primer lugar
-          const tieneFav = catList.some(c => c.id === 'favoritos');
-          if (!tieneFav) {
-            catList.unshift({ id: 'favoritos', nombre: '★ FAVORITOS / TODOS', icono: '⭐' });
-          }
           categorias = catList;
-          guardarDatosLocales();
-          renderPestañasCategorias();
+          guardarTodo();
+          renderTabsCategorias();
           renderListaEditorCategorias();
-          actualizarSelectorCategoriasProducto();
+          actualizarSelectorCategoriasModal();
         }
       });
     }
 
-    // INTERFAZ Y NAVEGACIÓN
-    function alternarVistaMesas() {
-      const cat = document.getElementById('contenedorCatalogo');
-      const plano = document.getElementById('contenedorPlanoMesas');
-      if (plano.classList.contains('hidden')) {
-        cat.classList.add('hidden');
-        plano.classList.remove('hidden');
-        renderPlanoMesas();
-      } else {
-        plano.classList.add('hidden');
-        cat.classList.remove('hidden');
-      }
-    }
-
-    function volverATerminal() {
-      document.getElementById('contenedorPlanoMesas').classList.add('hidden');
-      document.getElementById('contenedorCatalogo').classList.remove('hidden');
-    }
-
-    // FEEDBACK TOAST
-    function mostrarFeedback(msg) {
-      const t = document.getElementById('toastFeedback');
-      document.getElementById('toastFeedbackTexto').innerText = msg;
-      t.classList.remove('hidden');
-      clearTimeout(window._tTime);
-      window._tTime = setTimeout(() => t.classList.add('hidden'), 1300);
-    }
-
-    // CATÁLOGO & PRODUCTOS
-    function renderPestañasCategorias() {
-      const c = document.getElementById('pestañasCategorias');
-      if (!c) return;
-      c.innerHTML = '';
+    // --- RENDER CATEGORÍAS & PRODUCTOS ---
+    function renderTabsCategorias() {
+      const cont = document.getElementById('listaTabsCategorias');
+      if (!cont) return;
+      cont.innerHTML = '';
       categorias.forEach(cat => {
         const btn = document.createElement('button');
-        btn.onclick = () => filtrarCategoria(cat.id, btn);
-        const activa = (categoriaFiltroActiva === cat.id);
-        btn.className = `btn-cat px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all ${
-          activa 
-          ? 'bg-orange-600 text-white shadow-sm' 
-          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-        }`;
+        btn.onclick = () => filtrarPorCategoria(cat.id, btn);
+        btn.className = `btn-cat px-4 py-2.5 rounded-xl ${categoriaFiltroActiva === cat.id ? 'bg-orange-600 text-white font-extrabold shadow-sm' : 'bg-white text-slate-700 border border-orange-100 font-semibold'} shrink-0 active:scale-95 transition-all`;
         btn.innerHTML = `${cat.icono || '🏷️'} ${cat.nombre}`;
-        c.appendChild(btn);
+        cont.appendChild(btn);
       });
     }
 
-    function filtrarCategoria(id, btn) {
-      categoriaFiltroActiva = id;
+    function filtrarPorCategoria(catId, btn) {
+      categoriaFiltroActiva = catId;
       document.querySelectorAll('.btn-cat').forEach(b => {
-        b.className = 'btn-cat px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200';
+        b.className = 'btn-cat px-4 py-2.5 rounded-xl bg-white text-slate-700 border border-orange-100 font-semibold shrink-0';
       });
-      if (btn) btn.className = 'btn-cat px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 bg-orange-600 text-white shadow-sm';
-      if (id === 'favoritos' || id === 'todos') {
+      if (btn) btn.className = 'btn-cat px-4 py-2.5 rounded-xl bg-orange-600 text-white font-extrabold shadow-sm shrink-0';
+      if (catId === 'todos') {
         renderCatalogo(catalogo);
       } else {
-        const filtrados = catalogo.filter(p => p.categoria === id);
-        renderCatalogo(filtrados);
+        renderCatalogo(catalogo.filter(p => p.categoria === catId));
       }
     }
 
     function renderCatalogo(lista = catalogo) {
-      const g = document.getElementById('gridProductos');
-      if (!g) return;
-      g.innerHTML = '';
+      const grid = document.getElementById('gridProductos');
+      if (!grid) return;
+      grid.innerHTML = '';
       lista.forEach(prod => {
         const prodId = prod.id || prod.docId;
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-2xl p-3 border border-orange-100 shadow-sm flex flex-col justify-between hover:border-orange-300 active:scale-95 transition-all cursor-pointer select-none';
+        card.className = 'bg-white rounded-2xl p-3.5 border border-orange-100/90 shadow-sm flex flex-col justify-between hover:border-orange-300 active:scale-95 transition-all cursor-pointer';
         card.innerHTML = `
           <div class="flex items-start justify-between">
             <span class="text-2xl">${prod.icono || '☕'}</span>
-            <span class="px-2 py-0.5 rounded-lg bg-orange-50 text-orange-800 font-extrabold text-[11px] border border-orange-200/60 font-mono">
-              ${Number(prod.precio || 0).toFixed(2)} €
-            </span>
+            <span class="text-[9px] uppercase font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">${prod.categoria}</span>
           </div>
-          <div class="mt-3">
-            <h4 class="font-bold text-xs text-slate-900 leading-tight">${prod.nombre}</h4>
+          <div class="mt-2.5">
+            <h4 class="font-bold text-xs text-slate-800 leading-tight line-clamp-2">${prod.nombre}</h4>
+            <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
+              <span class="font-black text-sm text-slate-900 font-display">${Number(prod.precio || 0).toFixed(2)} €</span>
+              <span class="text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded font-bold">${prod.iva || 10}%</span>
+            </div>
           </div>
         `;
         card.onclick = () => agregarAlTicket(prodId);
-        g.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
-    function toggleBuscador() {
-      const b = document.getElementById('barraBuscador');
-      const inp = document.getElementById('inputBuscar');
-      if (b.classList.contains('hidden')) {
-        b.classList.remove('hidden');
-        inp.focus();
-      } else {
-        b.classList.add('hidden');
-        inp.value = '';
-        renderCatalogo(catalogo);
-      }
-    }
-
-    function filtrarProductos() {
-      const q = document.getElementById('inputBuscar').value.toLowerCase();
-      const filtrados = catalogo.filter(p => p.nombre.toLowerCase().includes(q));
-      renderCatalogo(filtrados);
-    }
-
-    // TICKET & COBRO CON CÁLCULO DE IVA EXACTO Y DESGLOSADO
-    function calcularTotalesEIVA(items) {
-      let total = 0;
-      let totalIva = 0;
-      const desgloses = { 4: 0, 10: 0, 21: 0 };
-
-      items.forEach(item => {
-        const itemTotal = Number(item.precio || 0) * (Number(item.cantidad) || 1);
-        const tipoIva = Number(item.iva) || 10;
-        total += itemTotal;
-
-        // Base imponible = Total / (1 + IVA/100)
-        const base = itemTotal / (1 + (tipoIva / 100));
-        const cuota = itemTotal - base;
-
-        if (!desgloses[tipoIva]) desgloses[tipoIva] = 0;
-        desgloses[tipoIva] += cuota;
-        totalIva += cuota;
-      });
-
-      return { total, totalIva, desgloses };
-    }
-
+    // --- TICKET & TOTALES ---
     function agregarAlTicket(id) {
       const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
       if (!prod) return;
@@ -805,595 +836,534 @@
       } else {
         ticketActual.push({
           id: prod.id || prod.docId,
-          docId: prod.docId || prod.id,
           nombre: prod.nombre,
           precio: Number(prod.precio) || 0,
           iva: Number(prod.iva) || 10,
+          icono: prod.icono || '☕',
           cantidad: 1
         });
       }
-
-      // Si hay una mesa seleccionada en comanda, sincronizar
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ocupada = true;
-        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) {
-          mesas[idx].ocupada = true;
-          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
-        }
-      }
-
-      guardarDatosLocales();
       actualizarTicketVisual();
-      mostrarFeedback(`+1 ${prod.nombre}`);
+      mostrarToastFeedback(`+1 ${prod.nombre}`);
     }
 
-    function cambiarCantidad(id, delta) {
-      const item = ticketActual.find(i => String(i.id) === String(id) || String(i.docId) === String(id));
+    function cambiarCantidadTicket(id, delta) {
+      const item = ticketActual.find(i => String(i.id) === String(id));
       if (!item) return;
       item.cantidad += delta;
       if (item.cantidad <= 0) {
-        ticketActual = ticketActual.filter(i => String(i.id) !== String(id) && String(i.docId) !== String(id));
+        ticketActual = ticketActual.filter(i => String(i.id) !== String(id));
       }
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ticket = JSON.parse(JSON.stringify(ticketActual));
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) {
-          mesas[idx].ticket = JSON.parse(JSON.stringify(ticketActual));
-        }
-      }
-      guardarDatosLocales();
       actualizarTicketVisual();
     }
 
-    function vaciarTicket() {
+    function limpiarTicket() {
       ticketActual = [];
-      if (mesaActivaSeleccionada) {
-        mesaActivaSeleccionada.ticket = [];
-        const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
-        if (idx !== -1) mesas[idx].ticket = [];
-      }
-      guardarDatosLocales();
+      mesaActivaSeleccionada = null;
+      document.getElementById('lblServicioActivo').innerText = 'BARRA';
       actualizarTicketVisual();
     }
 
     function actualizarTicketVisual() {
-      const cont = document.getElementById('ticketItems');
-      const totalGrande = document.getElementById('txtTotalGrande');
-      const desgloseIva = document.getElementById('txtDesgloseIva');
+      const cont = document.getElementById('ticketContainer');
+      const totalSpan = document.getElementById('txtGranTotal');
+      const detalleIVA = document.getElementById('txtDetalleIVA');
 
       if (ticketActual.length === 0) {
         cont.innerHTML = `
-          <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 py-10 space-y-2">
-            <i class="fa-regular fa-receipt text-3xl text-orange-200"></i>
-            <p class="text-xs font-medium">Ticket vacío.<br>Toca los productos de la derecha para sumar.</p>
+          <div class="h-full flex flex-col items-center justify-center text-slate-400 py-12 text-center">
+            <i class="fa-solid fa-receipt text-3xl mb-2 text-orange-200"></i>
+            <p class="text-xs font-bold text-slate-500">Ticket vacío</p>
+            <p class="text-[11px] text-slate-400">Toca los productos de la derecha para sumar.</p>
           </div>
         `;
-        totalGrande.innerText = '0.00 €';
-        desgloseIva.innerText = 'IVA inc. (0.00 €)';
+        totalSpan.innerText = '0.00 €';
+        detalleIVA.innerText = 'IVA inc. (0.00 €)';
         return;
       }
 
       cont.innerHTML = '';
+      let total = 0;
+      let totalCuotaIVA = 0;
+
       ticketActual.forEach(item => {
         const itemTotal = item.precio * item.cantidad;
-        const itemId = item.id || item.docId;
-        const itemIva = Number(item.iva) || 10;
+        total += itemTotal;
+        const cuota = itemTotal - (itemTotal / (1 + (item.iva / 100)));
+        totalCuotaIVA += cuota;
 
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 items-center py-2 px-1 text-xs hover:bg-slate-50 transition-colors';
+        row.className = 'grid grid-cols-12 py-2 items-center text-xs';
         row.innerHTML = `
-          <div class="col-span-6 font-bold text-slate-800 leading-tight pr-1">
-            <span>${item.nombre}</span>
-            <span class="text-[9px] text-slate-400 font-mono ml-1 font-semibold">(${itemIva}%)</span>
+          <div class="col-span-6 pr-1">
+            <span class="font-bold text-slate-800 block truncate">${item.nombre}</span>
+            <span class="text-[10px] text-slate-400 font-mono">${item.precio.toFixed(2)} € &bull; IVA ${item.iva}%</span>
           </div>
-          <div class="col-span-2 flex items-center justify-center gap-1">
-            <button onclick="cambiarCantidad('${itemId}', -1)" class="w-5 h-5 rounded bg-slate-100 text-slate-600 font-bold hover:bg-slate-200">-</button>
-            <span class="font-extrabold text-xs w-4 text-center font-mono">${item.cantidad}</span>
-            <button onclick="cambiarCantidad('${itemId}', 1)" class="w-5 h-5 rounded bg-slate-100 text-slate-600 font-bold hover:bg-slate-200">+</button>
+          <div class="col-span-2 flex items-center justify-center">
+            <div class="flex items-center border border-slate-200 rounded-lg bg-slate-50">
+              <button onclick="cambiarCantidadTicket('${item.id}', -1)" class="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold">-</button>
+              <span class="w-5 text-center font-bold text-[11px]">${item.cantidad}</span>
+              <button onclick="cambiarCantidadTicket('${item.id}', 1)" class="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold">+</button>
+            </div>
           </div>
-          <div class="col-span-2 text-right text-slate-500 font-mono text-[11px]">
-            ${item.precio.toFixed(2)}
-          </div>
-          <div class="col-span-2 text-right font-black text-slate-900 font-mono">
-            ${itemTotal.toFixed(2)} €
-          </div>
+          <span class="col-span-2 text-right font-mono text-slate-500 text-[11px]">${item.precio.toFixed(2)}</span>
+          <span class="col-span-2 text-right font-bold font-mono text-slate-900">${itemTotal.toFixed(2)}</span>
         `;
         cont.appendChild(row);
       });
 
-      const calc = calcularTotalesEIVA(ticketActual);
-      totalGrande.innerText = calc.total.toFixed(2) + ' €';
-
-      const partesDesglose = [];
-      if (calc.desgloses[4] > 0) partesDesglose.push(`4%: ${calc.desgloses[4].toFixed(2)}€`);
-      if (calc.desgloses[10] > 0) partesDesglose.push(`10%: ${calc.desgloses[10].toFixed(2)}€`);
-      if (calc.desgloses[21] > 0) partesDesglose.push(`21%: ${calc.desgloses[21].toFixed(2)}€`);
-
-      desgloseIva.innerText = partesDesglose.length > 0 
-        ? `IVA inc. [${partesDesglose.join(' | ')}] = ${calc.totalIva.toFixed(2)} €`
-        : `IVA inc. (${calc.totalIva.toFixed(2)} €)`;
+      totalSpan.innerText = total.toFixed(2) + ' €';
+      detalleIVA.innerText = `IVA inc. (${totalCuotaIVA.toFixed(2)} €)`;
     }
 
-    function pulsarTecladoNum(val) {
-      if (val === 'C') {
-        mostrarFeedback('Teclado limpiado');
-        return;
-      }
-      mostrarFeedback(`Marcado ${val}`);
+    function mostrarToastFeedback(txt) {
+      const toast = document.getElementById('toastArticuloAñadido');
+      document.getElementById('toastArticuloTexto').innerText = txt;
+      toast.classList.remove('hidden');
+      clearTimeout(window._tToast);
+      window._tToast = setTimeout(() => toast.classList.add('hidden'), 1200);
     }
 
-    // ==================== DEJAR PENDIENTE (APARCAR VENTAS) ====================
-    function aparcarVentaActual() {
+    // --- TECLADO NUMÉRICO TÁCTIL ---
+    let bufferTeclado = "";
+    function tecladoNumero(val) {
+      bufferTeclado += val;
+      console.log("Teclado:", bufferTeclado);
+    }
+    function tecladoBorrar() {
+      bufferTeclado = "";
+    }
+
+    // --- DEJAR PENDIENTE (APARCAR TICKET) ---
+    function dejarPendiente() {
       if (ticketActual.length === 0) {
-        alert('El ticket está vacío. Añade artículos antes de dejarlo pendiente.');
+        alert("El ticket está vacío. Añade productos antes de dejarlo pendiente.");
         return;
       }
-      const nombreRef = prompt('Nombre o referencia para dejar pendiente:', `Cliente ${ventasPendientes.length + 1}`) || `Ticket ${new Date().toLocaleTimeString().slice(0,5)}`;
-      const total = ticketActual.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
-
-      ventasPendientes.push({
+      const pendiente = {
         id: Date.now(),
-        referencia: nombreRef,
         fecha: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        servicio: document.getElementById('lblServicioActivo').innerText,
         ticket: JSON.parse(JSON.stringify(ticketActual)),
-        total: total,
-        servicio: servicioActivo
-      });
+        total: ticketActual.reduce((acc, i) => acc + (i.precio * i.cantidad), 0)
+      };
+      ticketsPendientes.push(pendiente);
+      guardarTodo();
+      actualizarBadgePendientes();
+      limpiarTicket();
+      alert("Ticket dejado pendiente con éxito.");
+    }
 
-      guardarDatosLocales();
-      vaciarTicket();
-      mostrarFeedback('¡Ticket dejado pendiente!');
+    function actualizarBadgePendientes() {
+      document.getElementById('badgeContadorPendientes').innerText = ticketsPendientes.length;
     }
 
     function abrirModalPendientes() {
-      const m = document.getElementById('modalPendientes');
-      const lista = document.getElementById('listaVentasPendientes');
-      lista.innerHTML = '';
-
-      if (ventasPendientes.length === 0) {
-        lista.innerHTML = '<p class="text-center text-xs text-slate-400 py-8">No hay ventas pendientes aparcadas.</p>';
+      const modal = document.getElementById('modalPendientes');
+      const cont = document.getElementById('listaTicketsPendientes');
+      cont.innerHTML = '';
+      if (ticketsPendientes.length === 0) {
+        cont.innerHTML = '<p class="text-center text-slate-400 py-6">No hay tickets pendientes.</p>';
       } else {
-        ventasPendientes.forEach(v => {
-          const card = document.createElement('div');
-          card.className = 'p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between';
-          card.innerHTML = `
+        ticketsPendientes.forEach((p, idx) => {
+          const div = document.createElement('div');
+          div.className = 'py-2.5 flex items-center justify-between';
+          div.innerHTML = `
             <div>
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-xs text-slate-900">${v.referencia}</span>
-                <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-bold">${v.fecha}</span>
-              </div>
-              <span class="text-xs text-orange-600 font-black mt-0.5 block font-mono">${v.total.toFixed(2)} € (${v.ticket.length} arts.)</span>
+              <span class="font-bold text-slate-800">${p.servicio} (${p.total.toFixed(2)} €)</span>
+              <span class="block text-[10px] text-slate-400">${p.fecha} &bull; ${p.ticket.length} productos</span>
             </div>
-            <div class="flex items-center gap-1.5">
-              <button onclick="reanudarVentaPendiente(${v.id})" class="px-3 py-1.5 rounded-xl bg-orange-600 text-white font-bold text-xs hover:bg-orange-700 active:scale-95 shadow-sm">
-                Reanudar
-              </button>
-              <button onclick="eliminarVentaPendiente(${v.id})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center">
-                <i class="fa-solid fa-trash-can text-xs"></i>
-              </button>
-            </div>
+            <button onclick="recuperarTicketPendiente(${idx})" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold text-xs">
+              Recuperar
+            </button>
           `;
-          lista.appendChild(card);
+          cont.appendChild(div);
         });
       }
-      m.classList.remove('hidden');
+      modal.classList.remove('hidden');
     }
 
     function cerrarModalPendientes() {
       document.getElementById('modalPendientes').classList.add('hidden');
     }
 
-    function reanudarVentaPendiente(id) {
-      const v = ventasPendientes.find(item => item.id === id);
-      if (!v) return;
-      ticketActual = JSON.parse(JSON.stringify(v.ticket));
-      servicioActivo = v.servicio || 'BARRA';
-      document.getElementById('ticketServicioLabel').innerText = servicioActivo;
-      ventasPendientes = ventasPendientes.filter(item => item.id !== id);
-      guardarDatosLocales();
+    function recuperarTicketPendiente(idx) {
+      const p = ticketsPendientes[idx];
+      ticketActual = JSON.parse(JSON.stringify(p.ticket));
+      document.getElementById('lblServicioActivo').innerText = p.servicio;
+      ticketsPendientes.splice(idx, 1);
+      guardarTodo();
+      actualizarBadgePendientes();
       actualizarTicketVisual();
       cerrarModalPendientes();
-      volverATerminal();
-      mostrarFeedback(`Reanudado: ${v.referencia}`);
     }
 
-    function eliminarVentaPendiente(id) {
-      if (!confirm('¿Eliminar esta venta pendiente?')) return;
-      ventasPendientes = ventasPendientes.filter(item => item.id !== id);
-      guardarDatosLocales();
-      abrirModalPendientes();
-    }
-
-    function actualizarBadgePendientes() {
-      const b = document.getElementById('badgeNumPendientes');
-      if (b) b.innerText = ventasPendientes.length;
-    }
-
-    // ==================== PLANO DE MESAS INTERACTIVO Y ARRASTRABLE ====================
-    function renderPlanoMesas() {
-      const contenedor = document.getElementById('areaMesasContenedor');
-      const badge = document.getElementById('badgeContadorMesas');
-      if (!contenedor) return;
-
-      contenedor.innerHTML = '';
-      if (badge) badge.innerText = `${mesas.length} mesas`;
-
-      if (mesas.length === 0) {
-        contenedor.innerHTML = `
-          <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 py-16 space-y-3">
-            <i class="fa-solid fa-chair text-4xl text-orange-200"></i>
-            <p class="text-xs font-semibold">No hay mesas en el plano todavía.</p>
-            <button onclick="crearNuevaMesaPrompt()" class="px-4 py-2 bg-orange-600 text-white rounded-xl font-bold text-xs shadow-md">
-              + Crear la primera mesa
-            </button>
-          </div>
-        `;
+    // --- ASIGNAR A MESA DIRECTO ---
+    function iniciarAsignarAMesa() {
+      if (ticketActual.length === 0) {
+        alert("Añade artículos al ticket antes de asignarlo a una mesa.");
         return;
       }
-
-      mesas.forEach((mesa, index) => {
-        if (typeof mesa.x !== 'number' || typeof mesa.y !== 'number' || isNaN(mesa.x) || isNaN(mesa.y)) {
-          const col = index % 4;
-          const fila = Math.floor(index / 4);
-          mesa.x = 30 + (col * 140);
-          mesa.y = 30 + (fila * 130);
-        }
-
-        const totalMesa = (mesa.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
-        const card = document.createElement('div');
-        card.id = `mesa-item-${mesa.id}`;
-        card.className = `mesa-arrastrable absolute w-28 h-28 rounded-3xl p-2.5 border-2 flex flex-col justify-between shadow-md transition-shadow select-none ${
-          mesa.ocupada
-          ? 'bg-rose-50 border-rose-300 text-rose-950 shadow-rose-200/50'
-          : 'bg-white border-orange-200 text-slate-800 shadow-orange-100'
-        } ${modoMoverMesasActivo ? 'cursor-move ring-2 ring-orange-400 animate-pulse' : 'cursor-pointer hover:scale-105 active:scale-95'}`;
-
-        card.style.left = `${mesa.x}px`;
-        card.style.top = `${mesa.y}px`;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="w-2.5 h-2.5 rounded-full ${mesa.ocupada ? 'bg-rose-500 animate-ping' : 'bg-emerald-500'}"></span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full ${mesa.ocupada ? 'bg-rose-200 text-rose-900' : 'bg-slate-100 text-slate-600'}">
-              ${mesa.pax || 2}p
-            </span>
-          </div>
-          <div class="text-center my-auto">
-            <span class="font-black text-sm block leading-tight font-display">${mesa.nombre}</span>
-            <span class="text-[10px] font-bold font-mono ${mesa.ocupada ? 'text-rose-600' : 'text-emerald-600'}">
-              ${mesa.ocupada ? totalMesa.toFixed(2) + ' €' : 'Libre'}
-            </span>
-          </div>
-          <div class="text-center text-[9px] font-bold text-slate-400 border-t border-slate-100 pt-1">
-            ${modoMoverMesasActivo ? 'Arrastrar' : 'Tocar'}
-          </div>
+      const total = ticketActual.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+      document.getElementById('txtAsignarTotalInfo').innerText = `Total a transferir: ${total.toFixed(2)} €`;
+      
+      const grid = document.getElementById('gridMesasParaAsignar');
+      grid.innerHTML = '';
+      mesas.forEach(m => {
+        const btn = document.createElement('button');
+        btn.onclick = () => completarAsignacionMesa(m.id);
+        btn.className = `p-3 rounded-2xl border text-center active:scale-95 transition-all ${m.ocupada ? 'bg-orange-50 border-orange-300 text-orange-900' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'}`;
+        btn.innerHTML = `
+          <span class="text-xl block mb-1">🪑</span>
+          <span class="font-extrabold text-xs block">${m.nombre}</span>
+          <span class="text-[10px] block font-semibold ${m.ocupada ? 'text-orange-600' : 'text-emerald-600'}">${m.ocupada ? 'Ocupada' : 'Libre'}</span>
         `;
-
-        configurarArrastreMesa(card, mesa);
-        contenedor.appendChild(card);
+        grid.appendChild(btn);
       });
 
-      guardarDatosLocales();
+      document.getElementById('modalAsignarAMesa').classList.remove('hidden');
     }
 
-    function toggleModoMoverMesas() {
-      modoMoverMesasActivo = !modoMoverMesasActivo;
-      const btn = document.getElementById('btnModoMover');
-      const txt = document.getElementById('txtModoMover');
-      if (modoMoverMesasActivo) {
-        btn.className = 'px-3.5 py-2 rounded-xl bg-orange-600 text-white font-extrabold text-xs flex items-center gap-1.5 active:scale-95 transition-all shadow-md';
-        txt.innerText = 'Mover Mesas: ON';
-        mostrarFeedback('Modo Mover: Arrastra las mesas a tu antojo');
-      } else {
-        btn.className = 'px-3.5 py-2 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs flex items-center gap-1.5 active:scale-95 transition-all border border-slate-300';
-        txt.innerText = 'Mover Mesas: OFF';
-        mostrarFeedback('Posiciones guardadas');
-      }
-      renderPlanoMesas();
+    function cerrarModalAsignarAMesa() {
+      document.getElementById('modalAsignarAMesa').classList.add('hidden');
     }
 
-    function crearNuevaMesaPrompt() {
-      const numSiguiente = mesas.length + 1;
-      const nombre = prompt('Nombre o número de la nueva mesa:', `Mesa ${numSiguiente}`);
-      if (!nombre || !nombre.trim()) return;
-
-      const pax = parseInt(prompt('Número de comensales (pax):', '4'), 10) || 2;
-      
-      const contenedor = document.getElementById('lienzoPlano');
-      const ancho = contenedor ? contenedor.clientWidth : 400;
-      const alto = contenedor ? contenedor.clientHeight : 400;
-      
-      const nuevaMesa = {
-        id: Date.now(),
-        nombre: nombre.trim(),
-        pax: pax,
-        ocupada: false,
-        ticket: [],
-        x: Math.max(20, Math.floor((ancho / 2) - 60 + (Math.random() * 40 - 20))),
-        y: Math.max(20, Math.floor((alto / 2) - 60 + (Math.random() * 40 - 20)))
-      };
-
-      mesas.push(nuevaMesa);
-      guardarDatosLocales();
-      renderPlanoMesas();
-      mostrarFeedback(`¡${nuevaMesa.nombre} creada con éxito!`);
-    }
-
-    // SOPORTE DE ARRASTRE TÁCTIL Y RATÓN
-    function configurarArrastreMesa(elemento, mesa) {
-      let isDragging = false;
-      let startX, startY, initialLeft, initialTop;
-
-      function onStart(e) {
-        if (!modoMoverMesasActivo) {
-          abrirModalMesa(mesa.id);
-          return;
-        }
-
-        isDragging = true;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        startX = clientX;
-        startY = clientY;
-        initialLeft = parseInt(elemento.style.left, 10) || mesa.x;
-        initialTop = parseInt(elemento.style.top, 10) || mesa.y;
-
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onEnd);
-        document.addEventListener('touchmove', onMove, { passive: false });
-        document.addEventListener('touchend', onEnd);
-      }
-
-      function onMove(e) {
-        if (!isDragging || !modoMoverMesasActivo) return;
-        if (e.cancelable) e.preventDefault();
-
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        const deltaX = clientX - startX;
-        const deltaY = clientY - startY;
-
-        const contenedor = document.getElementById('lienzoPlano');
-        const maxW = contenedor ? (contenedor.clientWidth - 115) : 800;
-        const maxH = contenedor ? (contenedor.clientHeight - 115) : 600;
-
-        const newX = Math.max(10, Math.min(initialLeft + deltaX, maxW));
-        const newY = Math.max(10, Math.min(initialTop + deltaY, maxH));
-
-        elemento.style.left = `${newX}px`;
-        elemento.style.top = `${newY}px`;
-        mesa.x = newX;
-        mesa.y = newY;
-      }
-
-      function onEnd() {
-        if (isDragging) {
-          isDragging = false;
-          guardarDatosLocales();
-        }
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onEnd);
-        document.removeEventListener('touchmove', onMove);
-        document.removeEventListener('touchend', onEnd);
-      }
-
-      elemento.addEventListener('mousedown', onStart);
-      elemento.addEventListener('touchstart', onStart, { passive: true });
-    }
-
-    // MODAL DE OPCIONES DE MESA
-    function abrirModalMesa(id) {
-      const mesa = mesas.find(m => m.id === id);
+    function completarAsignacionMesa(mesaId) {
+      const mesa = mesas.find(m => m.id === mesaId);
       if (!mesa) return;
-      mesaActivaSeleccionada = mesa;
-
-      document.getElementById('modalMesaTitulo').innerText = mesa.nombre;
-      document.getElementById('modalMesaSubtitulo').innerText = mesa.ocupada 
-        ? `OCUPADA (${mesa.pax || 2} Pax)` 
-        : `LIBRE (${mesa.pax || 2} Pax)`;
-      document.getElementById('txtComensalesModal').innerText = mesa.pax || 2;
-
-      const totalMesa = (mesa.ticket || []).reduce((acc, curr) => acc + (Number(curr.precio || 0) * (Number(curr.cantidad) || 1)), 0);
-      document.getElementById('txtTotalMesaModal').innerText = totalMesa.toFixed(2) + ' €';
-
-      document.getElementById('modalMesaOpciones').classList.remove('hidden');
+      mesa.ocupada = true;
+      // Sumar comanda
+      mesa.ticket = (mesa.ticket || []).concat(JSON.parse(JSON.stringify(ticketActual)));
+      guardarTodo();
+      limpiarTicket();
+      cerrarModalAsignarAMesa();
+      alert(`Ticket asignado con éxito a ${mesa.nombre}.`);
     }
 
-    function cerrarModalMesa() {
-      document.getElementById('modalMesaOpciones').classList.add('hidden');
-    }
-
-    function cambiarComensalesMesa(delta) {
-      if (!mesaActivaSeleccionada) return;
-      mesaActivaSeleccionada.pax = Math.max(1, (mesaActivaSeleccionada.pax || 2) + delta);
-      document.getElementById('txtComensalesModal').innerText = mesaActivaSeleccionada.pax;
-      guardarDatosLocales();
-      renderPlanoMesas();
-    }
-
-    function mesaAccionAñadirProducto() {
-      if (!mesaActivaSeleccionada) return;
-      mesaActivaSeleccionada.ocupada = true;
-      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
-      document.getElementById('ticketServicioLabel').innerText = servicioActivo;
-
-      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
-      guardarDatosLocales();
-      actualizarTicketVisual();
-      cerrarModalMesa();
-      volverATerminal();
-      mostrarFeedback(`Comanda abierta: ${mesaActivaSeleccionada.nombre}`);
-    }
-
-    function mesaAccionCobrarDirecto() {
-      if (!mesaActivaSeleccionada) return;
-      ticketActual = JSON.parse(JSON.stringify(mesaActivaSeleccionada.ticket || []));
-      servicioActivo = mesaActivaSeleccionada.nombre.toUpperCase();
-      document.getElementById('ticketServicioLabel').innerText = servicioActivo;
-      actualizarTicketVisual();
-      cerrarModalMesa();
-      abrirModalCobro();
-    }
-
-    function mesaAccionLiberar() {
-      if (!mesaActivaSeleccionada) return;
-      mesaActivaSeleccionada.ocupada = false;
-      mesaActivaSeleccionada.ticket = [];
-      guardarDatosLocales();
-      renderPlanoMesas();
-      cerrarModalMesa();
-      mostrarFeedback('Mesa liberada');
-    }
-
-    function mesaAccionEliminar() {
-      if (!mesaActivaSeleccionada) return;
-      if (!confirm(`¿Seguro que deseas eliminar ${mesaActivaSeleccionada.nombre}?`)) return;
-      mesas = mesas.filter(m => m.id !== mesaActivaSeleccionada.id);
-      mesaActivaSeleccionada = null;
-      guardarDatosLocales();
-      renderPlanoMesas();
-      cerrarModalMesa();
-      mostrarFeedback('Mesa eliminada');
-    }
-
-    // ==================== PASARELA DE COBRO FINAL ====================
-    function abrirModalCobro() {
+    // --- MODAL DE COBRO (F1) CON PREVISUALIZACIÓN COMPLETA DEL TICKET ---
+    function abrirModalCobroConTicket() {
       if (ticketActual.length === 0) {
-        alert('No hay productos en el ticket para cobrar.');
+        alert("El ticket está vacío. Toca productos para poder cobrar.");
         return;
       }
-      const calc = calcularTotalesEIVA(ticketActual);
-      document.getElementById('txtModalCobroTotal').innerText = calc.total.toFixed(2) + ' €';
-      document.getElementById('txtCobroDestino').innerText = 'Servicio: ' + servicioActivo;
-      
-      const partes = [];
-      if (calc.desgloses[4] > 0) partes.push(`IVA 4%: ${calc.desgloses[4].toFixed(2)}€`);
-      if (calc.desgloses[10] > 0) partes.push(`IVA 10%: ${calc.desgloses[10].toFixed(2)}€`);
-      if (calc.desgloses[21] > 0) partes.push(`IVA 21%: ${calc.desgloses[21].toFixed(2)}€`);
-      
-      const txtDetalle = document.getElementById('txtModalCobroIvaDetalle');
-      if (txtDetalle) {
-        txtDetalle.innerHTML = partes.length > 0 
-          ? `Desglose IVA inc.: <span class="font-bold text-orange-900">${partes.join(' &bull; ')}</span> (Total IVA: ${calc.totalIva.toFixed(2)} €)`
-          : `IVA incluido: ${calc.totalIva.toFixed(2)} €`;
-      }
 
-      document.getElementById('modalCobro').classList.remove('hidden');
+      // 1. Rellenar datos del ticket fiscal
+      document.getElementById('tkNegocio').innerText = datosFiscales.nombre || "LA PIRULETA";
+      document.getElementById('tkRazonSocial').innerText = datosFiscales.razonSocial || "Cafetería La Piruleta S.L.";
+      document.getElementById('tkCIF').innerText = "CIF/NIF: " + (datosFiscales.cif || "B-12345678");
+      document.getElementById('tkDireccion').innerText = datosFiscales.direccion || "C/ Mayor 12, Madrid";
+      document.getElementById('tkTelefono').innerText = "Tel: " + (datosFiscales.telefono || "600 000 000");
+      document.getElementById('tkPieAgradecimiento').innerText = datosFiscales.pieTicket || "¡Muchas gracias por su visita! Vuelva pronto 🍭";
+
+      const ahora = new Date();
+      document.getElementById('tkFechaHora').innerText = ahora.toLocaleDateString() + ' ' + ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('tkNumero').innerText = 'TICKET #T-' + String(correlativoTicket).padStart(3, '0');
+
+      // 2. Renderizar líneas del ticket
+      const listaCont = document.getElementById('tkListaArticulos');
+      listaCont.innerHTML = '';
+      let subtotalBase = 0;
+      let totalCuotaIVA = 0;
+      let totalGeneral = 0;
+
+      ticketActual.forEach(item => {
+        const itemTotal = item.precio * item.cantidad;
+        totalGeneral += itemTotal;
+        const cuota = itemTotal - (itemTotal / (1 + (item.iva / 100)));
+        totalCuotaIVA += cuota;
+        subtotalBase += (itemTotal - cuota);
+
+        const row = document.createElement('div');
+        row.className = 'py-1 flex justify-between items-center';
+        row.innerHTML = `
+          <span class="font-bold truncate max-w-[170px]">${item.cantidad}x ${item.nombre}</span>
+          <span class="font-mono text-slate-600">${itemTotal.toFixed(2)} €</span>
+        `;
+        listaCont.appendChild(row);
+      });
+
+      document.getElementById('tkBaseImponible').innerText = subtotalBase.toFixed(2) + ' €';
+      document.getElementById('tkCuotaIVA').innerText = totalCuotaIVA.toFixed(2) + ' €';
+      document.getElementById('tkTotalPagar').innerText = totalGeneral.toFixed(2) + ' €';
+
+      fijarEntrega(totalGeneral); // Por defecto entrega importe exacto
+      document.getElementById('modalCobroTicket').classList.remove('hidden');
     }
 
     function cerrarModalCobro() {
-      document.getElementById('modalCobro').classList.add('hidden');
+      document.getElementById('modalCobroTicket').classList.add('hidden');
     }
 
-    function seleccionarMetodo(metodo, btn) {
-      metodoPagoActivo = metodo;
-      document.querySelectorAll('.btn-metodo').forEach(b => {
-        b.className = 'btn-metodo py-3 px-2 rounded-xl border border-slate-200 bg-white font-semibold text-xs text-center shadow-sm flex flex-col items-center gap-1.5';
+    function seleccionarMedioPago(medio, btn) {
+      medioPagoActivo = medio;
+      document.querySelectorAll('.btn-pago').forEach(b => {
+        b.className = 'btn-pago py-3 px-2 rounded-2xl border border-slate-200 bg-white font-semibold text-xs text-slate-700 flex flex-col items-center gap-1 shadow-sm active:scale-95';
       });
-      btn.className = 'btn-metodo py-3 px-2 rounded-xl border-2 border-orange-500 bg-orange-50/50 font-bold text-xs text-center shadow-sm flex flex-col items-center gap-1.5 text-orange-600';
+      btn.className = 'btn-pago py-3 px-2 rounded-2xl border-2 border-orange-500 bg-orange-50/60 font-bold text-xs text-orange-700 flex flex-col items-center gap-1 shadow-sm active:scale-95';
     }
 
-    function ejecutarCobroConfirmado() {
-      const total = ticketActual.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
-      if (metodoPagoActivo === 'efectivo') caja.efectivo += total;
-      else if (metodoPagoActivo === 'tarjeta') caja.tarjeta += total;
-      else if (metodoPagoActivo === 'bizum') caja.bizum += total;
+    function fijarEntrega(cant) {
+      const total = ticketActual.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+      const cambio = Math.max(0, cant - total);
+      document.getElementById('txtCambioDevolver').innerText = cambio.toFixed(2) + ' €';
+    }
+
+    // --- CONFIRMAR Y COBRAR -> DESPLEGAR SELECTOR POST-VENTA (WHATSAPP, IMPRIMIR, FINALIZAR) ---
+    function ejecutarCobroYDesplegarOpciones() {
+      const total = ticketActual.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+      
+      // Asentar en contabilidad de caja
+      if (medioPagoActivo === 'efectivo') caja.efectivo += total;
+      else if (medioPagoActivo === 'tarjeta') caja.tarjeta += total;
+      else if (medioPagoActivo === 'bizum') caja.bizum += total;
       caja.total += total;
 
+      // Guardar copia del ticket para imprimir o WhatsApp
+      ultimoTicketCobrado = {
+        num: '#T-' + String(correlativoTicket).padStart(3, '0'),
+        fechaHora: new Date().toLocaleString(),
+        servicio: document.getElementById('lblServicioActivo').innerText,
+        articulos: JSON.parse(JSON.stringify(ticketActual)),
+        total: total,
+        metodo: medioPagoActivo
+      };
+
+      // Si correspondía a una mesa, liberarla automáticamente
       if (mesaActivaSeleccionada) {
         const idx = mesas.findIndex(m => m.id === mesaActivaSeleccionada.id);
         if (idx !== -1) {
           mesas[idx].ocupada = false;
           mesas[idx].ticket = [];
         }
-        mesaActivaSeleccionada = null;
-        servicioActivo = 'BARRA';
-        document.getElementById('ticketServicioLabel').innerText = 'BARRA';
       }
 
-      guardarDatosLocales();
-      vaciarTicket();
+      correlativoTicket += 1;
+      guardarTodo();
+
+      // Cerrar modal de cobro y abrir el selector post-venta
       cerrarModalCobro();
+      document.getElementById('modalSelectorPostVenta').classList.remove('hidden');
+    }
+
+    // --- ACCIÓN 1: ENVIAR A WHATSAPP ---
+    function postVentaWhatsApp() {
+      if (!ultimoTicketCobrado) return;
+      let msg = `*🍭 LA PIRULETA - Ticket ${ultimoTicketCobrado.num}*\n`;
+      msg += `Fecha: ${ultimoTicketCobrado.fechaHora}\n`;
+      msg += `Servicio: ${ultimoTicketCobrado.servicio}\n\n`;
+      msg += `*DETALLE:*\n`;
+      ultimoTicketCobrado.articulos.forEach(art => {
+        msg += `- ${art.cantidad}x ${art.nombre}: ${(art.precio * art.cantidad).toFixed(2)} €\n`;
+      });
+      msg += `\n*TOTAL: ${ultimoTicketCobrado.total.toFixed(2)} €* (IVA incl.)\n`;
+      msg += `Pago: ${ultimoTicketCobrado.metodo.toUpperCase()}\n\n`;
+      msg += `${datosFiscales.pieTicket || '¡Muchas gracias por su visita!'}`;
+
+      const tel = prompt("Introduce el teléfono del cliente para WhatsApp (con prefijo ej. 34600000000) o déjalo vacío para abrir selector:");
+      let url = "https://wa.me/";
+      if (tel && tel.trim().length > 0) {
+        url += tel.replace(/\D/g, '') + "?text=" + encodeURIComponent(msg);
+      } else {
+        url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(msg);
+      }
+      window.open(url, '_blank');
+      postVentaFinalizar();
+    }
+
+    // --- ACCIÓN 2: IMPRIMIR TICKET TÉRMICO ---
+    function postVentaImprimir() {
+      if (!ultimoTicketCobrado) return;
+      const printDiv = document.getElementById('ticketImprimible');
+      let html = `
+        <div style="text-align:center; font-family: monospace; font-size:12px;">
+          <h2 style="margin:0; font-size:16px;">${datosFiscales.nombre}</h2>
+          <p style="margin:2px 0;">${datosFiscales.razonSocial}</p>
+          <p style="margin:2px 0;">CIF: ${datosFiscales.cif}</p>
+          <p style="margin:2px 0;">${datosFiscales.direccion}</p>
+          <p style="margin:2px 0;">Tel: ${datosFiscales.telefono}</p>
+          <hr style="border-top:1px dashed #000; margin:6px 0;">
+          <p style="margin:2px 0;">${ultimoTicketCobrado.num} &bull; ${ultimoTicketCobrado.fechaHora}</p>
+          <hr style="border-top:1px dashed #000; margin:6px 0;">
+          <table style="width:100%; font-size:11px; text-align:left;">
+      `;
+      ultimoTicketCobrado.articulos.forEach(art => {
+        html += `<tr>
+          <td>${art.cantidad}x ${art.nombre}</td>
+          <td style="text-align:right;">${(art.precio * art.cantidad).toFixed(2)}€</td>
+        </tr>`;
+      });
+      html += `
+          </table>
+          <hr style="border-top:1px dashed #000; margin:6px 0;">
+          <h3 style="font-size:14px; margin:4px 0; text-align:right;">TOTAL: ${ultimoTicketCobrado.total.toFixed(2)} €</h3>
+          <p style="text-align:right; margin:2px 0;">Pago: ${ultimoTicketCobrado.metodo.toUpperCase()}</p>
+          <hr style="border-top:1px dashed #000; margin:6px 0;">
+          <p style="font-size:10px; margin:6px 0;">${datosFiscales.pieTicket}</p>
+        </div>
+      `;
+      printDiv.innerHTML = html;
+      window.print();
+      postVentaFinalizar();
+    }
+
+    // --- ACCIÓN 3: FINALIZAR Y LIMPIAR MOSTRADOR ---
+    function postVentaFinalizar() {
+      document.getElementById('modalSelectorPostVenta').classList.add('hidden');
+      limpiarTicket();
+      document.getElementById('lblNumTicket').innerText = '#T-' + String(correlativoTicket).padStart(3, '0');
+    }
+
+    // --- PLANO DE MESAS ARRASTRABLE (DRAG & DROP) ---
+    function abrirModalPlanoMesas() {
       renderPlanoMesas();
-      alert(`¡Cobro de ${total.toFixed(2)} € completado con éxito!`);
-      volverATerminal();
+      document.getElementById('modalPlanoMesas').classList.remove('hidden');
     }
 
-    // ==================== CAJA Y ARQUEO Z ====================
-    function abrirModalCaja() {
-      document.getElementById('cajaEfectivo').innerText = caja.efectivo.toFixed(2) + ' €';
-      document.getElementById('cajaTarjeta').innerText = caja.tarjeta.toFixed(2) + ' €';
-      document.getElementById('cajaBizum').innerText = caja.bizum.toFixed(2) + ' €';
-      document.getElementById('cajaTotal').innerText = caja.total.toFixed(2) + ' €';
-      document.getElementById('modalCaja').classList.remove('hidden');
+    function cerrarModalPlanoMesas() {
+      document.getElementById('modalPlanoMesas').classList.add('hidden');
     }
 
-    function cerrarModalCaja() {
-      document.getElementById('modalCaja').classList.add('hidden');
+    function toggleModoMover() {
+      modoMoverMesas = !modoMoverMesas;
+      const btn = document.getElementById('btnModoMover');
+      const txt = document.getElementById('txtModoMover');
+      if (modoMoverMesas) {
+        btn.className = 'px-3 py-1.5 rounded-xl bg-orange-600 text-white font-bold text-xs flex items-center gap-1 shadow-sm';
+        txt.innerText = 'Mover: ON (Arrastra)';
+      } else {
+        btn.className = 'px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 flex items-center gap-1';
+        txt.innerText = 'Mover: OFF';
+      }
+      renderPlanoMesas();
     }
 
-    function confirmarCierreZ() {
-      if (!confirm('¿Deseas cerrar el turno y reiniciar el arqueo a 0.00 €? Se descargará el resumen Z.')) return;
-      const fecha = new Date().toLocaleString('es-ES');
-      const resumen = `==================================\nCIERRE DE CAJA Z - LA PIRULETA\nFecha: ${fecha}\nCaja: ${datosFiscales.caja || 'Caja 1'}\n==================================\nEfectivo en Cajón: ${caja.efectivo.toFixed(2)} €\nDatáfono / Tarjeta: ${caja.tarjeta.toFixed(2)} €\nBizum Recibidos: ${caja.bizum.toFixed(2)} €\n----------------------------------\nTOTAL VENTAS: ${caja.total.toFixed(2)} €\n==================================`;
-
-      const blob = new Blob([resumen], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Cierre_Z_' + new Date().toISOString().slice(0,10) + '.txt';
-      a.click();
-
-      caja = { efectivo: 0, tarjeta: 0, bizum: 0, total: 0 };
-      guardarDatosLocales();
-      cerrarModalCaja();
-      alert('Resumen Z generado y caja reiniciada a 0.00 € para el nuevo turno.');
+    function crearNuevaMesa() {
+      const num = mesas.length + 1;
+      mesas.push({
+        id: Date.now(),
+        nombre: 'Mesa ' + num,
+        x: 60 + ((num * 30) % 250),
+        y: 60 + ((num * 25) % 180),
+        ocupada: false,
+        pax: 4,
+        ticket: []
+      });
+      guardarTodo();
+      renderPlanoMesas();
     }
 
-    // ==================== AJUSTES FISCALES ====================
-    function toggleAjustesModal() {
-      const m = document.getElementById('modalAjustes');
-      m.classList.toggle('hidden');
-      if (!m.classList.contains('hidden')) {
-        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
-        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
-        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
-        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
-        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
-        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
-        document.getElementById('cfgCaja').value = datosFiscales.caja || "Caja 1";
+    function renderPlanoMesas() {
+      const lienzo = document.getElementById('lienzoPlanoMesas');
+      if (!lienzo) return;
+      lienzo.innerHTML = '';
+
+      mesas.forEach(mesa => {
+        const div = document.createElement('div');
+        div.className = `absolute w-24 h-24 rounded-2xl flex flex-col items-center justify-center p-2 border-2 cursor-pointer transition-shadow shadow-md ${mesa.ocupada ? 'bg-orange-100 border-orange-500 text-orange-950 font-black' : 'bg-white border-orange-200 text-slate-800 font-bold'} ${modoMoverMesas ? 'ring-2 ring-orange-400 animate-pulse cursor-move' : ''}`;
+        div.style.left = mesa.x + 'px';
+        div.style.top = mesa.y + 'px';
+
+        const totalMesa = (mesa.ticket || []).reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+
+        div.innerHTML = `
+          <span class="text-xl">🪑</span>
+          <span class="text-xs font-extrabold truncate w-full text-center mt-0.5">${mesa.nombre}</span>
+          <span class="text-[10px] ${mesa.ocupada ? 'text-orange-700' : 'text-slate-400'}">${mesa.ocupada ? totalMesa.toFixed(2) + ' €' : mesa.pax + ' pax'}</span>
+        `;
+
+        // Soporte de Arrastre (Drag)
+        if (modoMoverMesas) {
+          hacerElementoArrastrable(div, mesa);
+        } else {
+          div.onclick = () => abrirMenuMesaIndividual(mesa.id);
+        }
+
+        lienzo.appendChild(div);
+      });
+    }
+
+    function hacerElementoArrastrable(elmnt, mesaData) {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      elmnt.onmousedown = dragMouseDown;
+      elmnt.ontouchstart = dragTouchStart;
+
+      function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        const newLeft = Math.max(10, Math.min(elmnt.parentElement.clientWidth - 110, elmnt.offsetLeft - pos1));
+        const newTop = Math.max(10, Math.min(elmnt.parentElement.clientHeight - 110, elmnt.offsetTop - pos2));
+        elmnt.style.left = newLeft + "px";
+        elmnt.style.top = newTop + "px";
+        mesaData.x = newLeft;
+        mesaData.y = newTop;
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        guardarTodo();
+      }
+
+      function dragTouchStart(e) {
+        const touch = e.touches[0];
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        document.ontouchend = closeTouchDrag;
+        document.ontouchmove = touchDrag;
+      }
+
+      function touchDrag(e) {
+        const touch = e.touches[0];
+        pos1 = pos3 - touch.clientX;
+        pos2 = pos4 - touch.clientY;
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        const newLeft = Math.max(10, Math.min(elmnt.parentElement.clientWidth - 110, elmnt.offsetLeft - pos1));
+        const newTop = Math.max(10, Math.min(elmnt.parentElement.clientHeight - 110, elmnt.offsetTop - pos2));
+        elmnt.style.left = newLeft + "px";
+        elmnt.style.top = newTop + "px";
+        mesaData.x = newLeft;
+        mesaData.y = newTop;
+      }
+
+      function closeTouchDrag() {
+        document.ontouchend = null;
+        document.ontouchmove = null;
+        guardarTodo();
       }
     }
 
-    function guardarAjustes() {
-      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
-      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
-      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
-      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
-      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
-      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
-      datosFiscales.caja = document.getElementById('cfgCaja').value.trim() || "Caja 1";
-      guardarDatosLocales();
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja;
-      toggleAjustesModal();
-      mostrarFeedback('¡Ajustes fiscales guardados!');
+    function abrirMenuMesaIndividual(mesaId) {
+      const mesa = mesas.find(m => m.id === mesaId);
+      if (!mesa) return;
+      mesaActivaSeleccionada = mesa;
+      document.getElementById('lblServicioActivo').innerText = mesa.nombre.toUpperCase();
+      ticketActual = JSON.parse(JSON.stringify(mesa.ticket || []));
+      actualizarTicketVisual();
+      cerrarModalPlanoMesas();
     }
 
-    // ==================== EDITOR CARTA Y CATEGORÍAS (CON MODIFICAR + ELIMINAR + IVA) ====================
+    // --- GESTOR DE CARTA EN LA NUBE (ARTÍCULOS + IVA + CATEGORÍAS) ---
     function abrirModalEditorCarta() {
-      document.getElementById('modalEditorCarta').classList.remove('hidden');
-      renderListaEditor();
+      actualizarSelectorCategoriasModal();
+      renderListaEditorProductos();
       renderListaEditorCategorias();
-      actualizarSelectorCategoriasProducto();
+      document.getElementById('modalEditorCarta').classList.remove('hidden');
     }
 
     function cerrarModalEditorCarta() {
       cancelarEdicionProducto();
-      cancelarEdicionCategoria();
       document.getElementById('modalEditorCarta').classList.add('hidden');
     }
 
@@ -1411,405 +1381,244 @@
       }
     }
 
-    function actualizarSelectorCategoriasProducto() {
-      const s = document.getElementById('nuevoProdCat');
-      if (!s) return;
-      const valorSeleccionado = s.value;
-      s.innerHTML = '';
-      categorias.filter(c => c.id !== 'favoritos' && c.id !== 'todos').forEach(c => {
-        const o = document.createElement('option');
-        o.value = c.id;
-        o.innerText = `${c.icono || '🏷️'} ${c.nombre}`;
-        s.appendChild(o);
-      });
-      if (valorSeleccionado) {
-        s.value = valorSeleccionado;
-      }
-    }
-
-    // RENDER LISTA ARTÍCULOS CON BOTONES DE EDITAR Y ELIMINAR
-    function renderListaEditor() {
-      const c = document.getElementById('listaEditorProductos');
-      if (!c) return;
-      c.innerHTML = '';
-      
-      if (catalogo.length === 0) {
-        c.innerHTML = '<div class="py-6 text-center text-slate-400">No hay productos en la carta.</div>';
-        return;
-      }
-
-      catalogo.forEach(prod => {
-        const prodId = prod.id || prod.docId;
-        const ivaProd = Number(prod.iva) || (prod.categoria === 'pan' ? 4 : 10);
-        const d = document.createElement('div');
-        d.className = 'py-2 px-1 flex items-center justify-between hover:bg-orange-50/50 rounded-xl transition-colors cursor-pointer group';
-        d.innerHTML = `
-          <div class="flex items-center gap-2.5 flex-1 min-w-0" onclick="cargarProductoParaEditar('${prodId}')">
-            <span class="text-xl shrink-0">${prod.icono || '☕'}</span>
-            <div class="truncate">
-              <span class="font-bold text-slate-800 block truncate">${prod.nombre}</span>
-              <div class="flex items-center gap-1.5 mt-0.5">
-                <span class="text-[11px] text-orange-700 font-bold font-mono">${Number(prod.precio).toFixed(2)} €</span>
-                <span class="text-[9px] px-1.5 py-0.2 rounded font-extrabold font-mono ${ivaProd === 4 ? 'bg-emerald-100 text-emerald-800' : (ivaProd === 21 ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800')}">
-                  IVA ${ivaProd}%
-                </span>
-                <span class="text-[10px] text-slate-400 capitalize">&bull; ${prod.categoria}</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1 shrink-0 ml-2">
-            <button onclick="cargarProductoParaEditar('${prodId}')" title="Modificar Producto" class="w-7 h-7 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-800 flex items-center justify-center transition-all active:scale-95">
-              <i class="fa-solid fa-pen text-xs"></i>
-            </button>
-            <button onclick="eliminarProducto('${prodId}')" title="Eliminar Producto" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all active:scale-95">
-              <i class="fa-solid fa-trash-can text-xs"></i>
-            </button>
-          </div>
-        `;
-        c.appendChild(d);
+    function actualizarSelectorCategoriasModal() {
+      const sel = document.getElementById('nuevoProdCat');
+      if (!sel) return;
+      sel.innerHTML = '';
+      categorias.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.innerText = `${cat.icono || ''} ${cat.nombre}`;
+        sel.appendChild(opt);
       });
     }
 
-    function cargarProductoParaEditar(id) {
-      const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
-      if (!prod) return;
-
-      document.getElementById('editandoProdId').value = prod.id || prod.docId;
-      document.getElementById('nuevoProdNombre').value = prod.nombre || '';
-      document.getElementById('nuevoProdPrecio').value = Number(prod.precio || 0);
-      document.getElementById('nuevoProdCat').value = prod.categoria || 'cafe';
-      document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
-      document.getElementById('nuevoProdIva').value = String(prod.iva || 10);
-
-      document.getElementById('tituloFormArticulo').innerText = `Modificando: ${prod.nombre}`;
-      document.getElementById('btnGuardarProd').innerText = '💾 Guardar Cambios en Producto';
-      document.getElementById('btnGuardarProd').className = 'w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
-      document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
-
-      document.getElementById('nuevoProdNombre').focus();
-    }
-
-    function cancelarEdicionProducto() {
-      document.getElementById('editandoProdId').value = '';
-      document.getElementById('nuevoProdNombre').value = '';
-      document.getElementById('nuevoProdPrecio').value = '';
-      document.getElementById('nuevoProdIcono').value = '';
-      document.getElementById('nuevoProdIva').value = '10';
-
-      document.getElementById('tituloFormArticulo').innerText = 'Añadir Nuevo Producto';
-      document.getElementById('btnGuardarProd').innerText = 'Guardar en la Nube';
-      document.getElementById('btnGuardarProd').className = 'w-full py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
-      document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
-    }
-
-    function guardarNuevoProducto() {
-      const editId = document.getElementById('editandoProdId').value;
+    function guardarProductoEnNube() {
+      const idEdit = document.getElementById('editandoProdId').value;
       const nombre = document.getElementById('nuevoProdNombre').value.trim();
       const precio = parseFloat(document.getElementById('nuevoProdPrecio').value);
       const cat = document.getElementById('nuevoProdCat').value;
       const icono = document.getElementById('nuevoProdIcono').value.trim() || '☕';
-      const iva = parseInt(document.getElementById('nuevoProdIva').value, 10) || 10;
+      const iva = parseInt(document.getElementById('nuevoProdIVA').value) || 10;
 
-      if (!nombre || isNaN(precio) || precio < 0) {
-        alert('Por favor introduce un nombre válido y un precio correcto.');
+      if (!nombre || isNaN(precio)) {
+        alert("Por favor introduce nombre y precio.");
         return;
       }
 
-      const datosProducto = { nombre, precio, categoria: cat, icono, iva };
-
-      if (editId) {
-        // Modo MODIFICAR existente
+      if (idEdit) {
+        // Modificar existente
         if (db) {
-          db.collection("productos").doc(editId).set(datosProducto, { merge: true }).then(() => {
-            mostrarFeedback(`¡${nombre} modificado en Firebase!`);
-          }).catch(err => {
-            console.warn("Error modificando en Firestore:", err);
-          });
+          db.collection("productos").doc(idEdit).update({ nombre, precio, categoria: cat, icono, iva });
         }
-        const index = catalogo.findIndex(p => String(p.id) === String(editId) || String(p.docId) === String(editId));
-        if (index !== -1) {
-          catalogo[index] = { ...catalogo[index], ...datosProducto };
+        const idx = catalogo.findIndex(p => String(p.id) === idEdit || String(p.docId) === idEdit);
+        if (idx !== -1) {
+          catalogo[idx] = { ...catalogo[idx], nombre, precio, categoria: cat, icono, iva };
         }
-        mostrarFeedback(`¡${nombre} actualizado!`);
       } else {
-        // Modo CREAR nuevo
+        // Crear nuevo
+        const nuevo = { nombre, precio, categoria: cat, icono, iva };
         if (db) {
-          db.collection("productos").add(datosProducto).then(() => {
-            mostrarFeedback('Producto creado y guardado en la Nube');
-          }).catch(err => {
-            console.warn("Error guardando en Firestore:", err);
-          });
+          db.collection("productos").add(nuevo);
         } else {
-          catalogo.push({ id: Date.now(), ...datosProducto });
-          mostrarFeedback('Producto añadido localmente');
+          catalogo.push({ id: Date.now(), ...nuevo });
         }
       }
 
-      guardarDatosLocales();
+      guardarTodo();
       renderCatalogo();
-      renderListaEditor();
-      actualizarTicketVisual();
+      renderListaEditorProductos();
       cancelarEdicionProducto();
+      alert("Producto guardado con éxito.");
     }
 
-    function eliminarProducto(id) {
+    function editarProductoModal(id) {
       const prod = catalogo.find(p => String(p.id) === String(id) || String(p.docId) === String(id));
-      const nombre = prod ? prod.nombre : 'este producto';
-      if (!confirm(`¿Estás seguro de que deseas eliminar definitivamente "${nombre}" de la carta?`)) return;
+      if (!prod) return;
+      document.getElementById('editandoProdId').value = prod.id || prod.docId;
+      document.getElementById('nuevoProdNombre').value = prod.nombre;
+      document.getElementById('nuevoProdPrecio').value = prod.precio;
+      document.getElementById('nuevoProdCat').value = prod.categoria;
+      document.getElementById('nuevoProdIcono').value = prod.icono || '☕';
+      document.getElementById('nuevoProdIVA').value = prod.iva || 10;
 
-      if (db) {
-        db.collection("productos").doc(String(id)).delete().then(() => {
-          mostrarFeedback(`"${nombre}" eliminado de Firebase`);
-        }).catch(err => {
-          console.warn("Error borrando en Firestore:", err);
-        });
-      }
-
-      catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
-      guardarDatosLocales();
-      renderCatalogo();
-      renderListaEditor();
-      mostrarFeedback(`Producto "${nombre}" eliminado`);
-      if (document.getElementById('editandoProdId').value === String(id)) {
-        cancelarEdicionProducto();
-      }
+      document.getElementById('tituloFormArticulo').innerText = "Modificar Artículo: " + prod.nombre;
+      document.getElementById('btnGuardarProd').innerText = "Actualizar en la Nube";
+      document.getElementById('btnCancelarEdicionProd').classList.remove('hidden');
     }
 
-    // RENDER LISTA CATEGORÍAS CON MODIFICAR Y ELIMINAR
-    function renderListaEditorCategorias() {
-      const c = document.getElementById('listaEditorCategorias');
-      if (!c) return;
-      c.innerHTML = '';
-      
-      categorias.forEach(cat => {
-        const catId = cat.id || cat.docId;
-        const esProtegida = (cat.id === 'favoritos' || cat.id === 'todos');
-        const d = document.createElement('div');
-        d.className = 'py-2 px-1 flex items-center justify-between hover:bg-amber-50/50 rounded-xl transition-colors cursor-pointer group';
-        d.innerHTML = `
-          <div class="flex items-center gap-2 flex-1 min-w-0" ${!esProtegida ? `onclick="cargarCategoriaParaEditar('${catId}')"` : ''}>
-            <span class="text-xl shrink-0">${cat.icono || '🏷️'}</span>
-            <div class="truncate">
-              <span class="font-bold text-slate-800 block truncate">${cat.nombre}</span>
-              ${esProtegida ? '<span class="text-[9px] text-amber-700 font-bold bg-amber-100 px-1.5 py-0.2 rounded">Sistema</span>' : ''}
+    function cancelarEdicionProducto() {
+      document.getElementById('editandoProdId').value = "";
+      document.getElementById('nuevoProdNombre').value = "";
+      document.getElementById('nuevoProdPrecio').value = "";
+      document.getElementById('nuevoProdIcono').value = "";
+      document.getElementById('tituloFormArticulo').innerText = "Añadir Nuevo Producto";
+      document.getElementById('btnGuardarProd').innerText = "Guardar en la Nube";
+      document.getElementById('btnCancelarEdicionProd').classList.add('hidden');
+    }
+
+    function eliminarProductoEnNube(id) {
+      if (!confirm("¿Eliminar este producto de la carta?")) return;
+      if (db) db.collection("productos").doc(id).delete();
+      catalogo = catalogo.filter(p => String(p.id) !== String(id) && String(p.docId) !== String(id));
+      guardarTodo();
+      renderCatalogo();
+      renderListaEditorProductos();
+    }
+
+    function renderListaEditorProductos() {
+      const cont = document.getElementById('listaEditorProductos');
+      if (!cont) return;
+      cont.innerHTML = '';
+      catalogo.forEach(p => {
+        const id = p.id || p.docId;
+        const div = document.createElement('div');
+        div.className = 'py-2 flex items-center justify-between';
+        div.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-base">${p.icono || '☕'}</span>
+            <div>
+              <span class="font-bold text-slate-800 block truncate max-w-[140px]">${p.nombre}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${Number(p.precio).toFixed(2)} € &bull; ${p.categoria} &bull; IVA ${p.iva || 10}%</span>
             </div>
           </div>
-          ${!esProtegida ? `
-            <div class="flex items-center gap-1 shrink-0 ml-2">
-              <button onclick="cargarCategoriaParaEditar('${catId}')" title="Modificar Categoría" class="w-7 h-7 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 flex items-center justify-center transition-all active:scale-95">
-                <i class="fa-solid fa-pen text-xs"></i>
-              </button>
-              <button onclick="eliminarCategoria('${catId}')" title="Eliminar Categoría" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all active:scale-95">
-                <i class="fa-solid fa-trash-can text-xs"></i>
-              </button>
-            </div>
-          ` : '<span class="text-[10px] text-slate-400 font-semibold italic pr-1">Fija</span>'}
+          <div class="flex items-center gap-1.5">
+            <button onclick="editarProductoModal('${id}')" class="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 hover:bg-orange-200 flex items-center justify-center font-bold" title="Editar">
+              <i class="fa-solid fa-pen text-xs"></i>
+            </button>
+            <button onclick="eliminarProductoEnNube('${id}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center font-bold" title="Eliminar">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
         `;
-        c.appendChild(d);
+        cont.appendChild(div);
       });
     }
 
-    function cargarCategoriaParaEditar(id) {
-      const cat = categorias.find(c => String(c.id) === String(id) || String(c.docId) === String(id));
-      if (!cat) return;
-
-      document.getElementById('editandoCatId').value = cat.id || cat.docId;
-      document.getElementById('nuevaCatNombre').value = cat.nombre || '';
-      document.getElementById('nuevaCatIcono').value = cat.icono || '🏷️';
-
-      document.getElementById('tituloFormCategoria').innerText = `Modificando: ${cat.nombre}`;
-      document.getElementById('btnGuardarCat').innerText = '💾 Guardar Cambios en Categoría';
-      document.getElementById('btnGuardarCat').className = 'w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
-      document.getElementById('btnCancelarEdicionCat').classList.remove('hidden');
-
-      document.getElementById('nuevaCatNombre').focus();
-    }
-
-    function cancelarEdicionCategoria() {
-      document.getElementById('editandoCatId').value = '';
-      document.getElementById('nuevaCatNombre').value = '';
-      document.getElementById('nuevaCatIcono').value = '';
-
-      document.getElementById('tituloFormCategoria').innerText = 'Nueva Categoría';
-      document.getElementById('btnGuardarCat').innerText = 'Guardar Categoría';
-      document.getElementById('btnGuardarCat').className = 'w-full py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all active:scale-98';
-      document.getElementById('btnCancelarEdicionCat').classList.add('hidden');
-    }
-
-    function guardarCategoria() {
-      const editId = document.getElementById('editandoCatId').value;
+    // Categorías en la Nube
+    function guardarCategoriaEnNube() {
       const nombre = document.getElementById('nuevaCatNombre').value.trim();
       const icono = document.getElementById('nuevaCatIcono').value.trim() || '🏷️';
-      if (!nombre) {
-        alert('Por favor introduce un nombre para la categoría.');
-        return;
-      }
-
-      if (editId) {
-        // MODIFICAR categoría existente
-        if (db) {
-          db.collection("categorias").doc(editId).set({ nombre, icono }, { merge: true }).then(() => {
-            mostrarFeedback(`¡Categoría ${nombre} actualizada en Firebase!`);
-          }).catch(err => {
-            console.warn("Error actualizando categoría Firestore:", err);
-          });
-        }
-        const idx = categorias.findIndex(c => String(c.id) === String(editId) || String(c.docId) === String(editId));
-        if (idx !== -1) {
-          categorias[idx].nombre = nombre;
-          categorias[idx].icono = icono;
-        }
-        mostrarFeedback(`¡Categoría "${nombre}" modificada!`);
-      } else {
-        // CREAR nueva categoría
-        const nuevoId = nombre.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-        const nueva = { nombre, icono };
-        if (db) {
-          db.collection("categorias").add(nueva).then(() => {
-            mostrarFeedback('Categoría creada en Firestore');
-          });
-        } else {
-          categorias.push({ id: nuevoId || 'cat_' + Date.now(), ...nueva });
-          mostrarFeedback('Categoría creada');
-        }
-      }
-
-      guardarDatosLocales();
-      renderPestañasCategorias();
-      renderListaEditorCategorias();
-      actualizarSelectorCategoriasProducto();
-      cancelarEdicionCategoria();
-    }
-
-    function eliminarCategoria(id) {
-      if (id === 'favoritos' || id === 'todos') {
-        alert('Esta categoría es parte del sistema y no se puede eliminar.');
-        return;
-      }
-      const cat = categorias.find(c => String(c.id) === String(id) || String(c.docId) === String(id));
-      const nombre = cat ? cat.nombre : 'esta categoría';
-      
-      const hayProductosAsociados = catalogo.some(p => p.categoria === id || (cat && p.categoria === cat.id));
-      let avisoExtra = '';
-      if (hayProductosAsociados) {
-        avisoExtra = '\n\nATENCIÓN: Existen artículos vinculados a esta categoría.';
-      }
-
-      if (!confirm(`¿Estás seguro de que deseas eliminar la categoría "${nombre}"?${avisoExtra}`)) return;
-
+      if (!nombre) return;
+      const id = nombre.toLowerCase().replace(/\s+/g, '_');
       if (db) {
-        db.collection("categorias").doc(String(id)).delete().then(() => {
-          mostrarFeedback(`Categoría "${nombre}" eliminada de Firebase`);
-        }).catch(err => {
-          console.warn("Error al borrar categoría Firestore:", err);
-        });
+        db.collection("categorias").add({ nombre, icono });
+      } else {
+        categorias.push({ id, nombre, icono });
       }
-
-      categorias = categorias.filter(c => String(c.id) !== String(id) && String(c.docId) !== String(id));
-      guardarDatosLocales();
-      renderPestañasCategorias();
+      guardarTodo();
+      renderTabsCategorias();
       renderListaEditorCategorias();
-      actualizarSelectorCategoriasProducto();
-      mostrarFeedback(`Categoría "${nombre}" eliminada`);
-      if (document.getElementById('editandoCatId').value === String(id)) {
-        cancelarEdicionCategoria();
+      actualizarSelectorCategoriasModal();
+      document.getElementById('nuevaCatNombre').value = '';
+      document.getElementById('nuevaCatIcono').value = '';
+    }
+
+    function renderListaEditorCategorias() {
+      const cont = document.getElementById('listaEditorCategorias');
+      if (!cont) return;
+      cont.innerHTML = '';
+      categorias.forEach(cat => {
+        const div = document.createElement('div');
+        div.className = 'py-2 flex items-center justify-between';
+        div.innerHTML = `
+          <span class="font-bold text-slate-800">${cat.icono || '🏷️'} ${cat.nombre}</span>
+          <button onclick="eliminarCategoriaEnNube('${cat.id}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        `;
+        cont.appendChild(div);
+      });
+    }
+
+    function eliminarCategoriaEnNube(id) {
+      if (!confirm("¿Eliminar categoría?")) return;
+      if (db) db.collection("categorias").doc(id).delete();
+      categorias = categorias.filter(c => c.id !== id);
+      guardarTodo();
+      renderTabsCategorias();
+      renderListaEditorCategorias();
+    }
+
+    // --- AJUSTES FISCALES ---
+    function toggleAjustesModal() {
+      const m = document.getElementById('modalAjustes');
+      m.classList.toggle('hidden');
+      if (!m.classList.contains('hidden')) {
+        document.getElementById('cfgNombre').value = datosFiscales.nombre || "LA PIRULETA";
+        document.getElementById('cfgCIF').value = datosFiscales.cif || "";
+        document.getElementById('cfgRazonSocial').value = datosFiscales.razonSocial || "";
+        document.getElementById('cfgDireccion').value = datosFiscales.direccion || "";
+        document.getElementById('cfgTelefono').value = datosFiscales.telefono || "";
+        document.getElementById('cfgPieTicket').value = datosFiscales.pieTicket || "";
       }
     }
 
-    // INICIALIZACIÓN
+    function guardarAjustes() {
+      datosFiscales.nombre = document.getElementById('cfgNombre').value.trim() || "LA PIRULETA";
+      datosFiscales.cif = document.getElementById('cfgCIF').value.trim();
+      datosFiscales.razonSocial = document.getElementById('cfgRazonSocial').value.trim();
+      datosFiscales.direccion = document.getElementById('cfgDireccion').value.trim();
+      datosFiscales.telefono = document.getElementById('cfgTelefono').value.trim();
+      datosFiscales.pieTicket = document.getElementById('cfgPieTicket').value.trim();
+      guardarTodo();
+      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
+      toggleAjustesModal();
+      alert("Datos fiscales guardados con éxito.");
+    }
+
+    // --- CAJA & ARQUEO Z ---
+    function abrirModalCaja() {
+      document.getElementById('cjEfectivo').innerText = caja.efectivo.toFixed(2) + ' €';
+      document.getElementById('cjTarjeta').innerText = caja.tarjeta.toFixed(2) + ' €';
+      document.getElementById('cjBizum').innerText = caja.bizum.toFixed(2) + ' €';
+      document.getElementById('cjTotal').innerText = caja.total.toFixed(2) + ' €';
+      document.getElementById('modalCaja').classList.remove('hidden');
+    }
+
+    function cerrarModalCaja() {
+      document.getElementById('modalCaja').classList.add('hidden');
+    }
+
+    function confirmarCierreZ() {
+      if (!confirm("¿Deseas cerrar el turno y descargar el Resumen Z diario? La caja se reiniciará a 0.00 €.")) return;
+      const resumen = `==================================
+CIERRE DE CAJA Z - ${datosFiscales.nombre}
+Fecha: ${new Date().toLocaleString()}
+Caja: 1 &bull; Responsable: PACO
+==================================
+Efectivo en Cajón: ${caja.efectivo.toFixed(2)} €
+Datáfono / Tarjeta: ${caja.tarjeta.toFixed(2)} €
+Bizum Recibidos:   ${caja.bizum.toFixed(2)} €
+----------------------------------
+TOTAL FACTURADO:   ${caja.total.toFixed(2)} €
+==================================`;
+
+      const blob = new Blob([resumen], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Resumen_Z_' + new Date().toISOString().slice(0, 10) + '.txt';
+      a.click();
+
+      caja = { efectivo: 0, tarjeta: 0, bizum: 0, total: 0 };
+      guardarTodo();
+      abrirModalCaja();
+      alert("Caja cerrada y reiniciada a 0.00 € con éxito.");
+    }
+
+    function volverAlMostrador() {
+      limpiarTicket();
+    }
+
+    // INICIALIZACIÓN GENERAL AL CARGAR
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre || "LA PIRULETA";
-      document.getElementById('headerCajaNum').innerText = datosFiscales.caja || "Caja 1";
-      renderPestañasCategorias();
+      document.getElementById('headerNombreComercial').innerText = datosFiscales.nombre;
+      renderTabsCategorias();
       renderCatalogo();
       actualizarTicketVisual();
       actualizarBadgePendientes();
+      document.getElementById('lblNumTicket').innerText = '#T-' + String(correlativoTicket).padStart(3, '0');
     });
-  </script>
-<script>
-  let modoAsignarTicketAMesa = false;
-
-  function iniciarAsignacionMesa() {
-    if (!ticketActual || ticketActual.length === 0) {
-      alert('Añade primero productos al ticket para asignarlos a una mesa');
-      return;
-    }
-    const total = ticketActual.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
-    modoAsignarTicketAMesa = true;
-    
-    const banner = document.getElementById('bannerAsignarMesa');
-    const txtBanner = document.getElementById('txtBannerAsignarMesa');
-    if (banner && txtBanner) {
-      txtBanner.innerText = `Selecciona una mesa para asignar el ticket de ${total.toFixed(2)} €`;
-      banner.classList.remove('hidden');
-    }
-    
-    // Abrir vista del plano de mesas
-    const cat = document.getElementById('contenedorCatalogo');
-    const plano = document.getElementById('contenedorPlanoMesas');
-    cat.classList.add('hidden');
-    plano.classList.remove('hidden');
-    renderPlanoMesas();
-    mostrarFeedback('Selecciona una mesa en el plano');
-  }
-
-  function cancelarAsignacionMesa() {
-    modoAsignarTicketAMesa = false;
-    const banner = document.getElementById('bannerAsignarMesa');
-    if (banner) banner.classList.add('hidden');
-    volverATerminal();
-    mostrarFeedback('Asignación cancelada');
-  }
-
-  // Interceptar abrirModalMesa para manejar el flujo de asignación
-  const originalAbrirModalMesa = window.abrirModalMesa;
-  window.abrirModalMesa = function(id) {
-    if (modoAsignarTicketAMesa) {
-      asignarTicketActualAMesaDirecta(id);
-      return;
-    }
-    if (typeof originalAbrirModalMesa === 'function') {
-      originalAbrirModalMesa(id);
-    }
-  };
-
-  function asignarTicketActualAMesaDirecta(mesaId) {
-    const targetMesa = mesas.find(m => m.id === mesaId);
-    if (!targetMesa) return;
-    const total = ticketActual.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
-    
-    if (!targetMesa.ticket) targetMesa.ticket = [];
-    ticketActual.forEach(itemTicket => {
-      const existing = targetMesa.ticket.find(i => String(i.id) === String(itemTicket.id) || String(i.docId) === String(itemTicket.docId));
-      if (existing) {
-        existing.cantidad += itemTicket.cantidad;
-      } else {
-        targetMesa.ticket.push(JSON.parse(JSON.stringify(itemTicket)));
-      }
-    });
-    targetMesa.ocupada = true;
-    
-    const mesaNombre = targetMesa.nombre;
-    const totalFormateado = total.toFixed(2) + ' €';
-    
-    // Limpiar ticket actual de mostrador y reiniciar servicio
-    ticketActual = [];
-    mesaActivaSeleccionada = null;
-    servicioActivo = 'BARRA';
-    const labelServicio = document.getElementById('ticketServicioLabel');
-    if (labelServicio) labelServicio.innerText = 'BARRA';
-    
-    guardarDatosLocales();
-    actualizarTicketVisual();
-    
-    modoAsignarTicketAMesa = false;
-    const banner = document.getElementById('bannerAsignarMesa');
-    if (banner) banner.classList.add('hidden');
-    
-    renderPlanoMesas();
-    volverATerminal();
-    mostrarFeedback(`Ticket de ${totalFormateado} asignado a ${mesaNombre}`);
-    alert(`¡Ticket de ${totalFormateado} asignado a ${mesaNombre} con éxito!`);
-  }
-</script>
-</body></html>
+  <\/script>
+</body>
+</html>
